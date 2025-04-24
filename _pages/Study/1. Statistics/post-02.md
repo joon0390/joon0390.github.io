@@ -1,11 +1,10 @@
 ---
-title: "Sequential Kalman Filter for fast Online Changepoint Detection"
+title: "BART : Bayesian Additive Regression Tree"
 tag : 
-    - statistics
-    - Kalman Filter
-    - Changepoint Detection
-    - Online Method
-    - BOCPD
+    - Statistics
+    - BART
+    - Bayesian Additive Regression Tree
+    - Regression Tree
     - Bayesian
-date: "2025-12-01"
+date: "2025-04-01"
 ---
