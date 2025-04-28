@@ -43,12 +43,12 @@ Boosting은 이전 트리가 설명하지 못한 부분을 순차적으로 다�
 또 다른 접근 방식은 베이지안(Bayesian) 프레임워크를 이용하여 개별 Tree 모델들의 사후분포(Posterior distribution)를 구한 뒤, 이를 바탕으로 각 Tree의 예측값을 평균화(Bayesian Model Averaging)하는 방법입니다. 이때, 각 Tree가 데이터에 얼마나 잘 부합하는지에 따라 사후확률(Posterior probabilities)을 가중치로 사용하여 최종 예측값을 계산하게 됩니다.
 
 ---
-##### 이제 본격적으로 BART(Bayesian Additive Regression Tree)에 대한 이야기를 해보겠습니다.
+이제 본격적으로 BART(Bayesian Additive Regression Tree)에 대한 이야기를 해보겠습니다.
 
-Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x) = E(Y|x)$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
+Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=E(Y|x)$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
 
 주요 아이디어는 다음과 같습니다.
->- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularie하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬겠다.
+>- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularize하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬겠다.
 
 논문의 표현 방식을 빌려오면, 각각의 Regression Tree $g_j$들을 **weak Learners**로 만드는 것입니다. 각 $g_j$의 effects를 약화시킴으로써, BART는 각각의 약한 트리들이 함수 $f$의 small \& different portion을 설명하는 모델이 됩니다. 
 
