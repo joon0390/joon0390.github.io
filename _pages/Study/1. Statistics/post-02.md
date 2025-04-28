@@ -8,6 +8,10 @@ tag :
     - Bayesian
 date: "2025-04-29"
 ---
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
 # BART
 이 포스팅은 Chipman et al. (2010)의 논문 ["BART: Bayesian Additive Regression Trees"](https://arxiv.org/pdf/0806.3286)를 읽고 정리한 글입니다.
 
