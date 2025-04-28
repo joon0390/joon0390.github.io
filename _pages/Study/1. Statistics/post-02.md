@@ -6,7 +6,9 @@ tag :
     - Bayesian Additive Regression Tree
     - Regression Tree
     - Bayesian
-    
+
+layout: post
+bookmark: true
 date: "2025-04-29"
 ---
 <script type="text/javascript" async
