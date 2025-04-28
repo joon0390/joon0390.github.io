@@ -23,6 +23,7 @@ $$Y  = f(x)$$
 Regression Model부터  Neural Network까지 모두 함수 $f$를 어떻게 추론(or 근사)할 것인가에 대한 다양한 방법론이라고 생각할 수 있습니다. 
 
 이번에 제가 소개할 방법론은 여러 개의 **Regression Tree**의 합으로 $f(x) = E(Y|x)$ 를 근사하는 방법입니다. 수식으로 간단히 표현해보면 다음과 같습니다.
+
 $$f(x) \approx h(x)  = \sum_{j=1}^mg_j(x), \;\;g_j : \text{regressoin tree}$$
 
 따라서 우리는 **a sum-of-trees (트리합)** 모델로 근사를 할 수 있습니다. 
@@ -43,7 +44,7 @@ Boosting은 이전 트리가 설명하지 못한 부분을 순차적으로 다�
 또 다른 접근 방식은 베이지안(Bayesian) 프레임워크를 이용하여 개별 Tree 모델들의 사후분포(Posterior distribution)를 구한 뒤, 이를 바탕으로 각 Tree의 예측값을 평균화(Bayesian Model Averaging)하는 방법입니다. 이때, 각 Tree가 데이터에 얼마나 잘 부합하는지에 따라 사후확률(Posterior probabilities)을 가중치로 사용하여 최종 예측값을 계산하게 됩니다.
 
 ---
-##### 이제 본격적으로 BART(Bayesian Additive Regression Tree)에 대한 이야기를 해보겠습니다.
+#### 이제 본격적으로 BART(Bayesian Additive Regression Tree)에 대한 이야기를 해보겠습니다.
 
 Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=E(Y\|x)$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
 
