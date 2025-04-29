@@ -25,7 +25,7 @@ Regression Model부터  Neural Network까지 모두 함수 $f$를 어떻게 추�
 
 이번에 제가 소개할 방법론은 여러 개의 **Regression Tree**의 합으로 $f(x) = \mathbb{E}[Y\mid x]$ 를 근사하는 방법입니다. 수식으로 간단히 표현해보면 다음과 같습니다.
 
-$$f(x) \approx h(x)  = \sum_{j=1}^mg_j(x), \;\;g_j : \text{regressoin tree}$$
+$$f(x) \approx h(x)  = \sum_{j=1}^mg_j(x), \;\;g_j : \text{regression tree}$$
 
 따라서 우리는 **a sum-of-trees (트리합)** 모델로 근사를 할 수 있습니다. 
 
@@ -50,7 +50,8 @@ Boosting은 이전 트리가 설명하지 못한 부분을 순차적으로 다�
 Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=\mathbb{E}[Y\mid x]$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
 
 주요 아이디어는 다음과 같습니다.
->- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularize하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬자!
+
+##### $\rightarrow$ "각 Tree의 기여도를 제한하기 위해, 정규화(Regularization)된 Prior를 설정하여 Sum-of-trees 모델의 구조를 안정화시키기"
 
 논문의 표현 방식을 빌려오면, 각각의 Regression Tree $g_j$들을 **weak Learners**로 만드는 것입니다. 각 $g_j$의 effects를 약화시킴으로써, BART는 각각의 약한 트리들이 함수 $f$의 small \& different portion을 설명하는 모델이 됩니다. 
 
@@ -59,9 +60,9 @@ Sum-of-trees 모델을 fitting하기 위해 BART는 [Bayesian backfitting MCMC](
 이는 Gradient Boosting과 굉장히 유사해보입니다.
 잔차를 학습한다는 측면에서 굉장히 닮아있습니다. 하지만 두 가지 차이가 존재합니다.
 1. 개별 트리의 영향을 **Prior** 를 부여함으로써 약화시킨 것.
-   >- BART는 개별 트리의 약화를 위해 명시적인 손실 함수(loss function)를 최적화하는 대신, **사전 분포(prior distribution)** 를 사용하여 각 트리의 영향을 제한합니다.  
+   > BART는 개별 트리의 약화를 위해 명시적인 손실 함수(loss function)를 최적화하는 대신, **사전 분포(prior distribution)** 를 사용하여 각 트리의 영향을 제한합니다.  
 2. 고정된 개수의 Tree들에 대해 Bayesian Backfitting을 통해 적합한 것.
-   >- 또한 Boosting이 매 반복마다 새로운 트리를 추가하는 것과 달리, BART는 **고정된 개수의 트리(fixed number of trees)** 를 유지하면서 이들에 대해 반복적으로 베이지안 백피팅(Bayesian backfitting)을 수행합니다.
+   > 또한 Boosting이 매 반복마다 새로운 트리를 추가하는 것과 달리, BART는 **고정된 개수의 트리(fixed number of trees)** 를 유지하면서 이들에 대해 반복적으로 베이지안 백피팅(Bayesian backfitting)을 수행합니다.
 
 BART는 **강력한 사전 분포를 통해 복잡한(parameter rich) 모델을 제어하면서 학습하는 베이지안 비모수 방법(Bayesian nonparametric approach)** 으로 이해할 수 있습니다.
 
@@ -69,7 +70,7 @@ BART는 **강력한 사전 분포를 통해 복잡한(parameter rich) 모델을 
 ---
 
 ## The BART model
-언급했었던 대로 BART 모델은 두 부분으로 구성되는데, 이는 **a-sum-of-trees 모델** 과 모델의 파라미터에 부여되는 **Regularization 사전분포** 입니다.
+BART 모델은 두 부분으로 구성되는데, 이는 **a-sum-of-trees 모델** 과 모델의 파라미터에 부여되는 **Regularization 사전분포** 입니다.
 
 
 ### A-sum-of-trees model
@@ -77,7 +78,7 @@ BART는 **강력한 사전 분포를 통해 복잡한(parameter rich) 모델을 
       - $T$ : 내부 노드, 결정규칙, 말단 노드 집합으로 구성되는 Binary Tree
       - $M = \{\mu_1,\mu_2,\dots,\mu_b\}$ : $T$ 의 $b$ 개의 말단 노드에 주어진 파라미터 집합
 
-여기서 결정 규칙은 $x=(x_1,x_2,\dots,x_p)$ 가 입력으로 주어질 때, Binary Splits으로 볼 수 있습니다. 에를 들어 $\{x \in A\}\; vs\;\{x \notin A\} $ 같이 주어질 수 있습니다. 각각의 입력 $x$ 는 연속적인 결정규칙에 의해 하나의 말단 노드에 배정받게 됩니다. 그리고 해당 말단 노드의 value$(\mu_i)$ 를 갖게 됩니다. 주어진 $T$ 와 $M$ 에 대해서 $x$ 를 $\mu_i \in M$ 으로 assign하는 함수를 이제 $g(x;T,M)$ 으로 표기하겠습니다.   
+여기서 결정 규칙은 $x=(x_1,x_2,\dots,x_p)$ 가 입력으로 주어질 때, Binary Splits으로 볼 수 있습니다. 에를 들어 $\{x \in A\}\; vs\;\{x \notin A\} $ 같이 주어질 수 있습니다. 각각의 입력 $x$ 는 연속적인 결정규칙에 의해 하나의 말단 노드에 배정받게 됩니다. 그리고 해당 말단 노드의 value$(\mu_i)$ 를 갖게 됩니다. 주어진 $T$와 $M$에 대해 입력 $x$를 적절한 말단 노드의 값 $\mu_i$에 할당하는 함수를 $g(x;T,M)$으로 정의하겠습니다.
 이제 트리 모합 모델을 다음과 같이 표기할 수 있습니다.
 
 $$Y = \sum_{j=1}^mg(x;T,M) + \epsilon,\;\;\epsilon\sim N(0,\sigma^2) $$
@@ -87,14 +88,219 @@ $$Y = \sum_{j=1}^mg(x;T,M) + \epsilon,\;\;\epsilon\sim N(0,\sigma^2) $$
 쉽게 말해 노드에서의 결정 규칙이 일변수에서 다변수로 됨에 따라 상호작용을 고려할 수 있다는 것입니다. 예를 들어
 단일 변수의 경우, 
 
->$$ x_1  < 0.5  $$
+$$ x_1  < 0.5  $$
 
 의 결정 규칙을 가지고 있었다면, 다변수에서는  
 
->$$x_1 < 0.5 \;\;\&\;\; x_2 > 0.3 $$
+$$x_1 < 0.5 \;\;\&\;\; x_2 > 0.3 $$
 
 처럼 확장되어 상호작용을 고려할 수 있게 됩니다. 
 
 ---
 ### A regularization prior
 
+**Prior**를 부여할 대상인 Sum-of-trees 모델의 파라미터는 다음과 같습니다.
+
+1. $T_j$ : 트리 구조 파라미터
+2. $M_j = \{\mu_{ij}\}$ : 말단 노드의 출력값 집합
+3. $\sigma$ : 오차 분산 파라미터
+
+Regularization prior의 설정은, 우리가 특정 종류의 사전 분포에만 관심을 제한함으로써 훨씬 간단해집니다.  
+구체적으로는 다음과 같이 전체 사전분포를 **독립적인 구조로 factorize**합니다:
+
+$$
+p\left((T_1, M_1), \dots, (T_m, M_m), \sigma\right) = \left[\prod_{j=1}^m p(M_j \mid T_j) p(T_j)\right] p(\sigma)
+$$
+
+그리고 리프 노드의 값들도 서로 독립이라는 가정을 통해:
+
+$$
+p(M_j \mid T_j) = \prod_i p(\mu_{ij} \mid T_j)
+$$
+
+이러한 구성은 사전 분포를 단순하고 모듈화된 방식으로 구성할 수 있게 해주며, BART 모델의 계산적 효율성을 높여줍니다.
+
+---
+
+#### Tree 구조에 대한 prior
+
+트리 구조 $T_j$에 대한 prior는 다음과 같이 설정합니다.  
+깊이 $d$의 노드가 분기할 확률은 다음과 같은 함수로 정의됩니다:
+
+$$
+\text{Pr}(\text{split at depth } d) = \alpha (1 + d)^{-\beta}
+$$
+
+여기서 $\alpha \in (0, 1)$, $\beta \geq 0$는 하이퍼파라미터로, 일반적으로 $(\alpha, \beta) = (0.95, 2)$ 를 논문에서는 추천하고 있습니다.  
+이는 트리가 깊어질수록 분기 확률이 감소하게 만들어 **얕은 트리를 유도**하고, 과적합을 방지하는 역할을 합니다.
+
+또한, 어떤 노드가 분기(split)하기로 결정된 경우,  
+사용할 **분할 변수(split variable)** 와 **분할 기준값(split value)** 은 다음과 같이 선택됩니다:
+
+- 분할 변수는 현재 노드에서 사용 가능한 $p$개의 변수 중 균등 분포로 선택됩니다.
+- 분할 기준값은 선택된 변수의 값 범위 내에서 균등 분포로 선택됩니다.
+
+
+---
+
+#### 리프 노드 값에 대한 prior
+
+각 트리 $T_j$의 말단 노드 값 $\mu_{ij}$ 에 대해서는 다음과 같은 정규분포 prior를 가정합니다:
+
+$$
+\mu_{ij} \sim \mathcal{N}(0, \sigma_\mu^2)
+$$
+
+이 prior는 likelihood인 $Y_i \mid \mu_{ij} \sim \mathcal{N}(\mu_{ij}, \sigma^2)$ 와 conjugate 관계를 이룹니다.  
+이로 인해 posterior 또한 정규분포로 닫힌 형태(closed-form)를 가지게 되어,  
+Gibbs sampling 시 각 $\mu_{ij}$를 직접 샘플링(direct draw)할 수 있습니다:
+
+$$
+\mu_{ij} \mid \text{data} \sim \mathcal{N}(\tilde{\mu}, \tilde{\sigma}^2)
+$$
+
+뿐만 아니라, conjugate 구조를 활용하면 $\mu_{ij}$를 MCMC 과정에서 **marginalization** (적분으로 제거)할 수도 있습니다.  
+즉, $\mu_{ij}$를 샘플링하지 않고 **사후 분포 내에서 주변화하여 수치적으로 통합**할 수 있으며,  
+이는 계산 효율을 크게 높이는 방식 중 하나입니다.
+
+
+---
+
+#### 오차 분산 $\sigma^2$에 대한 prior
+
+오차 항에 대한 분산 파라미터 $\sigma^2$는 다음과 같은 scaled-inverse-chi-squared 분포를 따릅니다:
+
+$$
+\sigma^2 \sim \text{Inv-}\chi^2(\nu, \lambda)
+$$
+
+여기서 $\nu$는 자유도(degrees of freedom), $\lambda$는 스케일(scale) 파라미터입니다.  
+이 prior는 정규 likelihood와 conjugate 관계를 이루므로, posterior도 scaled-inverse-chi-squared 형태를 따르게 됩니다.
+
+> 즉, $\sigma^2$ 역시 conjugate prior를 사용하여 **Gibbs sampling 단계에서 직접 샘플링이 가능**합니다.
+
+---
+
+#### 정리
+
+BART에서는 prior를 단순히 무정보적(noninformative) 하게 설정하는 것이 아니라, 실제 데이터 분산을 기반으로 사전 정보를 반영하는 **data-informed prior approach**를 사용합니다. 이로 인해 데이터가 사전분포에 반영되어서는 안된다는 베이지안 원칙에는 어긋나지만, 데이터와 사전분포의 range가 충돌하지 않기 위해  compromise합니다. 
+| 파라미터 | Prior 형태 | 목적 |
+|:--|:--|:--|
+| $T_j$ | $\text{Pr}(\text{split at depth } d) = \alpha (1 + d)^{-\beta}$ | 얕은 트리 유도 |
+| $\mu_{ij}$ | $\mathcal{N}(0, \sigma_\mu^2)$ | 트리당 기여를 작게 제한 |
+| $\sigma^2$ | $\text{Inv-}\chi^2(\nu, \lambda)$ | 오차 분산의 정규화 |
+
+이러한 prior 설정은 BART가 개별 트리의 영향력을 제한하면서도, 여러 개의 약한 트리들이 모여 복잡한 함수 $f(x)$를 근사할 수 있도록 도와줍니다.
+
+---
+
+---
+
+## Bayesian Backfitting MCMC
+
+> 이제 어떻게 sum-of-tress 모델을 fitting 하는 지 알아보겠습니다다.
+
+BART는 sum-of-trees 모델의 posterior를 추정하기 위해  
+**Bayesian backfitting MCMC**를 사용합니다. 이는 CGM98 (Chipman, George, McCulloch, 1998)에서 제안한 backfitting 전략을 기반으로 하며,  
+각각의 트리와 리프 노드 값을 **full conditional posterior**에서 샘플링하는 형태의 **Gibbs sampler**입니다.
+
+### 목적
+
+우리가 추정하고자 하는 전체 posterior는 다음과 같습니다:
+
+$$
+p\left( (T_1, M_1), \dots, (T_m, M_m), \sigma \mid Y \right)
+$$
+
+여기서,
+- $T_j$: $j$번째 트리의 구조 (내부 노드, split 변수, split 값 등)
+- $M_j = \{\mu_{ij}\}$: 말단 노드의 파라미터 집합
+- $\sigma$: 오차 
+
+---
+
+### Backfitting의 핵심 아이디어
+
+**전체 함수 $f(x)$를 한 번에 적합하지 않고**,  
+각각의 트리 $g_j(x) = g(x; T_j, M_j)$가 담당하는 **잔차(residual)** 를 반복적으로 업데이트합니다.
+
+즉, 나머지 모든 트리를 고정한 상태에서,  
+하나의 트리 $g_j$만 선택하여 다음 조건부 posterior에서 샘플링합니다:
+
+$$
+p(T_j, M_j \mid R_j, \sigma)
+$$
+
+여기서 $R_j$는 현재 $j$번째 트리가 담당해야 할 잔차:
+
+$$
+R_j = Y - \sum_{k \ne j} g_k(x)
+$$
+
+---
+
+## 알고리즘 전체 구조 (Gibbs Sampling)
+
+각 MCMC iteration에서 다음 과정을 반복합니다:
+
+### (1) 각 트리에 대해 다음을 순차적으로 수행
+
+#### (a) 트리 구조 $T_j$의 샘플링
+
+- 고정된 $R_j$를 이용해 $T_j$의 posterior 분포로부터 샘플링.
+- 가능한 트리 구조 후보들과 사전 확률 $p(T_j)$, likelihood를 곱해 MH(Metropolis-Hastings) 방식으로 수행.
+- 트리 구조 변화는 보통 아래 네 가지 제안(move) 중 하나:
+  - grow
+  - prune
+  - change
+  - swap
+
+#### (b) 리프 노드 파라미터 $M_j = \{\mu_{ij}\}$의 샘플링
+
+- 각 $\mu_{ij}$는 해당 노드에 속한 잔차 값들과 conjugate 정규 prior를 통해
+- 다음과 같은 조건부 posterior에서 직접 샘플링:
+
+$$
+\mu_{ij} \mid \text{data}, T_j, \sigma \sim \mathcal{N}(\tilde{\mu}_{ij}, \tilde{\sigma}^2)
+$$
+
+- $\tilde{\mu}_{ij}$, $\tilde{\sigma}^2$는 해당 노드에 속한 데이터의 평균, $\sigma^2$, prior variance로 구성됨.
+
+---
+
+### (2) 오차 분산 $\sigma^2$ 샘플링
+
+- 모든 트리 구조 및 파라미터가 주어졌을 때, 잔차 $Y - \hat{Y}$를 기준으로 다음 분포에서 샘플링:
+
+$$
+\sigma^2 \mid Y, T_{1:m}, M_{1:m} \sim \text{Inv-}\chi^2(\nu^*, \lambda^*)
+$$
+
+- $\nu^* = \nu + n$, $\lambda^*$는 prior의 scale과 squared residual sum으로 계산됨.
+
+---
+
+## 요약: Bayesian Backfitting의 성격
+
+| 항목 | 설명 |
+|:--|:--|
+| 샘플링 방식 | full posterior에 대해 block-wise Gibbs Sampling |
+| 구조 | 각 트리에 대해 트리 구조 + 리프 파라미터 동시 업데이트 |
+| 목표 | 전체 예측함수 $f(x) = \sum_j g_j(x)$를 posterior 평균으로 근사 |
+| 특징 | 전체 모델이 아닌 개별 구성요소를 반복적으로 개선 |
+| 장점 | 복잡한 함수 $f$에 대해 예측 정확도 + 불확실성 추정 가능 |
+
+---
+
+#### 정리
+
+- 전체 함수를 한꺼번에 업데이트하지 않고, 각 트리 하나씩 번갈아 가며 잔차를 설명하는 방식.
+- 이는 **Gradient Boosting처럼 residual을 순차적으로 줄이는 방식**과 구조적으로 유사하지만,  
+  **확률 모델 기반의 MCMC를 통해 샘플링**한다는 점에서 베이지안적 특성이 강조됩니다.
+- 파라미터가 conjugate 구조도록 설정하여 closed-form conditional posterior를 통해 효율적 샘플링이 가능합니다.
+
+---
+## Reference
+- [Bayesian Backfitting](https://www.jstor.org/stable/2676659?seq=1)
+- [Bayesian Additive Regression Trees: A Review and Look Forward](https://www.annualreviews.org/content/journals/10.1146/annurev-statistics-031219-041110)
+- [BART package in r](https://cran.r-project.org/web/packages/BART/index.html)
