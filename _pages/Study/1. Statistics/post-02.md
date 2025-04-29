@@ -317,6 +317,7 @@ $$
 - $\hat{p}_k$ 값의 분포(예: credible interval)를 추정하면, 변수 중요도에 대한 **통계적 신뢰**까지 제시할 수 있습니다.
 
 > 이와 같은 변수 중요도 분석은 BART가 예측뿐만 아니라 **설명력 있는 모델링에도 유용**하다는 점을 보여줍니다.
+
 ---
 ## End
 이번 포스팅에서는 BART(Bayesian Additive Regression Tree)의 핵심 개념, 수학적 구성 요소, 정규화된 prior 구조, Bayesian Backfitting MCMC, 그리고 변수 선택 메커니즘까지 상세히 살펴보았습니다.

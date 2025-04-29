@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Kernel Machine Regrssion(BKMR)"
 tag : 
-    - statistics
+    - Statistics
     - BKMR
     - Bayesian Kernel Machine Regrssion
     - Bayesian
