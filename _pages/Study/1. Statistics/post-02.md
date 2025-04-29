@@ -286,6 +286,7 @@ $$
 - 이는 **Gradient Boosting처럼 residual을 순차적으로 줄이는 방식**과 구조적으로 유사하지만,  
   **확률 모델 기반의 MCMC를 통해 샘플링**한다는 점에서 베이지안적 특성이 강조됩니다.
 - 파라미터가 conjugate 구조도록 설정하여 closed-form conditional posterior를 통해 효율적 샘플링이 가능합니다.
+
 ---
 
 ## Variable Selection in BART
