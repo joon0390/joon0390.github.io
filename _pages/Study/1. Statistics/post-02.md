@@ -23,7 +23,7 @@ $$Y  = f(x)$$
 우리가 원하는 함수 $f$를 보다 정확히 추론하기 위해 많은 방식이 연구되어왔습니다. 
 Regression Model부터  Neural Network까지 모두 함수 $f$를 어떻게 추론(or 근사)할 것인가에 대한 다양한 방법론이라고 생각할 수 있습니다. 
 
-이번에 제가 소개할 방법론은 여러 개의 **Regression Tree**의 합으로 $f(x) = E(Y\|x)$ 를 근사하는 방법입니다. 수식으로 간단히 표현해보면 다음과 같습니다.
+이번에 제가 소개할 방법론은 여러 개의 **Regression Tree**의 합으로 $f(x) = \mathbb{E}[Y\mid x]$ 를 근사하는 방법입니다. 수식으로 간단히 표현해보면 다음과 같습니다.
 
 $$f(x) \approx h(x)  = \sum_{j=1}^mg_j(x), \;\;g_j : \text{regressoin tree}$$
 
@@ -47,7 +47,7 @@ Boosting은 이전 트리가 설명하지 못한 부분을 순차적으로 다�
 ---
 #### 이제 본격적으로 BART(Bayesian Additive Regression Tree)에 대한 이야기를 해보겠습니다.
 
-Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=E(Y\|x)$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
+Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=\mathbb{E}[Y\mid x]$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
 
 주요 아이디어는 다음과 같습니다.
 >- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularize하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬자!
@@ -67,9 +67,34 @@ BART는 **강력한 사전 분포를 통해 복잡한(parameter rich) 모델을 
 
 
 ---
+
 ## The BART model
 언급했었던 대로 BART 모델은 두 부분으로 구성되는데, 이는 **a-sum-of-trees 모델** 과 모델의 파라미터에 부여되는 **Regularization 사전분포** 입니다.
 
 
 ### A-sum-of-trees model
-- 
+   - Notation
+      - $T$ : 내부 노드, 결정규칙, 말단 노드 집합으로 구성되는 Binary Tree
+      - $M = \{\mu_1,\mu_2,\dots,\mu_b\}$ : $T$ 의 $b$ 개의 말단 노드에 주어진 파라미터 집합
+
+여기서 결정 규칙은 $x=(x_1,x_2,\dots,x_p)$ 가 입력으로 주어질 때, Binary Splits으로 볼 수 있습니다. 에를 들어 $\{x \in A\}\; vs\;\{x \notin A\} $ 같이 주어질 수 있습니다. 각각의 입력 $x$ 는 연속적인 결정규칙에 의해 하나의 말단 노드에 배정받게 됩니다. 그리고 해당 말단 노드의 value$(\mu_i)$ 를 갖게 됩니다. 주어진 $T$ 와 $M$ 에 대해서 $x$ 를 $\mu_i \in M$ 으로 assign하는 함수를 이제 $g(x;T,M)$ 으로 표기하겠습니다.   
+이제 트리 모합 모델을 다음과 같이 표기할 수 있습니다.
+
+$$Y = \sum_{j=1}^mg(x;T,M) + \epsilon,\;\;\epsilon\sim N(0,\sigma^2) $$
+
+이제 주어진 $x$에 대한 출력의 기댓값 $\mathbb{E}[Y\mid x]$ 는 $g(x;T_j,M_j)$ 에 의해 $x$ 에 할당된 $\mu_{ij}$ 들의 합으로 표현될 수 있습니다. 여기서 중요한 것은 단변수의 상황에는 각각의 $\mu_{ij}$ 가 Main effect를 의미하며, 다변수의 상황에서는 변수간의 Interaction effect를 의미한다는 것입니다. 따라서 자연스레, sum-of-trees 모델은 main effect와 interaction effect를 모두 포착할 수 있게 됩니다.
+
+쉽게 말해 노드에서의 결정 규칙이 일변수에서 다변수로 됨에 따라 상호작용을 고려할 수 있다는 것입니다. 예를 들어
+단일 변수의 경우, 
+
+>$$ x_1  < 0.5  $$
+
+의 결정 규칙을 가지고 있었다면, 다변수에서는  
+
+>$$x_1 < 0.5 \;\;\&\;\; x_2 > 0.3 $$
+
+처럼 확장되어 상호작용을 고려할 수 있게 됩니다. 
+
+---
+### A regularization prior
+
