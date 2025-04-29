@@ -7,6 +7,7 @@ tag :
     - Regression Tree
     - Bayesian
 
+thumbnail: "/assets/img/thumbnail/bart.jpg"
 date: "2025-04-28"
 ---
 
@@ -49,7 +50,7 @@ Boosting은 이전 트리가 설명하지 못한 부분을 순차적으로 다�
 Chipman et al. (2010) 에서 저자는 Sum-of-trees 모델을 사용하여 $f(x)=E(Y\|x)$ 를 근사하는 방법론인 Bayesian Additive Regression Model을 제안했습니다. 
 
 주요 아이디어는 다음과 같습니다.
->- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularize하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬겠다.
+>- 각각의 Tree 들의 **영향력을 작게 유지**하기 위해 **Regularize하는 Prior**를 부여하여 Sum-of-trees 모델을 다듬자!
 
 논문의 표현 방식을 빌려오면, 각각의 Regression Tree $g_j$들을 **weak Learners**로 만드는 것입니다. 각 $g_j$의 effects를 약화시킴으로써, BART는 각각의 약한 트리들이 함수 $f$의 small \& different portion을 설명하는 모델이 됩니다. 
 
@@ -67,4 +68,8 @@ BART는 **강력한 사전 분포를 통해 복잡한(parameter rich) 모델을 
 
 ---
 ## The BART model
-fds
+언급했었던 대로 BART 모델은 두 부분으로 구성되는데, 이는 **a-sum-of-trees 모델** 과 모델의 파라미터에 부여되는 **Regularization 사전분포** 입니다.
+
+
+### A-sum-of-trees model
+- 
