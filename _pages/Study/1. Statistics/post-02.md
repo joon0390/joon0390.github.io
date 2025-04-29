@@ -324,7 +324,7 @@ $$
 
 BART는 복잡한 함수 $f(x)$를 표현하는 데 있어 **설명 가능성과 예측 정확도**, 그리고 **불확실성 정량화**까지 모두 갖춘 강력한 Bayesian 기법입니다.
 
-다음 포스팅에서는 원 논문에서 제안한 BART의 실험 결과와 다른 머신러닝 모델들과의 성능 비교, 그리고 실제 데이터셋에 적용한 사례를 리뷰할 예정입니다. 긴 글 읽어주셔서 감사합니다 :);)
+다음 포스팅에서는 원 논문에서 제안한 BART의 실험 결과와 다른 머신러닝 모델들과의 성능 비교, 그리고 실제 데이터셋에 적용한 사례를 리뷰할 예정입니다. 긴 글 읽어주셔서 감사합니다 :)
 ## Reference
 - [Bayesian Backfitting](https://www.jstor.org/stable/2676659?seq=1)
 - [Bayesian Additive Regression Trees: A Review and Look Forward](https://www.annualreviews.org/content/journals/10.1146/annurev-statistics-031219-041110)
