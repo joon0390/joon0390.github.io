@@ -181,6 +181,7 @@ $$
 
 ---
 
+
 #### 정리
 
 BART에서는 prior를 단순히 무정보적(noninformative) 하게 설정하는 것이 아니라, 실제 데이터 분산을 기반으로 사전 정보를 반영하는 **data-informed prior approach**를 사용합니다. 이로 인해 데이터가 사전분포에 반영되어서는 안된다는 베이지안 원칙에는 어긋나지만, 데이터와 사전분포의 range가 충돌하지 않기 위해  compromise합니다. 
@@ -279,27 +280,50 @@ $$
 - $\nu^* = \nu + n$, $\lambda^*$는 prior의 scale과 squared residual sum으로 계산됨.
 
 ---
-
-## 요약: Bayesian Backfitting의 성격
-
-| 항목 | 설명 |
-|:--|:--|
-| 샘플링 방식 | full posterior에 대해 block-wise Gibbs Sampling |
-| 구조 | 각 트리에 대해 트리 구조 + 리프 파라미터 동시 업데이트 |
-| 목표 | 전체 예측함수 $f(x) = \sum_j g_j(x)$를 posterior 평균으로 근사 |
-| 특징 | 전체 모델이 아닌 개별 구성요소를 반복적으로 개선 |
-| 장점 | 복잡한 함수 $f$에 대해 예측 정확도 + 불확실성 추정 가능 |
-
----
-
-#### 정리
+### 정리
 
 - 전체 함수를 한꺼번에 업데이트하지 않고, 각 트리 하나씩 번갈아 가며 잔차를 설명하는 방식.
 - 이는 **Gradient Boosting처럼 residual을 순차적으로 줄이는 방식**과 구조적으로 유사하지만,  
   **확률 모델 기반의 MCMC를 통해 샘플링**한다는 점에서 베이지안적 특성이 강조됩니다.
 - 파라미터가 conjugate 구조도록 설정하여 closed-form conditional posterior를 통해 효율적 샘플링이 가능합니다.
-
 ---
+
+## Variable Selection in BART
+
+BART는 명시적으로 변수 선택(variable selection)을 수행하진 않지만,  
+**모델 내 각 변수의 중요도**를 추정할 수 있는 **변수 포함 비율 (variable inclusion proportions)** 개념을 제공합니다.
+
+### 변수 선택 메커니즘
+
+- BART의 트리 분할 과정에서, 각 split은 입력 변수 중 하나를 선택하여 수행됩니다.
+- MCMC 샘플링 과정에서 **각 변수가 얼마나 자주 분할에 사용되었는지**를 기록할 수 있습니다.
+- 이를 기반으로 **변수 포함 확률(variable inclusion probabilities)** 을 계산할 수 있습니다.
+
+$$
+\hat{p}_k = \frac{\text{Number of splits on variable } x_k}{\text{Total number of splits across all trees and iterations}}
+$$
+
+이 확률 $\hat{p}_k$는 변수 $x_k$가 모델에서 얼마나 중요하게 사용되고 있는지를 나타냅니다.
+
+### 해석 방법
+
+- $\hat{p}_k$ 값이 높을수록 변수 $x_k$는 모델의 다양한 트리에서 반복적으로 사용되며, 중요한 예측 변수로 간주됩니다.
+- 반면 $\hat{p}_k$ 값이 매우 작거나 0에 가까우면, 해당 변수는 모델에서 거의 사용되지 않았으며 중요도가 낮다고 판단할 수 있습니다.
+
+### 장점
+
+- 기존의 결정 트리 기반 변수 중요도와 달리, **posterior 기반 확률적 추론**이므로  
+  **불확실성까지 반영된 변수 중요도 해석**이 가능합니다.
+- $\hat{p}_k$ 값의 분포(예: credible interval)를 추정하면, 변수 중요도에 대한 **통계적 신뢰**까지 제시할 수 있습니다.
+
+> 이와 같은 변수 중요도 분석은 BART가 예측뿐만 아니라 **설명력 있는 모델링에도 유용**하다는 점을 보여줍니다.
+---
+## End
+이번 포스팅에서는 BART(Bayesian Additive Regression Tree)의 핵심 개념, 수학적 구성 요소, 정규화된 prior 구조, Bayesian Backfitting MCMC, 그리고 변수 선택 메커니즘까지 상세히 살펴보았습니다.
+
+BART는 복잡한 함수 $f(x)$를 표현하는 데 있어 **설명 가능성과 예측 정확도**, 그리고 **불확실성 정량화**까지 모두 갖춘 강력한 Bayesian 기법입니다.
+
+다음 포스팅에서는 원 논문에서 제안한 BART의 실험 결과와 다른 머신러닝 모델들과의 성능 비교, 그리고 실제 데이터셋에 적용한 사례를 리뷰할 예정입니다. 긴 글 읽어주셔서 감사합니다 :);)
 ## Reference
 - [Bayesian Backfitting](https://www.jstor.org/stable/2676659?seq=1)
 - [Bayesian Additive Regression Trees: A Review and Look Forward](https://www.annualreviews.org/content/journals/10.1146/annurev-statistics-031219-041110)
