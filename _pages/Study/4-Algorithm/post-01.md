@@ -1,18 +1,18 @@
 ---
 title: "MCMC Sampling in Bayesian Models"
-tag:
-    - Bayesian
-    - Sampling
-    - MCMC
-    - Gibbs Sampling
-    - Metropolis-Hastings
-    - Algorithm
+tag :
+        - Bayesian
+        - Sampling
+        - MCMC
+        - Gibbs Sampling
+        - Metropolis-Hastings
+        - Algorithm
 
-date: "2025-05-01"
+permalink: /study/mcmc-sampling
+date: "2025-04-23"
 ---
 
 # MCMC Sampling in Bayesian Models
-
 > 본 포스팅에서는 베이지안 추론에서 핵심이 되는 MCMC(Markov Chain Monte Carlo) 알고리즘의 원리와 구현 방식을 자세히 살펴봅니다.  
 
 
@@ -29,6 +29,7 @@ date: "2025-05-01"
 $$
 p(\theta \mid \mathbf{y})=\dfrac{p(\mathbf{y}\mid \theta)\,p(\theta)}{p(\mathbf{y})}
 $$
+
 <br/>
 
 하지만 분모에 등장하는 정규화 상수 혹은 Evidence $p(\mathbf{y})$는 다음과 같은 고차원 적분으로 정의됩니다.
@@ -36,6 +37,7 @@ $$
 $$
 p(\mathbf{y})=\int p(\mathbf{y}∣\theta)p(\theta)d\theta
 $$
+
 <br/>
 
 따라서 대부분의 실제 모델에서는 이 적분을 closef form으로 계산하기가 거의 불가능합니다. 특히 파라미터 $\theta$의 차원이 커짐에 따라 차원의 저주로 인해 수치적분 방식은 계산의 비용이 급격하게 증가하게 됩니다.

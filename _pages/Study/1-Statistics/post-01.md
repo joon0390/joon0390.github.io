@@ -149,7 +149,7 @@ $$
    - Trace plot, $\hat{R}$, effective sample size(ESS)
 
 
->MCMC Sampling 절차에 대한 자세한 설명은   [MCMC Sampling in Bayesian Models](/study/4.Algorithm/mcmc-sampling-guide) 글을 참고하세요.
+>MCMC Sampling 절차에 대한 자세한 설명은   [MCMC Sampling in Bayesian Models](joon0390.github.io\_pages\Study\4-Algorithm\post-01) 글을 참고하세요.
 
 
 ---
