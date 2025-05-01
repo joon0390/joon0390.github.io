@@ -8,7 +8,7 @@ tag :
         - Metropolis-Hastings
         - Algorithm
 
-permalink: /study/mcmc-sampling
+permalink: /Study/Algorithm/MCMC
 date: "2025-04-23"
 ---
 
