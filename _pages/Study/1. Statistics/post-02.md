@@ -13,7 +13,7 @@ date: "2025-04-28"
 ---
 
 # BART
-이 포스팅은 Chipman et al. (2010)의 논문 ["BART: Bayesian Additive Regression Trees"](https://arxiv.org/pdf/0806.3286)를 읽고 정리한 글입니다.
+>이 포스팅은 Chipman et al. (2010)의 논문 ["BART: Bayesian Additive Regression Trees"](https://arxiv.org/pdf/0806.3286)를 읽고 정리한 글입니다.
 
 ---
 ## Introduction
@@ -321,7 +321,7 @@ $$
 > 이와 같은 변수 중요도 분석은 BART가 예측뿐만 아니라 **설명력 있는 모델링에도 유용**하다는 점을 보여줍니다.
 
 ---
-## End
+## Conclusion
 이번 포스팅에서는 BART(Bayesian Additive Regression Tree)의 핵심 개념, 수학적 구성 요소, 정규화된 prior 구조, Bayesian Backfitting MCMC, 그리고 변수 선택 메커니즘까지 상세히 살펴보았습니다.
 
 BART는 복잡한 함수 $f(x)$를 표현하는 데 있어 **설명 가능성과 예측 정확도**, 그리고 **불확실성 정량화**까지 모두 갖춘 강력한 Bayesian 기법입니다.
