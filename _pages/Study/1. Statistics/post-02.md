@@ -240,7 +240,7 @@ $$
 
 ---
 
-## 알고리즘 전체 구조 (Gibbs Sampling)
+## Gibbs Sampling
 
 각 MCMC iteration에서 다음 과정을 반복합니다:
 
