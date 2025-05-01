@@ -1,11 +1,12 @@
 ---
-title: "BART : Bayesian Additive Regression Tree"
+title: "[Paper Review] BART : Bayesian Additive Regression Tree"
 tag : 
     - Statistics
+    - Bayesian
     - BART
     - Bayesian Additive Regression Tree
     - Regression Tree
-    - Bayesian
+    - Classification
 
 thumbnail: "/assets/img/thumbnail/bart.jpg"
 date: "2025-04-28"
