@@ -8,7 +8,7 @@ tag :
     - Regression Tree
     - Classification
 
-permalink: /Study/Statistics/BART
+permalink: /Study/1-Statistics/BART
 thumbnail: "/assets/img/thumbnail/bart.jpg"
 date: "2025-04-28"
 ---

@@ -9,7 +9,7 @@ tag :
     - Kernel Method
     - Gaussian Process
 
-permalink: /Study/Statistics/BKMR
+permalink: /Study/1-Statistics/BKMR
 thumbnail : "/assets/img/bkmr/beta.png"
 date: "2025-05-01"
 ---

@@ -9,7 +9,7 @@ tag :
         - Algorithm
         - 
 thumbnail : "/assets/img/MCMC/markov_chain.png"
-permalink: /Study/Algorithm/MCMC
+permalink: /Study/4-Algorithm/MCMC
 date: "2025-04-23"
 ---
 
