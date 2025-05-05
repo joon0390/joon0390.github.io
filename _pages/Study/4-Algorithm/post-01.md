@@ -8,8 +8,8 @@ tag :
         - Metropolis-Hastings
         - Algorithm
         - 
-thumbnail : "/assets/img/MCMC/markov_chain.png"
 permalink: /Study/4-Algorithm/MCMC
+thumbnail : "/assets/img/MCMC/markov_chain.png"
 date: "2025-04-23"
 ---
 
