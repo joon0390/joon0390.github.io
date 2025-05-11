@@ -9,7 +9,7 @@ tag :
     - Classification
 
 permalink: /Study/1-Statistics/BART
-thumbnail: "/assets/img/thumbnail/bart.jpg"
+thumbnail: "/assets/img/bart/bart.jpg"
 date: "2025-04-28"
 ---
 
