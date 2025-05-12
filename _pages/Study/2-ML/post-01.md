@@ -9,9 +9,8 @@ tag :
     - Random Kernel
 
 permalink: /Study/2-ML/Rocket
-thumbnail: "/assets/img/rocket/rocket.jpg"
+thumbnail: "/assets/img/rocket/rocket.png"
 date: "2025-05-10"
----
 ---
 
 # ROCKET: Exceptionally fast and accurate time series classification using random convolutional kernels
