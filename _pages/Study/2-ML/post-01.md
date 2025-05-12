@@ -3,7 +3,7 @@ title: "[Paper Review] ROCKET: Exceptionally fast and accurate time series class
 tag : 
     - Machine learning
     - Time series 
-    - Classificatin
+    - Classification
     - Rocket
     - Convolution
     - Random Kernel
