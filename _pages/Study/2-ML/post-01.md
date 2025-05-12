@@ -113,11 +113,10 @@ clf.fit(X_train_transform, y_train)
 print("Test Accuracy:", clf.score(X_test_transform, y_test))
 ```
 
-> 더 많은 예제는 [MiniRocket](https://github.com/angus924/minirocket) 공식 GitHub에서 확인할 수 있습니다.
 
 ---
 
-## 결론
+## Conclusion
 
 ROCKET은 무작위 커널이라는 단순한 아이디어를 통해, 기존의 복잡하고 느린 시계열 분류 알고리즘들을 능가하는 성능을 보여줍니다. 특히 학습 속도, 확장성, 정확도 면에서 모두 우수하여 **현실적인 시계열 분류 문제에 매우 실용적인 대안**이 됩니다.
 
