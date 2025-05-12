@@ -2,7 +2,7 @@
 title: "[Paper Review] ROCKET: Exceptionally fast and accurate time series classification using random convolutional kernels"
 tag : 
     - Machine learning
-    - Time seris 
+    - Time series 
     - Classificatin
     - Rocket
     - Convolution
