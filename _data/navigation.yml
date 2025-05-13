@@ -1,0 +1,16 @@
+# main links
+main:
+  - title: "Blog"
+    url: /posts/  
+  - title: "About Me"
+    url: /about/  # portfolio 페이지로 연결
+  - title: "Category"
+    url: /categories/
+  - title: "Paper Reviews"
+    url: /papers/  # 논문 리뷰 아카이브 페이지
+  - title: "Tag"
+    url: /tags/
+  #- title: "Sample Collections"
+  #   url: /collection-archive/
+  # - title: "Sitemap"
+  #   url: /sitemap/

@@ -1,0 +1,29 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+
+a {
+    text-decoration: none;
+    color: #000000; // 기본: 검은색
+  
+    &:focus {
+      @extend %tab-focus;
+    }
+  
+    &:visited {
+      color: #000000; // 방문해도 색상 유지 (검정)
+    }
+  
+    &:hover {
+      color: #888888; // 호버 시: 회색
+      outline: 0;
+    }
+  }
+  
