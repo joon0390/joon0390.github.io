@@ -1,16 +1,17 @@
 ---
 title: "Projects"
-layout: single
+layout: collection
 permalink: /projects/
-toc: true
-toc_sticky: true
+collection: projects
 classes: wide
 author_profile: true
+tox: true
+toc_sticky: true
 ---
 
 ## 개요
 
-저희 프로젝트 목록입니다. 
+제가 수행한 프로젝트 목록입니다. 
 
 ---
 

@@ -290,6 +290,10 @@ tag_archive:
 #     category: /categories/:name/
 #     tag: /tags/:name/
 
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:path/
 
 # HTML Compression
 # - https://jch.penibelst.de/
