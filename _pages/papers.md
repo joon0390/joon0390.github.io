@@ -16,8 +16,8 @@ author_profile: true
 
 ## 📄 목록
 
-### 1. [ROCKET: Random Convolutional Kernels](/rocket/)
+#### 1. [ROCKET: Random Convolutional Kernels](/rocket/)
 
+#### 2. [BART : Bayesian Additive Regression Tree](/bart/)
 
-### 2. [BART : Bayesian Additive Regression Tree](/bart/)
-
+#### 3. [GP-BART : a novel Bayesian additive regression trees approach using Gaussian processes](/gp-bart/)
