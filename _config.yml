@@ -115,7 +115,7 @@ analytics:
 author:
   name             : "Junhee Kim"
   avatar           : "/assets/img/me.webp"
-  bio              : "I'm studying Bayesian ML, DL in Bayes LAB, INHA University"
+  bio              : "I'm studying **Bayesian ML, DL** in [Bayes Inference LAB](https://sites.google.com/view/bstatjo/lab?authuser=0), INHA University"
   location         : "Incheon, Korea"
   email            : "kim8881472@gmail.com"
   links:
@@ -125,7 +125,9 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/joon0390"
-
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/junhee-kim-08695a352/"
 atom_feed:
   hide: true
   
@@ -143,7 +145,7 @@ footer:
       url: "https://github.com/joon0390"
     - label: "Linkedin"
       icon: "fab fa-fw fa-linkedin"
-      url: ""
+      url: "https://www.linkedin.com/in/junhee-kim-08695a352/"
     # - label: "Bitbucket"
     #   icon: "fab fa-fw fa-bitbucket"
     #   # url:
