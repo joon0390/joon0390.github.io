@@ -173,9 +173,9 @@ print(f"Predictive 95% CI: {y_pred.ppf(0.025):.3f}, {y_pred.ppf(0.975):.3f}")
 ---
 
 ## Conclusion
-Bayesian Linear Regression은 선형 모델에 확률론적 불확실성 해석을 더한 기법으로, 사전분포를 통해 과적합을 방지하고, 사후분포로 예측 신뢰도를 정량적으로 평가할 수 있습니다. Conjugate 모형을 사용하면 분석적 방식으로 빠르게 적합할 수 있고, 복잡한 Non-Conjugate 모형에서는 MCMC나 변분추론을 통해 확장 가능합니다. 
+Bayesian Linear Regression은 선형 모델에 확률론적 불확실성 해석을 더한 기법으로, 사전분포를 통해 과적합을 방지하고, 사후분포로 예측 신뢰도를 정량적으로 평가할 수 있습니다. Conjugate 모형을 사용하면 분석적 방식으로 빠르게 적합할 수 있고, 복잡한 Non-Conjugate 모형에서는 MCMC나 Variational Inference(VI) 등의 근사 기법을 통해 확장 가능합니다. 
 
-글 읽어주셔서 감사합니다.
+감사합니다.
 
 ---
 
