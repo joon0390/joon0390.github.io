@@ -21,3 +21,5 @@ author_profile: true
 #### 2. [BART : Bayesian Additive Regression Tree](/bart/)
 
 #### 3. [GP-BART : a novel Bayesian additive regression trees approach using Gaussian processes](/gp-bart/)
+
+#### 4. [Gaussian Processes Over Graphs](/gpg/)
