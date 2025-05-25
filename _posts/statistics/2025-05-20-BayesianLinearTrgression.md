@@ -5,8 +5,9 @@ date: 2025-05-20
 permalink: /BLR/
 categories:
   - Statistics
+  - Machine Learning
+
 tags :
-   - Statistics
    - Bayesian
    - Regression
    - Linear Regression
