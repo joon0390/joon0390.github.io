@@ -5,7 +5,7 @@ permalink: /projects/
 collection: projects
 classes: wide
 author_profile: true
-tox: true
+toc: true
 toc_sticky: true
 ---
 
