@@ -2,19 +2,19 @@
 title: "Paper Reviews"
 layout: single
 permalink: /papers/
-toc: False
-toc_sticky: False
+toc: true
+toc_sticky: true
 classes: wide
 author_profile: true
 ---
 
-## 개요
+## 📋 Welcome to my library
 
-이 페이지는 최근 읽은 논문들을 요약하고, 핵심 내용을 정리하기 위한 용도입니다.
+이 페이지는 읽은 논문들을 요약하고, 핵심 내용을 정리하기 위한 용도입니다.
 
 ---
 
-## 📄 목록
+## 📄 Paper list
 
 1. [ROCKET: Random Convolutional Kernels](/rocket/)
 
