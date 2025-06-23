@@ -12,8 +12,6 @@ author_profile: true
 
 이 페이지는 읽은 논문들을 요약하고, 핵심 내용을 정리하기 위한 용도입니다.
 
----
-
 ## 📄 Paper list
 
 1. [ROCKET: Random Convolutional Kernels](/rocket/)
