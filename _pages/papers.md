@@ -2,8 +2,8 @@
 title: "Paper Reviews"
 layout: single
 permalink: /papers/
-toc: true
-toc_sticky: true
+toc: false
+toc_sticky: false
 classes: wide
 author_profile: true
 ---
