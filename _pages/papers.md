@@ -25,3 +25,5 @@ author_profile: true
 5. [Gaussian Processes Over Graphs](/gpg/)
 
 6. [Bayesian Learning Rule](/bayesian-learning-rule/)
+
+7. [Normalizing Flows](/normalizing-flows/)
