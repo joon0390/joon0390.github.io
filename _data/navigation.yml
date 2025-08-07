@@ -6,8 +6,6 @@ main:
     url: /projects/
   - title: "Blog"
     url: /posts/  
-  - title: "Paper Reviews"
-    url: /papers/  # 논문 리뷰 아카이브 페이지
   - title: "Category"
     url: /categories/
   - title: "Tag"
