@@ -113,7 +113,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "[Junhee Kim](https://heekim.notion.site/Junhee-Kim-s-CV-248703566e45800799b1de70206e3da0?source=copy_link)"
+  name             : "Junhee Kim"
   avatar           : "/assets/img/me.webp"
   bio              : "I'm studying **Bayesian ML, DL** in [Bayes Inference LAB](https://sites.google.com/view/bstatjo/lab?authuser=0), INHA University"
   location         : "Incheon, Korea"
