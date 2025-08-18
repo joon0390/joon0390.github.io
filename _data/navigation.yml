@@ -4,8 +4,8 @@ main:
     url: /about/ 
   - title: "Blog"
     url: /posts/  
-  - title: "Projects"
-    url: /projects/
+#  - title: "Projects"
+#    url: /projects/
   - title: "Category"
     url: /categories/
   - title: "Tag"
