@@ -6,9 +6,8 @@ permalink: /BLR/
 categories:
   - Statistics
   - Machine Learning
-
+  - Bayesian
 tags :
-   - Bayesian
    - Regression
    - Linear Regression
 
