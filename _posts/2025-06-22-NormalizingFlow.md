@@ -4,14 +4,14 @@ title: "[Paper Review] Normalizing Flows: Probabilistic Modeling and Inference"
 date: 2025-06-22
 permalink: /normalizing-flows/
 categories:
-  - Statistics
-  - Machine Learning
-  - Deep Learning
+    - Statistics
+    - Machine Learning
+    - Deep Learning
 tags: 
-  - Normalizing Flow
-  - Generative Model
-  - Bayesian
-  - Variational Inference
+    - Normalizing Flow
+    - Generative Model
+    - Bayesian
+    - Variational Inference
 toc: true
 toc_sticky: true
 ---
