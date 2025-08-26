@@ -2,7 +2,7 @@
 title: "Contrastive Learning 기반 주행패턴 분석"
 excerpt: "스마트폰 센서를 활용한 운전패턴 변화 탐지 및 분류 시스템 개발"
 collection: projects
-permalink : /projects_1/
+permalink : /project_1/
 layout: posts
 date: 2024-02-23
 tags:
