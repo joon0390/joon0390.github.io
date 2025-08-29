@@ -27,3 +27,12 @@ a {
     }
   }
   
+/* assets/css/main.scss */
+
+/* Correct CSS for sidebar category markers */
+.sidebar .nav__items li a::before {
+  content: "·";
+  font-weight: bold;
+  margin-right: 6px;
+  color: #888;
+}

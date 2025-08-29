@@ -1,16 +1,49 @@
-# main links
+# # main links
+# main:
+#   - title: "About Me"
+#     url: /about/ 
+#   - title: "Blog"
+#     url: /posts/  
+# #  - title: "Projects"
+# #    url: /projects/
+#   - title: "Category"
+#     url: /categories/
+#   - title: "Tag"
+#     url: /tags/
+#   #- title: "Sample Collections"
+#   #   url: /collection-archive/
+#   # - title: "Sitemap"
+#   #   url: /sitemap/
+
+
+# _data/navigation.yml
+
+# --- 현재 설정 (상단 메뉴) ---
 main:
   - title: "About Me"
-    url: /about/ 
+    url: /about/
   - title: "Blog"
-    url: /posts/  
-#  - title: "Projects"
-#    url: /projects/
+    url: /posts/
   - title: "Category"
-    url: /categories/
+    url: /category-archive/
   - title: "Tag"
     url: /tags/
-  #- title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+
+# _data/navigation.yml
+
+sidebar-category:
+  - title: "📚 Categories"
+    children:
+      - title: "Machine Learning"
+        url: "/categories/machine-learning/"
+      - title: "Deep Learning"
+        url: "/categories/deep-learning/"
+      - title: "Statistics"
+        url: "/categories/statistics/"
+        children: # Statistics의 하위 카테고리
+          - title: "Bayesian"
+            url: "/categories/bayesian/"
+      - title: "Graph"
+        url: "/categories/graph/"
+      - title: "Applied Topics"
+        url: "/categories/applied-topics/"

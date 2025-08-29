@@ -10,7 +10,6 @@ categories:
 tags: 
     - Normalizing Flow
     - Generative Model
-    - Bayesian
     - Variational Inference
 toc: true
 toc_sticky: true
