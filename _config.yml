@@ -19,7 +19,7 @@ locale                   : "ko-KR"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
 title                    : "Heekim's Blog"
 title_separator          : "Statistics, ML, DL"
-subtitle                 : "Welcome to my blog"
+subtitle                 : #"Welcome to my blog"
 name                     : "Junhee Kim"
 description              : "My Blog"
 url                      : "https://joon0390.github.io"
