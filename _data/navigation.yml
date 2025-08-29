@@ -32,7 +32,7 @@ main:
 # _data/navigation.yml
 
 sidebar-category:
-  - title: "📚 Categories"
+  - title: "Categories"
     children:
       - title: "Machine Learning"
         url: "/categories/machine-learning/"
