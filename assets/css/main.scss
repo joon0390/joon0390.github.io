@@ -9,57 +9,56 @@ search: false
 @import "minimal-mistakes"; // main partials
 
 
-a {
-    text-decoration: none;
-    color: #000000; // 기본: 검은색
-  
-    &:focus {
-      @extend %tab-focus;
-    }
-  
-    &:visited {
-      color: #000000; // 방문해도 색상 유지 (검정)
-    }
-  
-    &:hover {
-      color: #888888; // 호버 시: 회색
-      outline: 0;
-    }
-  }
-  
-/* assets/css/main.scss */
+/* --- Custom Styles Start --- */
 
-/* Correct CSS for sidebar category markers */
+// 1. 링크 기본 스타일
+a {
+  text-decoration: none;
+  color: #000000;
+
+  &:focus {
+    @extend %tab-focus;
+  }
+  &:visited {
+    color: #000000;
+  }
+  &:hover {
+    color: #888888;
+    outline: 0;
+  }
+}
+
+// 2. 사이드바 카테고리 앞에 점(·) 추가
 .sidebar .nav__items li a::before {
   content: "·";
   font-weight: bold;
   margin-right: 8px;
   color: #888;
-  width: 1500px;
 }
 
-
-// 3. 사이드바 카테고리 폰트 크기 조절
+// 3. 사이드바 네비게이션 리스트 스타일
 .nav__list {
+
   // 1단계 카테고리
   .nav__children > li > a {
     font-size: 0.79em;
     color: #383632;
+    // 이름이 길 경우 줄바꿈 방지 및 말 줄임표(...) 처리
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  // 2단계 카테고리
+  // 2단계 카테고리 (하위) 목록
   .nav__children--nested {
-    padding-left: 1.0em; // 원하는 만큼 들여쓰기
+    padding-left: 1.0em; // 들여쓰기
+  }
+
+  // 2단계 카테고리 (하위) 링크
+  .nav__children--nested li a {
     color: #4F4747;
   }
-
-  // 사이드바 카테고리 이름이 길 경우 줄바꿈 방지
-  .nav__children > li > a {
-    display: block; /* 한 줄 전체를 차지하도록 설정 */
-    white-space: nowrap; /* 줄바꿈 방지 */
-    overflow: hidden; /* 영역을 벗어나는 텍스트 숨기기 */
-    text-overflow: ellipsis; /* 숨겨진 텍스트를 ...으로 표시 */
-  }
-
 }
 
+/* --- Custom Styles End --- */
