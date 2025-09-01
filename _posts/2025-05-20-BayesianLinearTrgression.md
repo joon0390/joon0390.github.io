@@ -9,7 +9,6 @@ categories:
   - Bayesian
 tags :
    - Regression
-   - Linear Regression
 
 toc: true
 toc_sticky: true

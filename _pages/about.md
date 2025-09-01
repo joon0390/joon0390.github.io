@@ -3,8 +3,7 @@ title: "About Me"
 permalink: /about/
 layout: single
 author_profile: false
-sidebar:
-  nav: "sidebar-category"
+
 ---
 
 ## Welcome to My Blog!

@@ -33,6 +33,33 @@ a {
 .sidebar .nav__items li a::before {
   content: "·";
   font-weight: bold;
-  margin-right: 6px;
+  margin-right: 8px;
   color: #888;
+  width: 1500px;
 }
+
+
+// 3. 사이드바 카테고리 폰트 크기 조절
+.nav__list {
+  // 1단계 카테고리
+  .nav__children > li > a {
+    font-size: 0.79em;
+    color: #383632;
+  }
+
+  // 2단계 카테고리
+  .nav__children--nested {
+    padding-left: 1.0em; // 원하는 만큼 들여쓰기
+    color: #4F4747;
+  }
+
+  // 사이드바 카테고리 이름이 길 경우 줄바꿈 방지
+  .nav__children > li > a {
+    display: block; /* 한 줄 전체를 차지하도록 설정 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    overflow: hidden; /* 영역을 벗어나는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 숨겨진 텍스트를 ...으로 표시 */
+  }
+
+}
+

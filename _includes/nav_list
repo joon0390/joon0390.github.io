@@ -1,4 +1,4 @@
-<nav class="nav__list">
+<!-- <nav class="nav__list">
   {% if page.sidebar.title %}<h3 class="nav__title" style="padding-left: 0;">{{ page.sidebar.title }}</h3>{% endif %}
   <input id="ac-toc" name="accordion-toc" type="checkbox" />
   <label for="ac-toc">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle Menu" }}</label>
@@ -23,5 +23,76 @@
         </li>
       {% endfor %}
     {% endfor %}
+  </ul>
+</nav> -->
+{%- comment %} 
+  nav="sidebar-category" 로 전달된 값을 받아 sidebar_nav 변수에 저장합니다.
+  site.data.navigation['sidebar-category'] 와 동일한 결과입니다.
+{%- endcomment %}
+{%- assign sidebar_nav = site.data.navigation[include.nav] -%}
+{%- assign total_posts = site.posts | size -%}
+
+<nav class="nav__list">
+  <ul class="nav__items">
+    <li>
+      <span style="font-weight: bold;">TOTAL</span>
+    </li>
+
+    {%- comment %} 
+      sidebar-category의 최상위 항목들을 순회합니다. (예: "Categories")
+    {%- endcomment %}
+    {%- for nav in sidebar_nav -%}
+      {%- if nav.title -%}
+        <li>
+          <span class="nav__sub-title">{{ nav.title }}</span>
+        </li>
+      {%- endif -%}
+
+      {%- comment %} 
+        최상위 항목에 children이 있는지 확인합니다.
+      {%- endcomment %}
+      {%- if nav.children -%}
+        <ul class="nav__children">
+          {%- comment %} 
+            첫 번째 레벨의 카테고리들을 순회합니다. (예: "Machine Learning", "Statistics")
+          {%- endcomment %}
+          {%- for child in nav.children -%}
+            {%- assign category_slug = child.title | slugify -%}
+            {%- assign category_size = site.categories[category_slug] | size | default: 0 -%}
+            <li>
+              <a href="{{ child.url | relative_url }}">
+                {{ child.title }}
+                {%- if category_size > 0 -%}
+                  <span class="nav__count">({{ category_size }})</span>
+                {%- endif -%}
+              </a>
+
+              {%- comment %} 
+                첫 번째 레벨 카테고리에 또 children(하위 카테고리)이 있는지 확인합니다.
+              {%- endcomment %}
+              {%- if child.children -%}
+                <ul class="nav__children--nested">
+                  {%- comment %} 
+                    두 번째 레벨의 카테고리들을 순회합니다. (예: "Bayesian")
+                  {%- endcomment %}
+                  {%- for grandchild in child.children -%}
+                    {%- assign sub_category_slug = grandchild.title | slugify -%}
+                    {%- assign sub_category_size = site.categories[sub_category_slug] | size | default: 0 -%}
+                    <li>
+                      <a href="{{ grandchild.url | relative_url }}">
+                        {{ grandchild.title }}
+                        {%- if sub_category_size > 0 -%}
+                          <span class="nav__count">({{ sub_category_size }})</span>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endfor -%}
   </ul>
 </nav>

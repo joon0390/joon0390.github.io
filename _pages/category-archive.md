@@ -3,8 +3,7 @@ title: "Category"
 layout: categories
 permalink: /category-archive/
 author_profile: true
-sidebar:
-  nav: "sidebar-category"
+
 ---
 
 
