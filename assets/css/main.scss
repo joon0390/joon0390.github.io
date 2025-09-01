@@ -31,7 +31,7 @@ a {
 // 2. 사이드바 카테고리 앞에 점(·) 추가
 .sidebar .nav__items li a::before {
   content: "Ø";
-  font-weight: lighter;
+  font-weight: normal;
   margin-right: 6px;
   color: #302A2A;
 }
@@ -42,6 +42,7 @@ a {
   // 1단계 카테고리
   .nav__children > li > a {
     font-size: 0.79em;
+    font-weight: normal;
     color: #302A2A;
     // 이름이 길 경우 줄바꿈 방지 및 말 줄임표(...) 처리
     display: block;
@@ -52,7 +53,7 @@ a {
 
   // 2단계 카테고리 (하위) 목록
   .nav__children--nested {
-    font-weight: lighter;
+    font-weight: normal;
     font-size: 0.9em;
     padding-left: 1.0em; // 들여쓰기
     color: #4F4747;
