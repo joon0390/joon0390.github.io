@@ -26,7 +26,7 @@ url                      : "https://joon0390.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "https://github.com/joon0390/joon0390.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : "/assets/img/gaussian.png"
+logo                     : "/assets/img/new_gaussian.png"
 masthead_title           : " "
 breadcrumbs              : # true, false (default)
 words_per_minute         : 200
