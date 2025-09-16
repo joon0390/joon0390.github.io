@@ -125,12 +125,13 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/joon0390"
-    - label: "Linkedin"
-      icon: "fab fa-fw fa-linkedin"
-      url: "https://www.linkedin.com/in/junhee-kim-08695a352/"
     - label: "CV"
       icon: "fas fa-fw fa-id-card"
       url: "https://joon0390.github.io/cv/"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/junhee-kim-08695a352/"
+
 atom_feed:
   hide: true
   
