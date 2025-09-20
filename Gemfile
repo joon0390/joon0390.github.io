@@ -1,4 +1,6 @@
 source "https://rubygems.org"
-gemspec
+
+gem "jekyll", "~> 4.3.3"
+gem "minimal-mistakes-jekyll"
 gem "jekyll-paginate", "~> 1.1"
-gem "jekyll-archives" # <--- 이 라인을 추가하거나, 있는지 확인하세요.
+gem "jekyll-archives"
