@@ -114,7 +114,7 @@ analytics:
 # Site Author
 author:
   name             : "Junhee Kim"
-  avatar           : "/assets/img/me.webp"
+  avatar           : "/assets/img/image.png"
   bio              : "I'm studying **Bayesian ML, DL** in [Bayes Inference LAB](https://sites.google.com/view/bstatjo/lab?authuser=0), INHA University"
   location         : "Incheon, Korea"
   #email            : "kim8881472@gmail.com"
