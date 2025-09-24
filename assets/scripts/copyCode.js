@@ -11,7 +11,7 @@ const codeBlocks = document.querySelectorAll(
       window.navigator.clipboard.writeText(code);
   
       const img = copyCodeButton.querySelector("img");
-      img.src = "/assets/images/check.png";
+      img.src = "/assets/img/check.png";
   
       if (id) {
         clearTimeout(id);
