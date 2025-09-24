@@ -62,3 +62,7 @@ This blog covers topics centered on Bayesian probabilistic models, machine learn
 
 #### Affiliation
 - [Bayesian Inference Lab](https://sites.google.com/view/bstatjo/lab?authuser=0)
+
+#### Curriculum Vitae
+- [CV](https://joon0390.github.io/cv/)
+
