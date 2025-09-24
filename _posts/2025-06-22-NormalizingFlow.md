@@ -13,6 +13,7 @@ tags:
     - Variational Inference
 toc: true
 toc_sticky: true
+comments: true
 ---
 
 > 이 포스팅은 Papamakarios et al. (2021)의 ["Normalizing Flows for Probabilistic Modeling and Inference"](https://arxiv.org/abs/1912.02762), Kobyzev et al. (2021)의 ["Normalizing Flows: An Introduction and Review of Current Methods"](https://arxiv.org/pdf/1908.09257), 그리고 Rezende & Mohamed (2015)의 ["Variational Inference with Normalizing Flows"](https://proceedings.mlr.press/v37/rezende15.pdf) 논문을 읽고 정리한 글입니다.

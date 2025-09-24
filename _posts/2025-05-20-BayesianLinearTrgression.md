@@ -12,6 +12,7 @@ tags :
 
 toc: true
 toc_sticky: true
+comments: true
 ---
 
 > 이 포스팅은 Bayesian Linear Regression에 대한 개념을 소개하는 글입니다.
