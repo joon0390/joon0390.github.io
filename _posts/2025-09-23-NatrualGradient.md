@@ -14,6 +14,7 @@ tags:
 
 toc: true  
 toc_sticky: true  
+comments: true
 ---
 
 > 이 포스팅은 [Amari (1998)](https://ieeexplore.ieee.org/document/6790500)의 **Natural Gradient** 개념과  
