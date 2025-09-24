@@ -136,6 +136,7 @@ $$
 
 ## Python Code
 
+{% include code-header.html %}
 ```python
 import numpy as np
 from scipy.stats import invgamma, t
