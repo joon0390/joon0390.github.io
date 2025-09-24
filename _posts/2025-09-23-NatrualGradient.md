@@ -151,30 +151,12 @@ $$
 \tilde{\nabla}_\lambda \mathcal L = F(\lambda)^{-1}\nabla_\lambda \mathcal L.
 $$
 
----
 
 ### 4. 핵심 포인트
 
 - 일반 gradient는 유클리드 공간에서의 “좌표 의존적” 기울기.  
 - 자연 gradient는 분포 공간의 **KL 기하학(정보 기하학)** 을 고려한 기울기.  
 - 따라서 **파라미터화에 불변**하며, 동시에 feature 스케일 차이도 자동으로 보정.  
-
----
-
-## Application to Variational Inference
-
-Variational Inference(VI)에서는 근사 분포 $q_\lambda(\theta)$를 두고,  
-Evidence Lower Bound(ELBO)를 최대화합니다.  
-
-- **일반 gradient**: 좌표계와 스케일에 민감  
-- **자연 gradient**: KL geometry 반영 → 훨씬 안정적  
-
-예: **Gaussian Variational Approximation**
-$$
-q_\lambda(\theta) = \mathcal{N}(\mu, BB^\top + D^2),
-$$
-여기서 $\lambda = (\mu, B, D)$.  
-이 경우 자연 그래디언트를 사용하면 $\mu, B, D$ 업데이트가 빠르고 안정적입니다.  
 
 ---
 
@@ -188,7 +170,6 @@ $$
 - Ordinary Gradient는 **좌표축 기준**의 경사를 따라가기 때문에 곡선의 경로를 보입니다.  
 - Natural Gradient는 Fisher metric을 반영하여 **등고선을 따라 곧장 최적점으로 향하는 방향**을 잡습니다.  
 
----
 
 ### 2. Mixture of Gaussians Negative Log-Likelihood
 
@@ -202,6 +183,130 @@ $$
 
 ---
 
+
+## Variational Inference와 Natural Gradient
+
+Variational Inference(VI)는 복잡한 사후분포 $p(\theta|y)$를 tractable한 $q_\lambda(\theta)$로 근사하는 방법입니다.  
+최적화 목표는 ELBO (Evidence Lower Bound)입니다:
+
+$$
+\mathcal{L}(\lambda) = \mathbb{E}_{q_\lambda}[\log p(y,\theta)] - \mathbb{E}_{q_\lambda}[\log q_\lambda(\theta)].
+$$
+
+
+### Ordinary Gradient의 한계
+- ELBO는 고차원 파라미터 공간에서 곡률이 심하게 다릅니다.  
+- Ordinary Gradient는 parameterization과 스케일에 민감하여, 학습률 조정이 매우 까다롭습니다.  
+- 결과적으로 수렴 속도가 느리고 불안정합니다.  
+
+
+### Natural Gradient의 역할
+- VI에서의 파라미터 $\lambda$는 분포 $q_\lambda$ 자체를 나타내므로,  
+  자연스러운 거리 척도는 **KL divergence**입니다.  
+- Natural Gradient는 이 KL geometry를 반영하여 **불변성(invariance)** 을 확보합니다.  
+
+즉,
+$$
+\tilde{\nabla}_\lambda \mathcal L = F(\lambda)^{-1}\nabla_\lambda \mathcal L,
+$$
+여기서 $F(\lambda)$는 $q_\lambda$의 Fisher 정보 행렬입니다.
+
+
+### Gaussian VI 예시
+예를 들어,
+$$
+q_\lambda(\theta) = \mathcal N(\mu, \Sigma), \quad \lambda = (\mu, \Sigma).
+$$
+
+- Ordinary Gradient로는 $\Sigma$ 업데이트가 수치적으로 불안정해질 수 있습니다.  
+- Natural Gradient는 KL geometry를 따라 업데이트하므로,  
+  $\mu$와 $\Sigma$ 모두 안정적이고 효율적으로 최적화됩니다.  
+
+#### 파이썬 코드 
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 타겟분포 p(theta) = N(3, 1)
+mu_p, sigma_p = 3.0, 1.0
+
+# 파라미터 초기화
+mu, log_sigma = -2.0, 1.0
+lr = 0.1
+steps = 100
+
+traj_grad, traj_natgrad = [], []
+
+def kl_divergence(mu, sigma2):
+    return 0.5 * ((mu - mu_p)**2 / sigma_p**2 + sigma2/sigma_p**2 - 1 + np.log(sigma_p**2/sigma2))
+
+for method in ["grad", "natgrad"]:
+    mu, sigma2 = -2.0, np.exp(1.0)
+
+    traj = []
+    for t in range(steps):
+        traj.append((mu, np.sqrt(sigma2)))
+
+        grad_mu = (mu - mu_p) / sigma_p**2
+        grad_sigma2 = 0.5 * (1/sigma_p**2 - 1/sigma2)
+
+        if method == "grad":
+            mu -= lr * grad_mu
+            sigma2 -= lr * grad_sigma2
+        else:
+            nat_grad_mu = sigma2 * grad_mu
+            nat_grad_sigma2 = 2 * sigma2**2 * grad_sigma2
+            mu -= lr * nat_grad_mu
+            sigma2 -= lr * nat_grad_sigma2
+
+        sigma2 = max(sigma2, 1e-6)
+
+    if method == "grad":
+        traj_grad = traj
+    else:
+        traj_natgrad = traj
+
+mus = np.linspace(-2, 5, 100)
+sigs = np.linspace(0.2, 2.5, 100)
+M, S = np.meshgrid(mus, sigs)
+KL = np.array([[kl_divergence(m, s**2) for m in mus] for s in sigs])
+
+plt.figure(figsize=(8,6))
+cs = plt.contour(M, S, KL, levels=20, cmap="gray")
+plt.clabel(cs, inline=True, fontsize=8)
+
+plt.plot([m for m,s in traj_grad], [s for m,s in traj_grad], 'o-', label="Ordinary Gradient")
+plt.plot([m for m,s in traj_natgrad], [s for m,s in traj_natgrad], 'o-', label="Natural Gradient")
+plt.scatter([mu_p], [sigma_p], c="red", s=120, marker="*", label="True Posterior")
+
+plt.xlabel("Mean (mu)")
+plt.ylabel("Std (sigma)")
+plt.title("Gaussian VI: Gradient vs Natural Gradient")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
+![Gaussian Variational Inference](/assets/img/natural_gradient/output3.png){: .align-center}
+
+위 그림은 Gaussian Variational Inference를 Ordinary Gradient와 Natural Gradient 각각을 파이썬으로 구현하여 시각화한 예시입니다. 
+
+- 배경 등고선 (검은 곡선)
+KL divergence $\mathrm{KL}(q||p)$ 값의 등고선입니다. 안쪽으로 갈수록 값이 작아지며,
+실제 posterior $\mathcal N(3,1)$에서 최소가 됩니다.
+- 파란 경로 (Ordinary Gradient)
+	- 초기값에서 출발해 지그재그로 이동합니다.
+	- 이유: Ordinary Gradient는 단순히 좌표축 기준으로 업데이트하기 때문에,
+평균 $\mu$와 분산 $\sigma^2$의 스케일 차이를 보정하지 못합니다.
+  - 결과적으로 불필요하게 돌아가는 경로를 탑니다.
+- 주황 경로 (Natural Gradient)
+  - Fisher Information metric을 이용해 스케일 차이를 자동으로 보정합니다.
+  - $\sigma$ 방향으로는 보폭을 줄이고, $\mu$ 방향으로는 보폭을 키워 효율적으로 이동합니다.
+  - 그 결과, 곧장 빨간 별 로 안정적이고 빠르게 수렴합니다.
+
+---
+
+
 ## Intuition
 
 - 일반 gradient: 단순히 **좌표축 기준의 기울기**  
@@ -214,7 +319,6 @@ $$
 
 - **Natural Gradient**는 Variational Inference, 강화학습, Bayesian Deep Learning 등에서 필수적인 도구  
 - 분포의 기하학적 구조를 반영해 **더 효율적이고 안정적인 최적화**를 제공  
-- DeepGLM/GLMM 같은 최신 Bayesian Deep Learning 연구에서도 핵심적으로 활용됨  
 
 ---
 
