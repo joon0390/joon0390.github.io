@@ -224,9 +224,8 @@ $$
 
 #### 파이썬 코드 
 
-<pre>
 {% include code-header.html %}
-```{python}
+```
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -289,7 +288,6 @@ plt.legend()
 plt.grid()
 plt.show()
 ```
-</pre>
 
 ![Gaussian Variational Inference](/assets/img/natural_gradient/output3.png){: .align-center}
 
