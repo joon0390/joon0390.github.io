@@ -224,8 +224,8 @@ $$
 
 #### 파이썬 코드 
 
-{% include code-header.html %}
 <pre>
+{% include code-header.html %}
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
