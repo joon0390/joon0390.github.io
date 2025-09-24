@@ -16,7 +16,7 @@ toc: true
 toc_sticky: true  
 comments: true
 ---
-
+{% include code-header.html %}
 > 이 포스팅은 [Amari (1998)](https://ieeexplore.ieee.org/document/6790500)의 **Natural Gradient** 개념과  
 > Variational Inference에서의 응용을 정리한 글입니다.  
 
