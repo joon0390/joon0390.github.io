@@ -224,6 +224,7 @@ $$
   $\mu$와 $\Sigma$ 모두 안정적이고 효율적으로 최적화됩니다.  
 
 #### 파이썬 코드 
+<pre>
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -287,6 +288,7 @@ plt.legend()
 plt.grid()
 plt.show()
 ```
+</pre>
 
 ![Gaussian Variational Inference](/assets/img/natural_gradient/output3.png){: .align-center}
 
