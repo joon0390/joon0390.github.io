@@ -50,7 +50,5 @@ This blog covers topics centered on Bayesian probabilistic models, machine learn
 
 ### Key Topics
 - Bayesian Inference (MCMC, Variational Inference)  
-- Probabilistic Deep Learning (PyMC3, Pyro)  
-- Graphical Models & Graph Neural Networks  
-- Spatio-Temporal Modeling  
+- Probabilistic Deep Learning
 - And more
