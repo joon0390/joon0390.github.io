@@ -13,7 +13,7 @@ author_profile: false
   <!-- Left: Profile photo (square), shift image content down by 6px -->
   <div style="flex-shrink: 0;">
     <img
-      src="/assets/img/profile.jpg"
+      src="/assets/img/taipei.png"
       alt="Profile photo"
       style="
         width:150px;
