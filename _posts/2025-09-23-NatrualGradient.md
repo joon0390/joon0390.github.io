@@ -10,8 +10,7 @@ categories:
 tags:  
   - Natural Gradient
   - Variational Inference
-  - Information Geometry
-
+  
 toc: true  
 toc_sticky: true  
 comments: true

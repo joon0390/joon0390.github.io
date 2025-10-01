@@ -11,6 +11,7 @@ tags:
     - Normalizing Flow
     - Generative Model
     - Variational Inference
+  
 toc: true
 toc_sticky: true
 comments: true

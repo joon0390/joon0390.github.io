@@ -9,16 +9,6 @@ categories:
   - Machine Learning
 tags:  
   - Dimensionality Reduction
-  - PCA
-  - Kernel PCA
-  - Probabilistic PCA
-  - LLE
-  - GPLVM
-  - LDA
-  - Isomap
-  - t-SNE
-  - UMAP
-  - Bayesian
 toc: true  
 toc_sticky: true  
 comments: true
