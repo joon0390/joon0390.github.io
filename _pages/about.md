@@ -17,7 +17,7 @@ author_profile: false
       alt="Profile photo"
       style="
         width:200px;
-        height:250px;
+        height:230px;
         object-fit: cover;
         object-position: center -6px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
