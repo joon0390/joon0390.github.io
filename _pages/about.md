@@ -13,11 +13,11 @@ author_profile: false
   <!-- Left: Profile photo (square), shift image content down by 6px -->
   <div style="flex-shrink: 0;">
     <img
-      src="/assets/img/me.webp"
+      src="/assets/img/taipei.png"
       alt="Profile photo"
       style="
-        width:150px;
-        height:150px;
+        width:200px;
+        height:250px;
         object-fit: cover;
         object-position: center -6px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
