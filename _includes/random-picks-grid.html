@@ -1,5 +1,92 @@
 {% assign categories = site.data.navigation['sidebar-category'][0].children %}
 {% if categories %}
+<style>
+  .random-picks-grid {
+    margin: 2rem 0 2.5rem;
+  }
+
+  .random-picks-grid__wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .random-picks-grid__card {
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .random-picks-grid__card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.12);
+  }
+  .random-picks-grid__image-link {
+    display: block;
+    height: 170px;
+    overflow: hidden;
+  }
+  .random-picks-grid__image-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+  .random-picks-grid__card:hover .random-picks-grid__image-link img {
+    transform: scale(1.05);
+  }
+  .random-picks-grid__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #bfdbfe, #e0f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1d4ed8;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .random-picks-grid__body {
+    padding: 1.1rem 1.3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .random-picks-grid__category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .random-picks-grid__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1f2933;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+  .random-picks-grid__title:hover {
+    color: #1d4ed8;
+  }
+  .random-picks-grid__excerpt {
+    font-size: 0.9rem;
+    color: #4b5563;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .random-picks-grid__image-link {
+      height: 150px;
+    }
+  }
+</style>
 <section class="random-picks-grid">
   <h3 class="archive__subtitle">Category Picks</h3>
   <div class="random-picks-grid__wrapper">
