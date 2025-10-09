@@ -130,3 +130,27 @@ a {
 }
 
 /* --- Custom Styles End --- */
+
+// 4. 코드 블록 복사 버튼 위치 조정
+.highlight {
+  position: relative;
+
+  .copy-code-button {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    background: rgba(240, 240, 240, 0.9);
+    border-radius: 999px;
+    width: 1.85rem;
+    height: 1.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  pre {
+    margin-top: 0.8rem;
+  }
+}
