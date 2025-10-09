@@ -61,18 +61,42 @@ a {
 }
 
 .theme-toggle {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.05);
   border: 0;
   color: #302A2A;
   cursor: pointer;
   margin-left: 0.75rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0.35rem;
+  border-radius: 999px;
   font-size: 1.05rem;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+
+  i {
+    width: 100%;
+    text-align: center;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
 }
 
 .theme-toggle:focus {
   @extend %tab-focus;
+}
+
+.theme-toggle.theme-toggle--dark {
+  background: rgba(0, 0, 0, 0.4);
+  color: #f5f5f5;
 }
 
 .sidebar__recommendations {
