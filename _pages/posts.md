@@ -1,5 +1,5 @@
 ---
-title: "Blog"
+title: "Study"
 layout: posts
 permalink: /posts/
 author_profile: true

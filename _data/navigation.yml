@@ -22,7 +22,7 @@
 main:
   - title: "About Me"
     url: /about/
-  - title: "Blog"
+  - title: "Study"
     url: /posts/
   - title: "Category"
     url: /category-archive/
