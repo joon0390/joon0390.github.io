@@ -4,14 +4,6 @@ layout: archive
 
 {{ content }}
 
-{% assign random_posts = site.posts | sample: 5 %}
-{% if random_posts and random_posts.size > 0 %}
-<h3 class="archive__subtitle">Random Picks</h3>
-<div class="entries-grid">
-  {% include documents-collection.html entries=random_posts type='grid' %}
-</div>
-{% endif %}
-
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 
 {% if paginator %}
