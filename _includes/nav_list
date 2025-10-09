@@ -35,7 +35,12 @@
 <nav class="nav__list">
   <ul class="nav__items">
     <li>
-      <span style="font-weight: bold;">TOTAL</span>
+      <span style="font-weight: bold;">
+        TOTAL
+        {%- if total_posts > 0 -%}
+          <span class="nav__count">({{ total_posts }})</span>
+        {%- endif -%}
+      </span>
     </li>
 
     {%- comment %} 
@@ -57,8 +62,13 @@
             첫 번째 레벨의 카테고리들을 순회합니다. (예: "Machine Learning", "Statistics")
           {%- endcomment %}
           {%- for child in nav.children -%}
-            {%- assign category_slug = child.title | slugify -%}
-            {%- assign category_size = site.categories[category_slug] | size | default: 0 -%}
+            {%- assign category_key = child.title -%}
+            {%- assign category_posts = site.categories[category_key] -%}
+            {%- if category_posts == null -%}
+              {%- assign category_key = child.title | slugify -%}
+              {%- assign category_posts = site.categories[category_key] -%}
+            {%- endif -%}
+            {%- assign category_size = category_posts | size | default: 0 -%}
             <li>
               <a href="{{ child.url | relative_url }}">
                 {{ child.title }}
@@ -76,8 +86,13 @@
                     두 번째 레벨의 카테고리들을 순회합니다. (예: "Bayesian")
                   {%- endcomment %}
                   {%- for grandchild in child.children -%}
-                    {%- assign sub_category_slug = grandchild.title | slugify -%}
-                    {%- assign sub_category_size = site.categories[sub_category_slug] | size | default: 0 -%}
+                    {%- assign sub_category_key = grandchild.title -%}
+                    {%- assign sub_category_posts = site.categories[sub_category_key] -%}
+                    {%- if sub_category_posts == null -%}
+                      {%- assign sub_category_key = grandchild.title | slugify -%}
+                      {%- assign sub_category_posts = site.categories[sub_category_key] -%}
+                    {%- endif -%}
+                    {%- assign sub_category_size = sub_category_posts | size | default: 0 -%}
                     <li>
                       <a href="{{ grandchild.url | relative_url }}">
                         {{ grandchild.title }}

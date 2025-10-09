@@ -26,8 +26,6 @@ main:
     url: /posts/
   - title: "Category"
     url: /category-archive/
-  - title: "Tag"
-    url: /tags/
 
 # _data/navigation.yml
 
