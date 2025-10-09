@@ -1,0 +1,33 @@
+{% assign candidate_posts = site.posts | where_exp: "post", "post.url != page.url" %}
+{% assign recommendations = "" | split: "" %}
+
+{% if page.categories and page.categories.size > 0 %}
+  {% assign primary_category = page.categories[0] %}
+  {% assign matching_category_posts = candidate_posts | where_exp: "post", "post.categories contains primary_category" %}
+  {% assign recommendations = recommendations | concat: matching_category_posts %}
+{% endif %}
+
+{% if page.tags and page.tags.size > 0 %}
+  {% assign matching_tag_posts = "" | split: "" %}
+  {% for tag in page.tags %}
+    {% assign tag_posts = candidate_posts | where_exp: "post", "post.tags contains tag" %}
+    {% assign matching_tag_posts = matching_tag_posts | concat: tag_posts %}
+  {% endfor %}
+  {% assign recommendations = recommendations | concat: matching_tag_posts %}
+{% endif %}
+
+{% assign recommendations = recommendations | uniq %}
+{% assign recommendations = recommendations | slice: 0, 3 %}
+
+{% if recommendations.size > 0 %}
+  <div class="sidebar__recommendations">
+    <h3>추천 포스트</h3>
+    <ul>
+      {% for post in recommendations %}
+        <li>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

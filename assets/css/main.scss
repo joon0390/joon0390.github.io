@@ -60,4 +60,49 @@ a {
   }
 }
 
+.theme-toggle {
+  background: transparent;
+  border: 0;
+  color: #302A2A;
+  cursor: pointer;
+  margin-left: 0.75rem;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.theme-toggle:focus {
+  @extend %tab-focus;
+}
+
+.sidebar__recommendations {
+  margin-top: 1.5rem;
+  padding-top: 1.0rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  h3 {
+    font-size: 0.9em;
+    color: #302A2A;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+
+  a {
+    color: #302A2A;
+
+    &:hover {
+      color: #888888;
+    }
+  }
+}
+
 /* --- Custom Styles End --- */

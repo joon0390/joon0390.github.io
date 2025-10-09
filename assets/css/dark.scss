@@ -1,0 +1,100 @@
+---
+# Dark theme stylesheet
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/dark";
+@import "minimal-mistakes";
+
+/* --- Dark Mode Custom Styles Start --- */
+
+a {
+  text-decoration: none;
+  color: #f0f0f0;
+
+  &:focus {
+    @extend %tab-focus;
+  }
+  &:visited {
+    color: #dcdcdc;
+  }
+  &:hover {
+    color: #9bd1ff;
+    outline: 0;
+  }
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 0;
+  color: #f0f0f0;
+  cursor: pointer;
+  margin-left: 0.75rem;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.theme-toggle:focus {
+  @extend %tab-focus;
+}
+
+.sidebar .nav__items li a::before {
+  content: "Ø";
+  font-weight: normal;
+  margin-right: 6px;
+  color: #c9c9c9;
+}
+
+.nav__list {
+  .nav__children > li > a {
+    font-size: 0.79em;
+    font-weight: normal;
+    color: #f5f5f5;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav__children--nested {
+    font-weight: normal;
+    font-size: 0.9em;
+    padding-left: 1.0em;
+    color: #dddddd;
+  }
+}
+
+.sidebar__recommendations {
+  margin-top: 1.5rem;
+  padding-top: 1.0rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  h3 {
+    font-size: 0.9em;
+    color: #f0f0f0;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 0.4rem;
+  }
+
+  a {
+    color: #d8e9ff;
+
+    &:hover {
+      color: #9bd1ff;
+    }
+  }
+}
+
+/* --- Dark Mode Custom Styles End --- */
