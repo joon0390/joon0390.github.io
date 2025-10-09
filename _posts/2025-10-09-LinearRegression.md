@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "[Study Note] Classical Linear Regression"
+title: "Linear Regression"
 date: 2025-10-09
 permalink: /linear-regression/
 categories:
