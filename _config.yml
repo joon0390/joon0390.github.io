@@ -128,6 +128,9 @@ author:
     - label: "CV"
       icon: "fas fa-fw fa-id-card"
       url: "https://joon0390.github.io/cv/"
+    - label: "Portfolio"
+      icon: "fas fa-fw fa-briefcase"
+      url: "https://joon0390.github.io/cv/Portfolio.pdf"
     - label: "Linkedin"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/junhee-kim-08695a352/"
@@ -323,3 +326,4 @@ defaults:
       toc_icon: '/assets/img/gaussian.png'
       sidebar:
         nav: "sidebar-category" 
+# Notes collection removed; using categories instead

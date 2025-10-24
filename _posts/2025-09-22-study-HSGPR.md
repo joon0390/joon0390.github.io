@@ -1,4 +1,4 @@
----
+ ---
 layout: single  
 title: "[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression"  
 date: 2025-09-22  
@@ -28,7 +28,7 @@ comments: true
 
 
 
-### 📎 Sparse GP & Inducing Points
+### Sparse GP & Inducing Points
 
 - **Sparse GP**: Gaussian Process의 $O(n^3)$ 연산을 줄이기 위해 저차원 근사를 사용하는 방법론의 총칭.  
 - **Inducing Points**: Sparse GP의 대표 기법으로, $m \ll n$개의 보조 변수(inducing variables)를 사용해 커널 행렬을 근사.  
@@ -55,7 +55,7 @@ $$k(x,x') \approx \sum_{j=1}^m\lambda_j\phi_j(x)\phi_j(x')$$
 
 즉, 커널을 직접 계산하는 대신, 미리 계산된 기저 함수를 이용하여 표현한다고 볼 수 있습니다. 
 
-### 📎 고유함수란?
+###  고유함수란?
 
 #### 선형대수에서의 고유벡터
 행렬 $A$가 있을 때, $A\nu = \lambda \nu$ 를 만족하는 $\nu$를 고유벡터(eigenvector), $\lambda$를 고유값(eigenvalue)라고 부릅니다.  
@@ -77,7 +77,7 @@ $$
 
 핵심 아이디어는 **커널을 Hilbert 공간의 고유함수 전개로 근사**하는 것입니다.  
 
-> 📎 **Hilbert Space란?**  
+>  **Hilbert Space란?**  
 > 단순히 함수들의 집합이 아니라  
 > $$
 > \langle f,g \rangle = \int_{\Omega} f(x)g(x)\,dx
@@ -177,7 +177,7 @@ $$
 
 ---
 
-✅ 정리하면,  
+정리하면,  
 1) Hilbert 공간에서 라플라스 고유함수 기저를 구하고,  
 2) 커널 스펙트럼을 이용해 각 기저에 weight를 부여하며,  
 3) 무한 전개를 rank-$m$ 근사로 자르고,  
@@ -190,7 +190,7 @@ $$
 
 논문/슬라이드에서는 제안한 Hilbert-space Reduced-Rank GP(RR-GP)를 다양한 상황에서 실험했습니다.
 
-- **1D 토이 예제**
+- **1D Toy Example**
   - 주기 함수를 관측치에 피팅.
   - Exact GP, Sparse GP (SOR, DTC, FIC 등)와 비교.
   - RR-GP는 rank $m$이 커질수록 RMSE가 낮아지며, Evidence(Marginal Likelihood)도 Exact GP에 근접.

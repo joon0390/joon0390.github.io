@@ -1,4 +1,4 @@
----
+ ---
 layout: single  
 title: "Graph Basics"  
 date: 2025-05-23  
