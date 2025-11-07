@@ -1,4 +1,4 @@
- ---
+---
 layout: single
 title: "[Paper Review] BART : Bayesian Additive Regression Tree"
 date: 2025-04-23

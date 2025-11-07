@@ -1,4 +1,4 @@
- ---
+---
 layout: single  
 title: "[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression"  
 date: 2025-09-22  
