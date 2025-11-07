@@ -1,4 +1,4 @@
- ---
+---
 layout: single
 title: "[Paper Review] Compact Memory for K-prior Based Continual Learning"
 date: 2025-09-27

@@ -1,4 +1,4 @@
- ---
+---
 layout: single
 title: "Probabilistic PCA"
 date: 2025-09-30
