@@ -132,3 +132,4 @@ Posterior $p(W,Z,\mu,\alpha,\tau|X)$는 직접 계산이 어렵습니다.
 ## Reference
 - [Bishop, C. M. (1999). *Bayesian PCA*. NIPS.](https://proceedings.neurips.cc/paper_files/paper/1998/file/c88d8d0a6097754525e02c2246d8d27f-Paper.pdf)  
 - [Github - MaxenceGiraud/BayesianPCA](https://github.com/MaxenceGiraud/BayesianPCA)
+
