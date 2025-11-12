@@ -7,8 +7,6 @@ entries_layout: list
 ---
 
 {% assign notes = site.posts | where_exp: 'p', 'p.categories contains "note"' %}
-<p><strong>총 개수:</strong> {{ notes | size }}</p>
-
 {% assign notes = notes | sort: 'date' | reverse %}
 
 {% if notes and notes.size > 0 %}
