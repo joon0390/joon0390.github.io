@@ -594,5 +594,10 @@ body {
 }
 
 .copy-code-image {
+  filter: invert(0);
+  transition: filter 0.2s ease-in-out;
+}
+
+.copy-code-button:hover .copy-code-image {
   filter: invert(1);
 }
