@@ -236,6 +236,116 @@ EKF/UKF는 대부분 실패하는 경우라고 볼 수 있습니다.
 그러나 PF는 particle들이 분포의 모양을 그대로 따라가기 때문에 잘 작동합니다.
 
 
-# 다음 편: Particle Filter Code Lab
+# Code Example
 
-다음 글에서는 Particle Filter를 코드로 실험해보고 분석해볼 예정입니다. 감사합니다.
+아래 셀을 돌리면 1D Particle Filter가 동작합니다. `cfg`를 수정하며 센서 노이즈, outlier, 재샘플 방식을 실험할 수 있습니다.
+
+{% include code-header.html %}
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Resampling
+def multinomial_resample(w, rng):
+    n = len(w)
+    return rng.choice(n, size=n, p=w)
+
+def systematic_resample(w, rng):
+    n = len(w)
+    positions = (np.arange(n) + rng.random()) / n
+    idx, cdf = np.zeros(n, dtype=int), np.cumsum(w)
+    i = j = 0
+    while i < n:
+        if positions[i] < cdf[j]:
+            idx[i] = j; i += 1
+        else:
+            j += 1
+    return idx
+
+# Synthetic data
+def make_synthetic(T=80, u=1.0, sigma_motion=0.4, sigma_obs=1.2,
+                   outlier_prob=0.0, outlier_scale=8.0, seed=42):
+    rng = np.random.default_rng(seed)
+    x_true, z_obs, us = [], [], []
+    x = 0.0
+    for _ in range(T):
+        x = x + u + rng.normal(0, sigma_motion)
+        z = x + rng.normal(0, sigma_obs)
+        if rng.random() < outlier_prob:
+            z += outlier_scale * rng.standard_normal()
+        x_true.append(x); z_obs.append(z); us.append(u)
+    return np.asarray(x_true), np.asarray(z_obs), np.asarray(us)
+
+# Particle Filter
+def particle_filter(zs, us, n=800, sigma_motion=0.4, sigma_obs=1.2,
+                    rough_sigma=0.0, resample_thresh=0.5,
+                    resample_method="systematic", seed=0):
+    rng = np.random.default_rng(seed)
+    xs = rng.normal(0, 5, size=n)
+    w = np.ones(n) / n
+    est, n_eff_hist = [], []
+    resample_count = 0
+    resampler = systematic_resample if resample_method == "systematic" else multinomial_resample
+
+    for u, z in zip(us, zs):
+        xs = xs + u + rng.normal(0, sigma_motion, size=n)  # Predict
+        ll = np.exp(-0.5 * ((z - xs) / sigma_obs) ** 2) / (sigma_obs * np.sqrt(2 * np.pi))
+        w *= ll; w += 1e-12; w /= w.sum()                  # Update
+
+        n_eff = 1.0 / np.sum(w ** 2)
+        n_eff_hist.append(n_eff)
+        if n_eff < resample_thresh * n:
+            idx = resampler(w, rng)
+            xs, w = xs[idx], np.ones(n) / n
+            resample_count += 1
+            if rough_sigma > 0:
+                xs += rng.normal(0, rough_sigma, size=n)
+
+        est.append(xs.dot(w))
+
+    return np.asarray(est), np.asarray(n_eff_hist), resample_count
+
+# Config 
+cfg = dict(
+    T=80, u=1.0,
+    sigma_motion=0.4, sigma_obs=1.2,
+    outlier_prob=0.2, outlier_scale=6.0,
+    particles=800, rough_sigma=0.1,
+    resample_thresh=0.5, resample_method="systematic",
+    seed=0,
+)
+
+x_true, z_obs, us = make_synthetic(
+    T=cfg["T"], u=cfg["u"],
+    sigma_motion=cfg["sigma_motion"], sigma_obs=cfg["sigma_obs"],
+    outlier_prob=cfg["outlier_prob"], outlier_scale=cfg["outlier_scale"],
+    seed=cfg["seed"],
+)
+est, n_eff_hist, resample_count = particle_filter(
+    zs=z_obs, us=us, n=cfg["particles"],
+    sigma_motion=cfg["sigma_motion"], sigma_obs=cfg["sigma_obs"],
+    rough_sigma=cfg["rough_sigma"],
+    resample_thresh=cfg["resample_thresh"],
+    resample_method=cfg["resample_method"],
+    seed=cfg["seed"],
+)
+
+rmse = float(np.sqrt(np.mean((est - x_true) ** 2)))
+print(f"RMSE={rmse:.3f}, resample_times={resample_count}, "
+      f"N_eff[min|median]={n_eff_hist.min():.1f}|{np.median(n_eff_hist):.1f}")
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
+ax1.plot(x_true, label="true", linewidth=2)
+ax1.plot(z_obs, ".", label="obs", alpha=0.6)
+ax1.plot(est, label="PF estimate", linewidth=2)
+ax1.legend(); ax1.grid(True, alpha=0.3); ax1.set_ylabel("position")
+ax2.plot(n_eff_hist, label="N_eff", color="tab:orange")
+ax2.axhline(cfg["resample_thresh"] * cfg["particles"], linestyle="--", color="gray", alpha=0.7)
+ax2.legend(); ax2.grid(True, alpha=0.3); ax2.set_ylabel("N_eff"); ax2.set_xlabel("time")
+plt.tight_layout(); plt.show()
+```
+
+- `outlier_prob`/`outlier_scale`로 센서 튐을 추가하거나 제거
+- `resample_method`을 `systematic` vs `multinomial`로 비교
+- `rough_sigma`로 재샘플 후 입자의 다양성 유지 효과를 확인
+
