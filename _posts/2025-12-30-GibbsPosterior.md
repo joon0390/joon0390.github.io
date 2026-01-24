@@ -33,7 +33,7 @@ comments: true
 이런 상황에서 Likelihood 대신 **임의의 Loss 함수를 직접 사용하여 Posterior를 정의**하는 방법이 바로 **Gibbs Posteriors**입니다.
 
 
-</br>
+
 
 ## Gibbs Posterior의 정의
 
@@ -51,7 +51,7 @@ $$
 - $\eta > 0$: **Learning rate** (또는 Inverse Temperature). 데이터로부터 얼마나 적극적으로 정보를 수용할지 결정합니다.
 
 
-</br>
+
 
 ## 왜 "Gibbs"인가?
 
@@ -64,7 +64,7 @@ $\eta$가 커질수록(온도가 낮아질수록) Posterior는 Loss를 최소화
 
 
 
-</br>
+
 
 ## Variational Gibbs Inference (VGI)
 
@@ -80,7 +80,7 @@ $$
 
 이 수식은 **PAC-Bayesian Bound**와도 직접적으로 연결됩니다. 특정 조건하에서 이 목적 함수를 최적화하여 얻은 $q$는 본 적 없는 데이터에 대한 Generalization Error의 상한을 최소화하는 분포임이 증명되어 있습니다.
 
-</br>
+
 
 ## 핵심 파라미터: $\eta$ 의 선택
 
@@ -91,7 +91,7 @@ Gibbs Posterior에서 가장 까다로운 부분은 $\eta$의 값을 결정하�
 
 최근 연구들(SafeBayes 등)은 데이터의 증거(evidence)를 기반으로 최적의 $\eta$를 자동으로 선택하는 알고리즘을 제안하고 있습니다.
 
-</br>
+
 
 
 ## Gibbs Posteriors의 장점
@@ -100,14 +100,14 @@ Gibbs Posterior에서 가장 까다로운 부분은 $\eta$의 값을 결정하�
 2.  **Flexibility**: 모델의 확률적 구조(Likelihood)를 엄밀하게 설계하지 않아도, 목적에 맞는 Loss만 있다면 베이지안 추론의 틀을 사용할 수 있습니다.
 3.  **Bayesian Deep Learning과의 연관성**: 신경망에서 사용하는 Cross-entropy 등을 Loss로 직접 사용하여 Bayesian Neural Networks를 구성할 때 이론적 근거를 제공합니다.
 
-</br>
+
 
 ## Summary
 
 - **Gibbs Posterior**는 Likelihood 대신 Loss 함수를 지수화하여 Posterior를 구성하는 방식이다.
 - 모델 오설정이나 이상치가 존재하는 실제 환경에서 Standard Bayes보다 강건한 성능을 보인다.
 
-</br>
+
 
 ## Reference
 
