@@ -6,15 +6,20 @@ layout: archive
 
 <h3 class="archive__subtitle">Recent Posting</h3>
 
-{% if paginator %}
-{% assign posts = paginator.posts %}
-{% else %}
-{% assign posts = site.posts %}
-{% endif %}
+{% assign posts = "" | split: "" %}
+{% for post in site.posts %}
+{% unless post.categories contains 'Blog' or post.categories contains 'Life' or post.categories contains 'note' or
+post.categories contains 'Note' %}
+{% assign posts = posts | push: post %}
+{% endunless %}
+{% endfor %}
 
+<!-- 페이지네이션이 있을 경우 위에서 필터링된 posts를 사용하되 페이징 처리는 별도 고려 필요 -->
+<!-- 하지만 홈 화면에서 페이징을 유지하면서 필터링하는 건 복잡하므로, 일단 전체 Study 글 중 최근 글만 보여주거나 페이징 없이 노출 -->
+<!-- 여기서는 필터링된 목록을 페이지네이션 없이 리스트로 보여주는 것이 안전함 -->
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
   {% include documents-collection.html entries=posts type=entries_layout %}
 </div>
 
-{% include paginator.html %}
+<!-- 필터링된 목록에는 paginator가 적용되지 않으므로 paginator 제거 -->

@@ -2,11 +2,19 @@
 layout: archive
 ---
 
-{{ content }}
+<div class="blog-header-content">
+    {{ content }}
+</div>
 
 <div class="blog-list">
-    {% assign blog_posts = site.posts | where_exp: "post", "post.categories contains 'Blog' or post.categories contains
-    'Life'" %}
+    {% assign blog_posts = "" | split: "" %}
+
+    {% for post in site.posts %}
+    {% if post.categories contains 'Blog' or post.categories contains 'Life' or post.categories contains 'note' or
+    post.categories contains 'Note' %}
+    {% assign blog_posts = blog_posts | push: post %}
+    {% endif %}
+    {% endfor %}
 
     {% if blog_posts.size > 0 %}
     {% for post in blog_posts %}
@@ -28,6 +36,22 @@ layout: archive
 </div>
 
 <style>
+    /* 상단 타이틀(Blog) 색상 변경 */
+    .page__title {
+        color: #bbb !important;
+        /* 연한 회색 */
+        margin-bottom: 0.5rem;
+    }
+
+    /* 상단 설명글(My Safe Place) 스타일 */
+    .blog-header-content {
+        color: #bbb;
+        /* 연한 회색 */
+        font-size: 1.2rem;
+        margin-bottom: 3rem;
+        font-weight: 300;
+    }
+
     .blog-list {
         max-width: 800px;
         margin: 2rem auto;
