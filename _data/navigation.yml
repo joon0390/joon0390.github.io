@@ -24,6 +24,8 @@ main:
     url: /about/
   - title: "Study"
     url: /posts/
+  - title: "Blog"
+    url: /blog/
   - title: "Category"
     url: /category-archive/
   - title: "Notes"
