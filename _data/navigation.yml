@@ -24,12 +24,12 @@ main:
     url: /about/
   - title: "Study"
     url: /posts/
-  - title: "Blog"
-    url: /blog/
   - title: "Category"
     url: /category-archive/
   - title: "Notes"
     url: /notes/
+  - title: "Blog"
+    url: /blog/
 
 
 # _data/navigation.yml

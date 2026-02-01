@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "유용한 사이트 모음"
+title: "Useful websites"
 date: 2025-10-30
 categories:
   - note
