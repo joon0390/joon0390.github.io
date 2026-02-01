@@ -1,30 +1,179 @@
 {% if post.header.teaser %}
-  {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
+{% capture teaser %}{{ post.header.teaser }}{% endcapture %}
 {% else %}
-  {% assign teaser = site.teaser %}
+{% assign teaser = site.teaser %}
 {% endif %}
 
 {% if post.id %}
-  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
 {% else %}
-  {% assign title = post.title %}
+{% assign title = post.title %}
 {% endif %}
 
 <div class="{{ include.type | default: 'list' }}__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork"{% if post.locale %} lang="{{ post.locale }}"{% endif %}>
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" {% if post.locale %}
+    lang="{{ post.locale }}" {% endif %}>
     {% if include.type == "grid" and teaser %}
-      <div class="archive__item-teaser">
-        <img src="{{ teaser | relative_url }}" alt="">
-      </div>
+    <div class="archive__item-teaser">
+      <a href="{{ post.url | relative_url }}">
+        <img src="{{ teaser | relative_url }}" alt="{{ title }}" loading="lazy">
+      </a>
+    </div>
+    {% elsif include.type == "grid" %}
+    <div class="archive__item-teaser archive__item-teaser--placeholder">
+      <a href="{{ post.url | relative_url }}">
+        <div class="teaser-placeholder">
+          <span class="teaser-icon">📄</span>
+        </div>
+      </a>
+    </div>
     {% endif %}
     <h2 class="archive__item-title no_toc" itemprop="headline">
       {% if post.link %}
-        <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+      <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i
+          class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}
-        <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
+      <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h2>
     {% include page__meta.html type=include.type %}
-    {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
+    {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify |
+      strip_html | truncate: 160 }}</p>{% endif %}
   </article>
 </div>
+
+<style>
+  /* Enhanced Gallery Grid Layout */
+  .entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .grid__item {
+    margin-bottom: 0 !important;
+  }
+
+  .grid__item .archive__item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e8e8e8;
+  }
+
+  .grid__item .archive__item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .archive__item-teaser {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+
+  .archive__item-teaser img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .grid__item .archive__item:hover .archive__item-teaser img {
+    transform: scale(1.08);
+  }
+
+  .archive__item-teaser--placeholder .teaser-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .teaser-icon {
+    font-size: 3.5rem;
+    opacity: 0.3;
+    filter: brightness(1.5);
+  }
+
+  .grid__item .archive__item-title {
+    padding: 1rem 1rem 0.5rem 1rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .grid__item .archive__item-title a {
+    color: #2c3e50;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .grid__item .archive__item-title a:hover {
+    color: #667eea;
+  }
+
+  .grid__item .page__meta {
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+  }
+
+  .grid__item .archive__item-excerpt {
+    padding: 0 1rem 1rem 1rem;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .grid__item .archive__item {
+      background: #2d3748;
+      border-color: #4a5568;
+    }
+
+    .grid__item .archive__item-title a {
+      color: #e2e8f0;
+    }
+
+    .grid__item .archive__item-excerpt {
+      color: #cbd5e0;
+    }
+
+    .grid__item .page__meta {
+      color: #a0aec0;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .entries-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .archive__item-teaser {
+      height: 180px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .entries-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
