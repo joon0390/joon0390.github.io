@@ -1,18 +1,10 @@
 ---
-title: Notes
-layout: archive
+title: "Notes"
+layout: posts
 permalink: /notes/
 author_profile: true
-entries_layout: list
+sidebar:
+  nav: "sidebar-category"
 ---
 
-{% assign notes = site.posts | where_exp: 'p', 'p.categories contains "note"' %}
-{% assign notes = notes | sort: 'date' | reverse %}
-
-{% if notes and notes.size > 0 %}
-  {% for post in notes %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% else %}
-  <p>No notes yet. Add <code>categories: [note]</code> to a post.</p>
-{% endif %}
+간단한 메모와 유용한 링크들을 모아두는 공간입니다.

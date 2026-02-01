@@ -10,8 +10,7 @@ layout: archive
     {% assign blog_posts = "" | split: "" %}
 
     {% for post in site.posts %}
-    {% if post.categories contains 'Blog' or post.categories contains 'Life' or post.categories contains 'note' or
-    post.categories contains 'Note' %}
+    {% if post.categories contains 'Blog' or post.categories contains 'Life' %}
     {% assign blog_posts = blog_posts | push: post %}
     {% endif %}
     {% endfor %}
