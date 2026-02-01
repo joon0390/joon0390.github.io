@@ -3,8 +3,6 @@ layout: single
 title: "블로그를 시작하며"
 date: 2026-02-02
 permalink: /blog-start/
-header:
-  teaser: /assets/img/gaussian.png
 categories:
   - Blog
   - Life
