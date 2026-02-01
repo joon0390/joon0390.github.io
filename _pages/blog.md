@@ -5,4 +5,4 @@ permalink: /blog/
 author_profile: false
 ---
 
-My Safe Place
+My Taste
