@@ -26,8 +26,6 @@ main:
     url: /posts/
   - title: "Category"
     url: /category-archive/
-  - title: "Notes"
-    url: /notes/
   - title: "Blog"
     url: /blog/
 
