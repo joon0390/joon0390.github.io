@@ -41,27 +41,27 @@ comments: true
 
 > "Local nonconvexity에서는 여전히 최적화가 샘플링보다 본질적으로 빠른가?"
 
-논문의 핵심 답은 의외입니다. 특정 문제 클래스에서는 **샘플링은 차원 \(d\)** 에 대해 다항 시간 복잡도를 가지지만, 최적화는 **지수 시간 lower bound**를 가질 수 있습니다.
+논문의 핵심 답은 의외입니다. 특정 문제 클래스에서는 **샘플링은 차원 $d$** 에 대해 다항 시간 복잡도를 가지지만, 최적화는 **지수 시간 lower bound**를 가질 수 있습니다.
 
 ---
 
 ## 2. Setup: Local Nonconvexity
 
-논문은 목적함수 \(U:\mathbb{R}^d \to \mathbb{R}\) 에 대해 아래를 가정합니다.
+논문은 목적함수 $U:\mathbb{R}^d \to \mathbb{R}$ 에 대해 아래를 가정합니다.
 
-1. \(U\) 는 \(L\)-smooth (gradient Lipschitz)
-2. 반지름 \(R\) 바깥에서는 \(m\)-strongly convex
-3. \(\nabla U(0)=0\) (기술적 가정)
+1. $U$ 는 $L$-smooth (gradient Lipschitz)
+2. 반지름 $R$ 바깥에서는 $m$-strongly convex
+3. $\nabla U(0)=0$ (기술적 가정)
 
 즉, 큰 영역에서는 잘 behaved하고, **안쪽 bounded region에서만 비볼록성**이 존재하는 구조입니다.
 
 타깃 분포는
 
-\[
+$$
 p^*(x)\propto e^{-U(x)}
-\]
+$$
 
-이고, 조건수는 \(\kappa=L/m\) 로 둡니다.
+이고, 조건수는 $\kappa=L/m$ 로 둡니다.
 
 ---
 
@@ -70,13 +70,13 @@ p^*(x)\propto e^{-U(x)}
 가장 단순화해서 보면 업데이트는 다음과 같습니다.
 
 - Gradient Descent:
-\[
+$$
 x_{k+1}=x_k-h_k\nabla U(x_k)
-\]
+$$
 - ULA:
-\[
+$$
 x_{k+1}=x_k-h_k\nabla U(x_k)+\xi_k,\quad \xi_k\sim\mathcal{N}(0,2h_k I)
-\]
+$$
 - MALA: ULA proposal + Metropolis accept/reject
 
 핵심은 ULA가 GD와 거의 같은 형태인데, 잡음을 넣어 전역 구조를 탐색한다는 점입니다.
@@ -86,14 +86,14 @@ x_{k+1}=x_k-h_k\nabla U(x_k)+\xi_k,\quad \xi_k\sim\mathcal{N}(0,2h_k I)
 ## 4. Key Result 1: Polynomial-Time Sampling
 
 논문의 Theorem 1(ULA/MALA mixing time upper bound)을 요약하면,
-\[
+$$
 \tau_{\text{ULA}}(\varepsilon)=\tilde{O}\!\left(e^{32LR^2}\kappa^2\frac{d}{\varepsilon^2}\right),
-\]
-\[
+$$
+$$
 \tau_{\text{MALA}}(\varepsilon)=\tilde{O}\!\left(e^{40LR^2}\kappa^{3/2}d^{1/2}(d\log\kappa+\log(1/\varepsilon))^{3/2}\right).
-\]
+$$
 
-\(LR^2=O(\log d)\)이면, 차원 \(d\)에 대해 **다항 시간**으로 제어됩니다.
+$LR^2=O(\log d)$이면, 차원 $d$에 대해 **다항 시간**으로 제어됩니다.
 
 논문의 이론 전개는
 - 연속시간 확산과정의 KL 감소율 분석
@@ -107,12 +107,12 @@ x_{k+1}=x_k-h_k\nabla U(x_k)+\xi_k,\quad \xi_k\sim\mathcal{N}(0,2h_k I)
 
 Theorem 2는 더 강합니다.
 
-\[
+$$
 K=\Omega\!\left(\left(\frac{LR^2}{\varepsilon}\right)^{d/2}\right)
-\]
+$$
 
 즉, 함수값/고계도함수 질의를 허용하는 매우 넓은 알고리즘 클래스에서도,  
-\(\varepsilon\)-최적해를 찾는 데 필요한 반복 수가 차원에 대해 지수적으로 커질 수 있습니다.
+$\varepsilon$-최적해를 찾는 데 필요한 반복 수가 차원에 대해 지수적으로 커질 수 있습니다.
 
 직관은 "볼 안에 지수 개의 작은 basin을 packing할 수 있다"는 구성입니다.  
 최적화는 "어느 basin이 진짜 global optimum인지"를 맞혀야 하므로 조합 폭발이 생깁니다.
@@ -121,11 +121,11 @@ K=\Omega\!\left(\left(\frac{LR^2}{\varepsilon}\right)^{d/2}\right)
 
 ## 6. Can Annealed Sampling Bypass Optimization?
 
-논문은 \(q_\beta^*(x)\propto e^{-\beta U(x)}\) 를 크게 sharpen해서  
+논문은 $q_\beta^*(x)\propto e^{-\beta U(x)}$ 를 크게 sharpen해서  
 최적점 근처를 샘플링하는 아이디어(시뮬레이티드 어닐링 계열)도 함께 점검합니다.
 
-결과적으로, 높은 확률로 \(\varepsilon\)-정확도를 얻으려면  
-\(\beta=\tilde{\Omega}(d/\varepsilon)\)가 필요해져서 전체 계산량은 다시 지수 스케일이 됩니다.
+결과적으로, 높은 확률로 $\varepsilon$-정확도를 얻으려면  
+$\beta=\tilde{\Omega}(d/\varepsilon)$가 필요해져서 전체 계산량은 다시 지수 스케일이 됩니다.
 
 즉, 이 설정에서는 "샘플링을 최적화 대용으로 쓰는 것"까지는 쉽지 않다는 메시지입니다.
 
@@ -135,7 +135,7 @@ K=\Omega\!\left(\left(\frac{LR^2}{\varepsilon}\right)^{d/2}\right)
 
 논문은 GMM mean 추정에서 ULA/MALA와 EM을 비교합니다.
 
-- 조건 \(MR^2=O(\log d)\) 하에서 ULA/MALA는 이론적으로 다항 복잡도
+- 조건 $MR^2=O(\log d)$ 하에서 ULA/MALA는 이론적으로 다항 복잡도
 - 반면 EM은 초기화가 나쁘면 고차원에서 급격히 어려워짐
 
 실험(Figure 2)에서도 차원이 커질수록
@@ -161,7 +161,7 @@ K=\Omega\!\left(\left(\frac{LR^2}{\varepsilon}\right)^{d/2}\right)
 ## 9. Limitations and Practical Interpretation
 
 - 결과는 **worst-case 복잡도 경계**입니다. 모든 실제 문제에서 샘플링이 빠르다는 뜻은 아닙니다.
-- 상수항 \(e^{O(LR^2)}\) 가 크면 이론적 다항성이 실무 시간으로 바로 이어지지 않을 수 있습니다.
+- 상수항 $e^{O(LR^2)}$ 가 크면 이론적 다항성이 실무 시간으로 바로 이어지지 않을 수 있습니다.
 - MCMC는 mixing/diagnostics가 필수라 구현 난이도는 여전히 있습니다.
 
 ---
