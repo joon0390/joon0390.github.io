@@ -2,122 +2,34 @@
 layout: archive
 ---
 
-<div class="blog-header-content">
-    {{ content }}
+<div class="filtered-posts__intro">
+  {{ content }}
 </div>
 
-<div class="blog-list">
-    {% assign blog_posts = "" | split: "" %}
+{% assign filtered_posts = "" | split: "" %}
+{% assign target_categories = page.post_categories | default: "" %}
 
-    {% for post in site.posts %}
-    {% if post.categories contains 'Blog' or post.categories contains 'Life' %}
-    {% assign blog_posts = blog_posts | push: post %}
+{% for post in site.posts %}
+  {% assign include_post = false %}
+  {% for category in target_categories %}
+    {% if post.categories contains category %}
+      {% assign include_post = true %}
+      {% break %}
     {% endif %}
+  {% endfor %}
+  {% if include_post %}
+    {% assign filtered_posts = filtered_posts | push: post %}
+  {% endif %}
+{% endfor %}
+
+{% assign filtered_posts = filtered_posts | sort: "date" | reverse %}
+
+{% if filtered_posts.size > 0 %}
+  <div class="entries-list">
+    {% for post in filtered_posts %}
+      {% include archive-single.html type="list" %}
     {% endfor %}
-
-    {% if blog_posts.size > 0 %}
-    {% for post in blog_posts %}
-    <article class="blog-post-item">
-        <time datetime="{{ post.date | date_to_xmlschema }}">
-            {{ post.date | date: "%Y.%m.%d" }}
-        </time>
-        <h2>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        </h2>
-        {% if post.excerpt %}
-        <p class="excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
-        {% endif %}
-    </article>
-    {% endfor %}
-    {% else %}
-    <p class="blog-empty">아직 작성된 블로그 포스트가 없습니다.</p>
-    {% endif %}
-</div>
-
-<style>
-    /* 상단 타이틀(Blog) 색상 변경 */
-    .page__title {
-        color: #444 !important;
-        /* 더 진한 회색 */
-        margin-bottom: 0.5rem;
-    }
-
-    /* 상단 설명글(My Safe Place) 스타일 */
-    .blog-header-content {
-        color: #444;
-        /* 더 진한 회색 */
-        font-size: 1.2rem;
-        margin-bottom: 3rem;
-        font-weight: 300;
-    }
-
-    .blog-list {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-
-    .blog-post-item {
-        padding: 1.5rem 0;
-        border-bottom: 1px solid #515156;
-    }
-
-    .blog-post-item:last-child {
-        border-bottom: none;
-    }
-
-    .blog-post-item time {
-        display: block;
-        font-size: 0.85rem;
-        color: #888;
-        margin-bottom: 0.5rem;
-    }
-
-    .blog-post-item h2 {
-        font-size: 1.5rem;
-        margin: 0 0 0.5rem 0;
-        line-height: 1.3;
-    }
-
-    .blog-post-item h2 a {
-        color: #333;
-        text-decoration: none;
-        transition: color 0.2s ease;
-    }
-
-    .blog-post-item h2 a:hover {
-        color: #667eea;
-    }
-
-    .blog-post-item .excerpt {
-        color: #666;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .blog-empty {
-        text-align: center;
-        color: #888;
-        padding: 3rem 0;
-        font-size: 1.1rem;
-    }
-
-    /* 다크모드 */
-    @media (prefers-color-scheme: dark) {
-        .blog-post-item {
-            border-bottom-color: #444;
-        }
-
-        .blog-post-item h2 a {
-            color: #666;
-        }
-
-        .blog-post-item h2 a:hover {
-            color: #8b9cee;
-        }
-
-        .blog-post-item .excerpt {
-            color: #aaa;
-        }
-    }
-</style>
+  </div>
+{% else %}
+  <p class="filtered-posts__empty">{{ page.empty_message | default: "No posts yet." }}</p>
+{% endif %}

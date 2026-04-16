@@ -326,6 +326,16 @@ defaults:
       toc_icon: '/assets/img/gaussian.png'
       sidebar:
         nav: "sidebar-category" 
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: single
+      author_profile: false
+      share: false
+      related: false
+      comments: false
+      toc: false
 # Notes collection removed; using categories instead
   - scope:
       path: "_posts/blog"

@@ -9,7 +9,7 @@ sidebar:
 
 {% assign study_posts = "" | split: "" %}
 {% for post in site.posts %}
-  {% unless post.categories contains 'Blog' or post.categories contains 'Life' or post.categories contains 'note' or post.categories contains 'Note' %}
+  {% unless post.categories contains 'Blog' or post.categories contains 'Life' or post.categories contains 'note' or post.categories contains 'Note' or post.categories contains 'Dev' or post.categories contains 'Troubleshooting' or post.categories contains 'Implementation' or post.categories contains 'Code' %}
     {% assign study_posts = study_posts | push: post %}
   {% endunless %}
 {% endfor %}

@@ -22,12 +22,15 @@
 main:
   - title: "About Me"
     url: /about/
+    children:
+      - title: "Projects"
+        url: /projects/
   - title: "Study"
     url: /posts/
   - title: "Category"
     url: /category-archive/
-  - title: "Blog"
-    url: /blog/
+  - title: "Dev Notes"
+    url: /dev-notes/
 
 
 # _data/navigation.yml

@@ -2,7 +2,7 @@
 title: "산업용 회전 장비 이상 진동 탐지 시스템 (Edge Computing)"
 excerpt: "Edge Impulse 기반 엣지 컴퓨팅으로 산업용 회전 장비 이상 진동을 실시간 탐지·분류"
 collection: projects
-layout: posts
+layout: single
 date: 2024-5-13
 tags:
   - Edge Computing
