@@ -23,7 +23,7 @@
   url: "/pymc/"
   image: "/assets/img/pymc/exp1.png"
   alt: "PyMC experiment posterior figure"
-  label: "Workflow"
+  label: "Code Lab"
   description: "A/B 테스트 예제로 prior부터 posterior, 의사결정까지 Bayesian workflow를 실전 코드와 함께 다룹니다."
 
 - title: "Natural Gradient for Variational Inference"

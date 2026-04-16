@@ -4,6 +4,8 @@ layout: archive
 permalink: /posts/
 author_profile: false
 entries_layout: grid
+sidebar:
+  nav: "sidebar-category"
 ---
 
 {% assign study_posts = "" | split: "" %}
