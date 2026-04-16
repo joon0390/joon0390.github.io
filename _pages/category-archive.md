@@ -2,12 +2,11 @@
 title: "Category"
 layout: categories
 permalink: /category-archive/
-author_profile: true
-sidebar:
-  nav: "sidebar-category"
+author_profile: false
 
 ---
 
+{% include category-mind-map.html %}
 
 <!-- <div class="entries-{{ page.entries_layout | default: 'list' }}">
   {%- assign categories = site.categories | sort -%}

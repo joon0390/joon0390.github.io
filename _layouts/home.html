@@ -4,7 +4,9 @@ layout: archive
 
 {{ content }}
 
-<h3 class="archive__subtitle">Recent Posting</h3>
+{% include home-posterior-gallery.html %}
+
+<h3 class="archive__subtitle">Recent Posts</h3>
 
 {% assign posts = "" | split: "" %}
 {% for post in site.posts %}
@@ -13,6 +15,8 @@ post.categories contains 'Note' %}
 {% assign posts = posts | push: post %}
 {% endunless %}
 {% endfor %}
+
+{% assign posts = posts | slice: 0, 4 %}
 
 <!-- 페이지네이션이 있을 경우 위에서 필터링된 posts를 사용하되 페이징 처리는 별도 고려 필요 -->
 <!-- 하지만 홈 화면에서 페이징을 유지하면서 필터링하는 건 복잡하므로, 일단 전체 Study 글 중 최근 글만 보여주거나 페이징 없이 노출 -->

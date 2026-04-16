@@ -1,0 +1,27 @@
+"Bayesian":
+  image: "/assets/img/gaussian.png"
+  image_position: "center center"
+"Statistics":
+  image: "/assets/img/MCMC/MH.png"
+  image_position: "center center"
+"Machine Learning":
+  image: "/assets/img/gvi/image.png"
+  image_position: "center center"
+"Deep Learning":
+  image: "/assets/img/nf/flows.png"
+  image_position: "center center"
+"Graph":
+  image: "/assets/img/graph/graph.png"
+  image_position: "center center"
+"Applied Topics":
+  image: "/assets/img/pymc/exp1.png"
+  image_position: "center center"
+"Time Series":
+  image: "/assets/img/bocd/run_length.png"
+  image_position: "center center"
+"Computation":
+  image: "/assets/img/new_gaussian.png"
+  image_position: "center center"
+"Optimization":
+  image: "/assets/img/MCMC/trace_plot.png"
+  image_position: "center center"

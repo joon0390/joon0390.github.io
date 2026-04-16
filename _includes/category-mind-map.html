@@ -1,0 +1,86 @@
+{% assign excluded_categories = "Blog|Life|note|Note" | split: "|" %}
+<section class="category-mindmap" data-category-map>
+  <div class="category-mindmap__header">
+    <h2 class="archive__subtitle">Graph Map</h2>
+    <p class="category-mindmap__hint">카테고리와 글노드를 눌러 연결을 확인할 수 있습니다.</p>
+  </div>
+
+  <div class="category-mindmap__stage">
+    <div class="category-mindmap__canvas" data-category-map-canvas>
+      <svg class="category-mindmap__links" data-category-map-links aria-hidden="true"></svg>
+      <div class="category-mindmap__nodes" data-category-map-nodes></div>
+    </div>
+
+    <aside class="category-mindmap__rail">
+      <div class="category-mindmap__panel" data-category-map-panel>
+        <p class="category-mindmap__eyebrow">Category Atlas</p>
+        <h3 class="category-mindmap__panel-title">카테고리 허브와 글 노드</h3>
+        <p class="category-mindmap__panel-text">선은 카테고리 소속과 공유 태그를 뜻합니다.</p>
+      </div>
+    </aside>
+  </div>
+
+  <script type="application/json" data-category-map-data>
+    {
+      "categories": [
+        {% assign emitted_categories = 0 %}
+        {% assign sorted_categories = site.categories | sort %}
+        {% for taxonomy in sorted_categories %}
+          {% assign category_name = taxonomy | first %}
+          {% assign category_slug = category_name | slugify %}
+          {% assign category_visual = site.data.category_map_visuals[category_name] %}
+          {% unless excluded_categories contains category_name %}
+            {% if emitted_categories > 0 %},{% endif %}
+            {
+              "id": {{ category_slug | jsonify }},
+              "name": {{ category_name | jsonify }},
+              "count": {{ taxonomy | last | size | jsonify }},
+              "url": {{ '/categories/' | append: category_slug | append: '/' | relative_url | jsonify }},
+              "image": {% if category_visual and category_visual.image %}{{ category_visual.image | relative_url | jsonify }}{% else %}null{% endif %},
+              "imagePosition": {% if category_visual and category_visual.image_position %}{{ category_visual.image_position | jsonify }}{% else %}null{% endif %}
+            }
+            {% assign emitted_categories = emitted_categories | plus: 1 %}
+          {% endunless %}
+        {% endfor %}
+      ],
+      "posts": [
+        {% assign emitted_posts = 0 %}
+        {% for post in site.posts %}
+          {% if post.hidden != true %}
+            {% assign visible_category_count = 0 %}
+            {% if post.categories %}
+              {% for category_name in post.categories %}
+                {% unless excluded_categories contains category_name %}
+                  {% assign visible_category_count = visible_category_count | plus: 1 %}
+                {% endunless %}
+              {% endfor %}
+            {% endif %}
+            {% if visible_category_count > 0 %}
+              {% if emitted_posts > 0 %},{% endif %}
+              {
+                "id": {{ post.url | slugify | jsonify }},
+                "title": {{ post.title | jsonify }},
+                "url": {{ post.url | relative_url | jsonify }},
+                "date": {{ post.date | date: "%Y-%m-%d" | jsonify }},
+                "excerpt": {{ post.excerpt | strip_html | strip_newlines | replace: "  ", " " | strip | truncate: 120 | jsonify }},
+                "categories": [
+                  {% assign emitted_post_categories = 0 %}
+                  {% for category_name in post.categories %}
+                    {% unless excluded_categories contains category_name %}
+                      {% if emitted_post_categories > 0 %},{% endif %}
+                      {{ category_name | jsonify }}
+                      {% assign emitted_post_categories = emitted_post_categories | plus: 1 %}
+                    {% endunless %}
+                  {% endfor %}
+                ],
+                "tags": {% if post.tags %}{{ post.tags | jsonify }}{% else %}[]{% endif %}
+              }
+              {% assign emitted_posts = emitted_posts | plus: 1 %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      ]
+    }
+  </script>
+  <script src="{{ '/assets/js/category-mind-map.js' | relative_url }}"></script>
+</section>

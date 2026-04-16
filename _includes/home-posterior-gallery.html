@@ -1,0 +1,26 @@
+{% assign gallery_items = site.data.home_posterior_gallery %}
+
+{% if gallery_items and gallery_items.size > 0 %}
+  <section class="home-gallery" aria-labelledby="posterior-gallery-title">
+    <div class="home-gallery__header">
+      <h2 id="posterior-gallery-title" class="archive__subtitle">Posterior Gallery</h2>
+    </div>
+
+    <div class="home-gallery__grid">
+      {% for item in gallery_items %}
+        <a class="home-gallery__item{% if forloop.first %} home-gallery__item--featured{% endif %}" href="{{ item.url | relative_url }}">
+          <img src="{{ item.image | relative_url }}" alt="{{ item.alt | default: item.title }}" loading="lazy">
+          <div class="home-gallery__overlay">
+            {% if item.label %}
+              <span class="home-gallery__label">{{ item.label }}</span>
+            {% endif %}
+            <h3 class="home-gallery__title">{{ item.title }}</h3>
+            {% if item.description %}
+              <p class="home-gallery__text">{{ item.description }}</p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}

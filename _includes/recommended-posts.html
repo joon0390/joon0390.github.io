@@ -31,7 +31,6 @@
   {% assign shared_category_count = 0 %}
   {% assign same_primary_category = false %}
   {% assign same_section = false %}
-  {% assign current_post = post | arrayify %}
 
   {% assign post_path_parts = post.path | split: "/" %}
   {% assign post_section = post_path_parts[1] | default: "" %}
@@ -61,19 +60,19 @@
   {% endif %}
 
   {% if same_section and same_primary_category and shared_tag_count > 0 %}
-    {% assign tier_1 = tier_1 | concat: current_post %}
+    {% assign tier_1 = tier_1 | push: post %}
   {% elsif same_section and shared_tag_count > 1 %}
-    {% assign tier_2 = tier_2 | concat: current_post %}
+    {% assign tier_2 = tier_2 | push: post %}
   {% elsif same_section and same_primary_category %}
-    {% assign tier_3 = tier_3 | concat: current_post %}
+    {% assign tier_3 = tier_3 | push: post %}
   {% elsif same_primary_category and shared_tag_count > 0 %}
-    {% assign tier_4 = tier_4 | concat: current_post %}
+    {% assign tier_4 = tier_4 | push: post %}
   {% elsif same_section and shared_tag_count > 0 %}
-    {% assign tier_5 = tier_5 | concat: current_post %}
+    {% assign tier_5 = tier_5 | push: post %}
   {% elsif shared_tag_count > 0 or shared_category_count > 0 %}
-    {% assign tier_6 = tier_6 | concat: current_post %}
+    {% assign tier_6 = tier_6 | push: post %}
   {% elsif same_section %}
-    {% assign tier_7 = tier_7 | concat: current_post %}
+    {% assign tier_7 = tier_7 | push: post %}
   {% endif %}
 {% endfor %}
 

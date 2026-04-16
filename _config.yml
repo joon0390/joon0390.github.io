@@ -202,7 +202,7 @@ markdown: kramdown
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
-incremental: true #디폴트가 false
+incremental: false
 
 
 # Markdown Processing
