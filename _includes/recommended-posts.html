@@ -1,0 +1,115 @@
+{% assign limit = include.limit | default: 4 | plus: 0 %}
+{% assign variant = include.variant | default: "grid" %}
+{% assign heading = include.heading | default: "추천 글" %}
+
+{% assign candidate_posts = site.posts | where_exp: "post", "post.hidden != true" | where_exp: "post", "post.url != page.url" %}
+
+{% assign page_tags = page.tags %}
+{% if page_tags == nil %}
+  {% assign page_tags = "" | split: "" %}
+{% endif %}
+
+{% assign page_categories = page.categories %}
+{% if page_categories == nil %}
+  {% assign page_categories = "" | split: "" %}
+{% endif %}
+
+{% assign primary_category = page_categories[0] %}
+{% assign page_path_parts = page.path | split: "/" %}
+{% assign page_section = page_path_parts[1] | default: "" %}
+
+{% assign tier_1 = "" | split: "" %}
+{% assign tier_2 = "" | split: "" %}
+{% assign tier_3 = "" | split: "" %}
+{% assign tier_4 = "" | split: "" %}
+{% assign tier_5 = "" | split: "" %}
+{% assign tier_6 = "" | split: "" %}
+{% assign tier_7 = "" | split: "" %}
+
+{% for post in candidate_posts %}
+  {% assign shared_tag_count = 0 %}
+  {% assign shared_category_count = 0 %}
+  {% assign same_primary_category = false %}
+  {% assign same_section = false %}
+  {% assign current_post = post | arrayify %}
+
+  {% assign post_path_parts = post.path | split: "/" %}
+  {% assign post_section = post_path_parts[1] | default: "" %}
+
+  {% if page_section != "" and post_section == page_section %}
+    {% assign same_section = true %}
+  {% endif %}
+
+  {% if primary_category and post.categories contains primary_category %}
+    {% assign same_primary_category = true %}
+  {% endif %}
+
+  {% if page_tags.size > 0 and post.tags %}
+    {% for tag in page_tags %}
+      {% if post.tags contains tag %}
+        {% assign shared_tag_count = shared_tag_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if page_categories.size > 0 and post.categories %}
+    {% for category in page_categories %}
+      {% if post.categories contains category %}
+        {% assign shared_category_count = shared_category_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% if same_section and same_primary_category and shared_tag_count > 0 %}
+    {% assign tier_1 = tier_1 | concat: current_post %}
+  {% elsif same_section and shared_tag_count > 1 %}
+    {% assign tier_2 = tier_2 | concat: current_post %}
+  {% elsif same_section and same_primary_category %}
+    {% assign tier_3 = tier_3 | concat: current_post %}
+  {% elsif same_primary_category and shared_tag_count > 0 %}
+    {% assign tier_4 = tier_4 | concat: current_post %}
+  {% elsif same_section and shared_tag_count > 0 %}
+    {% assign tier_5 = tier_5 | concat: current_post %}
+  {% elsif shared_tag_count > 0 or shared_category_count > 0 %}
+    {% assign tier_6 = tier_6 | concat: current_post %}
+  {% elsif same_section %}
+    {% assign tier_7 = tier_7 | concat: current_post %}
+  {% endif %}
+{% endfor %}
+
+{% assign recommendations = tier_1
+  | concat: tier_2
+  | concat: tier_3
+  | concat: tier_4
+  | concat: tier_5
+  | concat: tier_6
+  | concat: tier_7
+  | concat: candidate_posts
+  | uniq
+  | slice: 0, limit %}
+
+{% if recommendations.size > 0 %}
+  {% if variant == "sidebar" %}
+    <div class="sidebar__recommendations">
+      <h3>{{ heading }}</h3>
+      <ul>
+        {% for post in recommendations %}
+          <li>
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            <span class="sidebar__recommendation-meta">{{ post.date | date: "%Y.%m.%d" }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <div class="page__related page__related--recommended">
+      {% include before-related.html %}
+      <h2 class="page__related-title">{{ heading }}</h2>
+      <div class="grid__wrapper">
+        {% for post in recommendations %}
+          {% include archive-single.html type="grid" %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
