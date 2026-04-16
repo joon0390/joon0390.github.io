@@ -122,8 +122,8 @@
     function renderPanelDefault() {
       panel.innerHTML = [
         '<p class="category-mindmap__eyebrow">Category Atlas</p>',
-        '<h3 class="category-mindmap__panel-title">카테고리 허브와 글 노드</h3>',
-        '<p class="category-mindmap__panel-text">선은 카테고리 소속과 공유 태그를 뜻합니다.</p>',
+        '<h3 class="category-mindmap__panel-title">Category Hubs and Post Nodes</h3>',
+        '<p class="category-mindmap__panel-text">Lines indicate category membership and shared tags.</p>',
         '<ul class="category-mindmap__legend">',
         '<li><span class="category-mindmap__legend-dot category-mindmap__legend-dot--hub"></span> category hub</li>',
         '<li><span class="category-mindmap__legend-dot category-mindmap__legend-dot--post"></span> post node</li>',

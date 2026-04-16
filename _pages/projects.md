@@ -9,4 +9,4 @@ sort_order: reverse
 author_profile: false
 ---
 
-참여했던 프로젝트들을 모아 정리한 페이지입니다.
+This page collects projects I have worked on.

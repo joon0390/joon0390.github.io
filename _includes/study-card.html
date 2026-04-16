@@ -1,0 +1,61 @@
+{% assign excluded_categories = "Blog|Life|note|Note|Dev|Troubleshooting|Implementation|Code" | split: "|" %}
+{% assign visible_categories = "" | split: "" %}
+{% for category_name in post.categories %}
+  {% unless excluded_categories contains category_name %}
+    {% assign visible_categories = visible_categories | push: category_name %}
+  {% endunless %}
+{% endfor %}
+
+{% if post.header.teaser %}
+  {% capture teaser %}{{ post.header.teaser }}{% endcapture %}
+{% else %}
+  {% assign teaser = site.teaser %}
+{% endif %}
+
+{% assign primary_category = visible_categories | first | default: "Study" %}
+{% assign primary_category_slug = primary_category | slugify %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+<div
+  class="grid__item study-grid__item"
+  data-study-card
+  data-study-categories="{% for category_name in visible_categories %}{{ category_name | slugify }}{% unless forloop.last %}|{% endunless %}{% endfor %}">
+  <article class="archive__item study-card" itemscope itemtype="https://schema.org/CreativeWork" {% if post.locale %}lang="{{ post.locale }}" {% endif %}>
+    {% if teaser %}
+      <div class="archive__item-teaser">
+        <img src="{{ teaser | relative_url }}" alt="">
+      </div>
+    {% else %}
+      <div class="archive__item-teaser study-card__placeholder study-card__placeholder--{{ primary_category_slug }}">
+        <span>{{ primary_category }}</span>
+      </div>
+    {% endif %}
+
+    {% if visible_categories.size > 0 %}
+      <div class="study-card__categories">
+        {% for category_name in visible_categories limit: 2 %}
+          <span class="study-card__category study-card__category--{{ category_name | slugify }}">{{ category_name }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      {% if post.link %}
+        <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+      {% else %}
+        <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
+      {% endif %}
+    </h2>
+
+    {% include page__meta.html type="grid" %}
+
+    {% if post.excerpt %}
+      <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>
+    {% endif %}
+  </article>
+</div>
