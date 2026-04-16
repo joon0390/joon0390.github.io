@@ -2,9 +2,8 @@
 title: "Study"
 layout: archive
 permalink: /posts/
-author_profile: true
-sidebar:
-  nav: "sidebar-category"
+author_profile: false
+entries_layout: grid
 ---
 
 {% assign study_posts = "" | split: "" %}
@@ -14,8 +13,11 @@ sidebar:
   {% endunless %}
 {% endfor %}
 
-<div class="entries-list">
-  {% for post in study_posts %}
-    {% include archive-single.html type="list" %}
-  {% endfor %}
+{% assign study_posts = study_posts | sort: "date" | reverse %}
+{% assign entries_layout = page.entries_layout | default: "grid" %}
+
+<div class="entries-{{ entries_layout }}">
+  <div class="grid__wrapper">
+    {% include documents-collection.html entries=study_posts type=entries_layout %}
+  </div>
 </div>
