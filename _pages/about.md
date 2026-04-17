@@ -37,6 +37,9 @@ author_profile: false
       Here, I explore probabilistic models, neural networks,<br/>
       and graph-based methods through theory and hands-on code.
     </p>
+    <p style="margin: 1rem 0 0;">
+      <a href="/cv/" class="btn btn--primary">View CV</a>
+    </p>
   </div>
 
 </div>
