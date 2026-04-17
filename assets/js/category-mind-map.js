@@ -170,7 +170,7 @@
       panel.innerHTML = [
         '<p class="category-mindmap__eyebrow">Post</p>',
         '<h3 class="category-mindmap__panel-title">' + escapeHtml(post.title) + '</h3>',
-        '<p class="category-mindmap__panel-text">' + escapeHtml(post.excerpt || "?ㅻ챸 ?놁쓬") + '</p>',
+        '<p class="category-mindmap__panel-text">' + escapeHtml(post.excerpt || "No excerpt available.") + '</p>',
         relatedCategories.length ? '<div class="category-mindmap__chips">' + relatedCategories.map(function (category) {
           return '<span class="category-mindmap__chip" style="--chip-color:' + escapeHtml(category.color) + ';">' + escapeHtml(category.name) + '</span>';
         }).join("") + '</div>' : '',
@@ -183,7 +183,7 @@
             : data.posts.find(function (item) { return item.id === edge.left; }).title;
           return '<div class="category-mindmap__list-item">' + escapeHtml(title) + '<span>' + edge.sharedTags.map(function (tag) { return '#' + tag; }).join(', ') + '</span></div>';
         }).join("") + '</div>' : '',
-        '<a class="category-mindmap__jump" href="' + escapeHtml(post.url) + '">湲 ?쎄린</a>'
+        '<a class="category-mindmap__jump" href="' + escapeHtml(post.url) + '">Read post</a>'
       ].join("");
     }
 
