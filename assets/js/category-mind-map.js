@@ -155,7 +155,7 @@
         topTags.length ? '<div class="category-mindmap__chips">' + topTags.map(function (tag) {
           return '<span class="category-mindmap__chip">#' + escapeHtml(tag) + '</span>';
         }).join("") + '</div>' : '',
-        '<a class="category-mindmap__jump" href="#' + escapeHtml(category.id) + '">archive 蹂닿린</a>'
+        '<a class="category-mindmap__jump" href="#' + escapeHtml(category.id) + '">View archive</a>'
       ].join("");
     }
 
