@@ -10,6 +10,38 @@
 {% assign title = post.title %}
 {% endif %}
 
+{% if include.type == "project-gallery" %}
+{% assign project_index = post.order | default: 0 %}
+<div class="{{ include.type | default: 'list' }}__item">
+  <article class="project-card" itemscope itemtype="https://schema.org/CreativeWork"{% if post.locale %} lang="{{ post.locale }}"{% endif %}>
+    <a class="project-card__link" href="{{ post.url | relative_url }}" rel="permalink">
+      <div class="project-card__visual">
+        <p class="project-card__eyebrow">
+          Project
+          {% if project_index < 10 %}0{{ project_index }}{% else %}{{ project_index }}{% endif %}
+        </p>
+        <span class="project-card__index" aria-hidden="true">
+          {% if project_index < 10 %}0{{ project_index }}{% else %}{{ project_index }}{% endif %}
+        </span>
+        <span class="project-card__cta">View details</span>
+      </div>
+      <div class="project-card__body">
+        {% if post.tags %}
+        <div class="project-card__tags" aria-label="Project tags">
+          {% for tag in post.tags limit: 3 %}
+          <span class="project-card__tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h2 class="project-card__title no_toc" itemprop="headline">{{ title }}</h2>
+        {% if post.excerpt %}
+        <p class="project-card__excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 130 }}</p>
+        {% endif %}
+      </div>
+    </a>
+  </article>
+</div>
+{% else %}
 <div class="{{ include.type | default: 'list' }}__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" {% if post.locale %}
     lang="{{ post.locale }}" {% endif %}>
@@ -31,3 +63,4 @@
       strip_html | truncate: 160 }}</p>{% endif %}
   </article>
 </div>
+{% endif %}
