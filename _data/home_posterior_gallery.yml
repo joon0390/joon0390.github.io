@@ -56,7 +56,7 @@
 
 - title: "Variational Inference"
   url: "/variational-inference/"
-  image: "/assets/img/gaussian.png"
+  image: "/assets/vi/vi.jpg"
   alt: "Gaussian approximation illustration for variational inference"
   label: "Approximation"
   description: "복잡한 posterior를 tractable한 분포로 근사한다는 VI의 핵심 아이디어를 가장 단순한 그림으로 요약합니다."
