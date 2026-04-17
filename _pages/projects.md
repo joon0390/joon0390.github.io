@@ -4,9 +4,8 @@ layout: collection
 permalink: /projects/
 collection: projects
 entries_layout: list
-sort_by: date
-sort_order: reverse
+sort_by: order
 author_profile: false
 ---
 
-This page collects projects I have worked on.
+연구와 개발 과정에서 진행한 프로젝트를 정리한 페이지입니다.
