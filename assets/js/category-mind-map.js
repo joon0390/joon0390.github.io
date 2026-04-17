@@ -150,8 +150,8 @@
         : posts.length + " posts are connected to this hub.";
       panel.innerHTML = [
         '<p class="category-mindmap__eyebrow">Category</p>',
+        '<h3 class="category-mindmap__panel-title">' + escapeHtml(category.name) + '</h3>',
         '<p class="category-mindmap__panel-text">' + postSummary + '</p>',
-        '<p class="category-mindmap__panel-text">' + posts.length + '媛쒖쓽 湲?????덈툕???곌껐?섏뼱 ?덉뒿?덈떎.</p>',
         topTags.length ? '<div class="category-mindmap__chips">' + topTags.map(function (tag) {
           return '<span class="category-mindmap__chip">#' + escapeHtml(tag) + '</span>';
         }).join("") + '</div>' : '',
