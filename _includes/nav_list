@@ -30,83 +30,61 @@
   site.data.navigation['sidebar-category'] 와 동일한 결과입니다.
 {%- endcomment %}
 {%- assign sidebar_nav = site.data.navigation[include.nav] -%}
-{%- assign total_posts = site.posts | size -%}
 
-<nav class="nav__list">
-  <ul class="nav__items">
-    <li>
-      <span style="font-weight: bold;">
-        TOTAL
-        {%- if total_posts > 0 -%}
-          <span class="nav__count">({{ total_posts }})</span>
-        {%- endif -%}
-      </span>
-    </li>
+<nav class="nav__list nav__list--topics">
+  <div class="nav__topics-header">
+    <p class="nav__eyebrow">Browse</p>
+    <p class="nav__topics-title">Topics</p>
+  </div>
 
-    {%- comment %} 
-      sidebar-category의 최상위 항목들을 순회합니다. (예: "Categories")
-    {%- endcomment %}
+  <ul class="nav__items nav__items--topics">
     {%- for nav in sidebar_nav -%}
-      {%- if nav.title -%}
-        <li>
-          <span class="nav__sub-title">{{ nav.title }}</span>
-        </li>
-      {%- endif -%}
-
-      {%- comment %} 
-        최상위 항목에 children이 있는지 확인합니다.
-      {%- endcomment %}
       {%- if nav.children -%}
-        <ul class="nav__children">
-          {%- comment %} 
-            첫 번째 레벨의 카테고리들을 순회합니다. (예: "Machine Learning", "Statistics")
-          {%- endcomment %}
-          {%- for child in nav.children -%}
-            {%- assign category_key = child.title -%}
+        {%- for child in nav.children -%}
+          {%- assign category_key = child.title -%}
+          {%- assign category_posts = site.categories[category_key] -%}
+          {%- if category_posts == null -%}
+            {%- assign category_key = child.title | slugify -%}
             {%- assign category_posts = site.categories[category_key] -%}
-            {%- if category_posts == null -%}
-              {%- assign category_key = child.title | slugify -%}
-              {%- assign category_posts = site.categories[category_key] -%}
-            {%- endif -%}
-            {%- assign category_size = category_posts | size | default: 0 -%}
-            <li>
-              <a href="{{ child.url | relative_url }}">
-                {{ child.title }}
-                {%- if category_size > 0 -%}
-                  <span class="nav__count">({{ category_size }})</span>
-                {%- endif -%}
-              </a>
-
-              {%- comment %} 
-                첫 번째 레벨 카테고리에 또 children(하위 카테고리)이 있는지 확인합니다.
-              {%- endcomment %}
-              {%- if child.children -%}
-                <ul class="nav__children--nested">
-                  {%- comment %} 
-                    두 번째 레벨의 카테고리들을 순회합니다. (예: "Bayesian")
-                  {%- endcomment %}
-                  {%- for grandchild in child.children -%}
-                    {%- assign sub_category_key = grandchild.title -%}
-                    {%- assign sub_category_posts = site.categories[sub_category_key] -%}
-                    {%- if sub_category_posts == null -%}
-                      {%- assign sub_category_key = grandchild.title | slugify -%}
-                      {%- assign sub_category_posts = site.categories[sub_category_key] -%}
-                    {%- endif -%}
-                    {%- assign sub_category_size = sub_category_posts | size | default: 0 -%}
-                    <li>
-                      <a href="{{ grandchild.url | relative_url }}">
-                        {{ grandchild.title }}
-                        {%- if sub_category_size > 0 -%}
-                          <span class="nav__count">({{ sub_category_size }})</span>
-                        {%- endif -%}
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
+          {%- endif -%}
+          {%- assign category_size = category_posts | size | default: 0 -%}
+          {%- assign child_active = false -%}
+          {%- if page.url == child.url or page.categories contains child.title -%}
+            {%- assign child_active = true -%}
+          {%- endif -%}
+          <li class="nav__topic-card">
+            <a class="nav__topic-link{% if child_active %} active{% endif %}" href="{{ child.url | relative_url }}">
+              <span class="nav__topic-label">{{ child.title }}</span>
+              {%- if category_size > 0 -%}
+                <span class="nav__topic-count">{{ category_size }}</span>
               {%- endif -%}
-            </li>
-          {%- endfor -%}
-        </ul>
+            </a>
+
+            {%- if child.children -%}
+              <div class="nav__children--nested">
+                {%- for grandchild in child.children -%}
+                  {%- assign sub_category_key = grandchild.title -%}
+                  {%- assign sub_category_posts = site.categories[sub_category_key] -%}
+                  {%- if sub_category_posts == null -%}
+                    {%- assign sub_category_key = grandchild.title | slugify -%}
+                    {%- assign sub_category_posts = site.categories[sub_category_key] -%}
+                  {%- endif -%}
+                  {%- assign sub_category_size = sub_category_posts | size | default: 0 -%}
+                  {%- assign grandchild_active = false -%}
+                  {%- if page.url == grandchild.url or page.categories contains grandchild.title -%}
+                    {%- assign grandchild_active = true -%}
+                  {%- endif -%}
+                  <a class="nav__subtopic-link{% if grandchild_active %} active{% endif %}" href="{{ grandchild.url | relative_url }}">
+                    <span>{{ grandchild.title }}</span>
+                    {%- if sub_category_size > 0 -%}
+                      <span class="nav__topic-count">{{ sub_category_size }}</span>
+                    {%- endif -%}
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
       {%- endif -%}
     {%- endfor -%}
   </ul>
