@@ -1,6 +1,7 @@
 ---
 title: "스마트폰 가속도 센서를 이용한 도로 노면 탐지 시스템"
 excerpt: "스마트폰 가속도 센서 기반 시계열 데이터를 이용해 도로 노면 상태를 구분하는 시스템."
+date: 2026-04-18
 collection: projects
 layout: single
 order: 7

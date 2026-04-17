@@ -34,6 +34,12 @@
         </div>
         {% endif %}
         <h2 class="project-card__title no_toc" itemprop="headline">{{ title }}</h2>
+        {% if post.date %}
+        <p class="project-card__meta">
+          <i class="far fa-calendar-alt" aria-hidden="true"></i>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time>
+        </p>
+        {% endif %}
         {% if post.excerpt %}
         <p class="project-card__excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 130 }}</p>
         {% endif %}

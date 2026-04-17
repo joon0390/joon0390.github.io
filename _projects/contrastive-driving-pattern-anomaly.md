@@ -1,6 +1,7 @@
 ---
 title: "대조학습을 이용한 주행 패턴 이상 탐지"
 excerpt: "대조학습 기반 표현 학습으로 주행 시계열의 비정상 패턴을 탐지하는 프로젝트."
+date: 2026-04-18
 collection: projects
 layout: single
 order: 5

@@ -1154,6 +1154,17 @@ a {
   line-height: 1.45;
 }
 
+.project-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.55rem 0 0;
+  color: #7b6958;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .project-card__excerpt {
   margin: 0.7rem 0 0;
   color: #5d4d42;

@@ -1,6 +1,7 @@
 ---
 title: "강화학습을 이용한 조난자 이동 경로 예측"
 excerpt: "강화학습 기반 의사결정 모델로 조난자의 이동 경로를 예측하는 프로젝트."
+date: 2026-04-18
 collection: projects
 layout: single
 order: 3
