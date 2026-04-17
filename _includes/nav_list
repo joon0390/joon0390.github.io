@@ -1,4 +1,4 @@
-<!-- <nav class="nav__list">
+<nav class="nav__list">
   {% if page.sidebar.title %}<h3 class="nav__title" style="padding-left: 0;">{{ page.sidebar.title }}</h3>{% endif %}
   <input id="ac-toc" name="accordion-toc" type="checkbox" />
   <label for="ac-toc">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle Menu" }}</label>
@@ -23,69 +23,5 @@
         </li>
       {% endfor %}
     {% endfor %}
-  </ul>
-</nav> -->
-{%- comment %} 
-  nav="sidebar-category" 로 전달된 값을 받아 sidebar_nav 변수에 저장합니다.
-  site.data.navigation['sidebar-category'] 와 동일한 결과입니다.
-{%- endcomment %}
-{%- assign sidebar_nav = site.data.navigation[include.nav] -%}
-
-<nav class="nav__list nav__list--topics">
-  <div class="nav__topics-header">
-    <p class="nav__eyebrow">Browse</p>
-    <p class="nav__topics-title">Topics</p>
-  </div>
-
-  <ul class="nav__items nav__items--topics">
-    {%- for nav in sidebar_nav -%}
-      {%- if nav.children -%}
-        {%- for child in nav.children -%}
-          {%- assign category_key = child.title -%}
-          {%- assign category_posts = site.categories[category_key] -%}
-          {%- if category_posts == null -%}
-            {%- assign category_key = child.title | slugify -%}
-            {%- assign category_posts = site.categories[category_key] -%}
-          {%- endif -%}
-          {%- assign category_size = category_posts | size | default: 0 -%}
-          {%- assign child_active = false -%}
-          {%- if page.url == child.url or page.categories contains child.title -%}
-            {%- assign child_active = true -%}
-          {%- endif -%}
-          <li class="nav__topic-card">
-            <a class="nav__topic-link{% if child_active %} active{% endif %}" href="{{ child.url | relative_url }}">
-              <span class="nav__topic-label">{{ child.title }}</span>
-              {%- if category_size > 0 -%}
-                <span class="nav__topic-count">{{ category_size }}</span>
-              {%- endif -%}
-            </a>
-
-            {%- if child.children -%}
-              <div class="nav__children--nested">
-                {%- for grandchild in child.children -%}
-                  {%- assign sub_category_key = grandchild.title -%}
-                  {%- assign sub_category_posts = site.categories[sub_category_key] -%}
-                  {%- if sub_category_posts == null -%}
-                    {%- assign sub_category_key = grandchild.title | slugify -%}
-                    {%- assign sub_category_posts = site.categories[sub_category_key] -%}
-                  {%- endif -%}
-                  {%- assign sub_category_size = sub_category_posts | size | default: 0 -%}
-                  {%- assign grandchild_active = false -%}
-                  {%- if page.url == grandchild.url or page.categories contains grandchild.title -%}
-                    {%- assign grandchild_active = true -%}
-                  {%- endif -%}
-                  <a class="nav__subtopic-link{% if grandchild_active %} active{% endif %}" href="{{ grandchild.url | relative_url }}">
-                    <span>{{ grandchild.title }}</span>
-                    {%- if sub_category_size > 0 -%}
-                      <span class="nav__topic-count">{{ sub_category_size }}</span>
-                    {%- endif -%}
-                  </a>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
   </ul>
 </nav>

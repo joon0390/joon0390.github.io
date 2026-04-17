@@ -318,8 +318,6 @@ defaults:
       toc: true
       toc_label: "On this page"
       toc_icon: '/assets/img/gaussian.png'
-      sidebar:
-        nav: "sidebar-category" 
   - scope:
       path: ""
       type: projects
