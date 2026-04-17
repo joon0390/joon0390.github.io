@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   function byPriority(name) {
     var order = [
       "Bayesian",
@@ -67,7 +67,7 @@
       .map(function (post) {
         post.tags = (post.tags || []).filter(Boolean);
         post.categoryIds = (post.categories || [])
-          .map(function (name) { return String(name).toLowerCase().replace(/[^a-z0-9가-힣]+/g, "-").replace(/^-+|-+$/g, ""); })
+          .map(function (name) { return String(name).toLowerCase().replace(/[^a-z0-9媛-??+/g, "-").replace(/^-+|-+$/g, ""); })
           .filter(function (id) { return categoryById.has(id); });
         return post;
       })
@@ -145,15 +145,17 @@
       var topTags = Object.keys(tagCounts)
         .sort(function (left, right) { return tagCounts[right] - tagCounts[left] || left.localeCompare(right); })
         .slice(0, 5);
-
+      var postSummary = posts.length === 1
+        ? "1 post is connected to this hub."
+        : posts.length + " posts are connected to this hub.";
       panel.innerHTML = [
         '<p class="category-mindmap__eyebrow">Category</p>',
-        '<h3 class="category-mindmap__panel-title">' + escapeHtml(category.name) + '</h3>',
-        '<p class="category-mindmap__panel-text">' + posts.length + '개의 글이 이 허브에 연결되어 있습니다.</p>',
+        '<p class="category-mindmap__panel-text">' + postSummary + '</p>',
+        '<p class="category-mindmap__panel-text">' + posts.length + '媛쒖쓽 湲?????덈툕???곌껐?섏뼱 ?덉뒿?덈떎.</p>',
         topTags.length ? '<div class="category-mindmap__chips">' + topTags.map(function (tag) {
           return '<span class="category-mindmap__chip">#' + escapeHtml(tag) + '</span>';
         }).join("") + '</div>' : '',
-        '<a class="category-mindmap__jump" href="#' + escapeHtml(category.id) + '">archive 보기</a>'
+        '<a class="category-mindmap__jump" href="#' + escapeHtml(category.id) + '">archive 蹂닿린</a>'
       ].join("");
     }
 
@@ -168,7 +170,7 @@
       panel.innerHTML = [
         '<p class="category-mindmap__eyebrow">Post</p>',
         '<h3 class="category-mindmap__panel-title">' + escapeHtml(post.title) + '</h3>',
-        '<p class="category-mindmap__panel-text">' + escapeHtml(post.excerpt || "설명 없음") + '</p>',
+        '<p class="category-mindmap__panel-text">' + escapeHtml(post.excerpt || "?ㅻ챸 ?놁쓬") + '</p>',
         relatedCategories.length ? '<div class="category-mindmap__chips">' + relatedCategories.map(function (category) {
           return '<span class="category-mindmap__chip" style="--chip-color:' + escapeHtml(category.color) + ';">' + escapeHtml(category.name) + '</span>';
         }).join("") + '</div>' : '',
@@ -181,7 +183,7 @@
             : data.posts.find(function (item) { return item.id === edge.left; }).title;
           return '<div class="category-mindmap__list-item">' + escapeHtml(title) + '<span>' + edge.sharedTags.map(function (tag) { return '#' + tag; }).join(', ') + '</span></div>';
         }).join("") + '</div>' : '',
-        '<a class="category-mindmap__jump" href="' + escapeHtml(post.url) + '">글 읽기</a>'
+        '<a class="category-mindmap__jump" href="' + escapeHtml(post.url) + '">湲 ?쎄린</a>'
       ].join("");
     }
 
