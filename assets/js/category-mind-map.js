@@ -67,7 +67,7 @@
       .map(function (post) {
         post.tags = (post.tags || []).filter(Boolean);
         post.categoryIds = (post.categories || [])
-          .map(function (name) { return String(name).toLowerCase().replace(/[^a-z0-9媛-??+/g, "-").replace(/^-+|-+$/g, ""); })
+          .map(function (name) { return String(name).toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, ""); })
           .filter(function (id) { return categoryById.has(id); });
         return post;
       })
