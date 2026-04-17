@@ -3,7 +3,7 @@ title: "화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 
 excerpt: "화생방 환경에서 수집되는 시계열 신호를 기반으로 개인 오염 여부를 이상 탐지 및 분류하는 프로젝트."
 collection: projects
 layout: single
-order: 7
+order: 1
 tags:
   - CBRN
   - Anomaly Detection

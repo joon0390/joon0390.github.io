@@ -3,7 +3,7 @@ title: "산업용 회전 장비 이상 진동 탐지 프로젝트"
 excerpt: "산업용 회전 장비의 진동 신호를 바탕으로 이상 상태를 조기에 탐지하는 예지보전 프로젝트."
 collection: projects
 layout: single
-order: 1
+order: 2
 tags:
   - Predictive Maintenance
   - Vibration Analysis

@@ -3,7 +3,7 @@ title: "베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측"
 excerpt: "베이지안 딥커널 모델로 양식 넙치의 성장 변화를 예측하고 불확실성을 함께 추정한 프로젝트."
 collection: projects
 layout: single
-order: 5
+order: 4
 tags:
   - Bayesian Machine Learning
   - Deep Kernel Learning
