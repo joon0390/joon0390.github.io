@@ -20,6 +20,7 @@ tags:
 
   #flounder-project-main {
     min-width: 0;
+    max-width: 48rem;
   }
 
   #flounder-project-viewer {
@@ -74,6 +75,11 @@ tags:
     color: #627888;
     font-size: 0.9rem;
     line-height: 1.6;
+  }
+
+  .flounder-copy {
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .flounder-visual {
@@ -237,8 +243,8 @@ tags:
   @media (min-width: 980px) {
     #flounder-project-layout {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(32rem, 1.05fr);
-      gap: 2rem;
+      grid-template-columns: minmax(0, 1.45fr) clamp(27rem, 31vw, 32rem);
+      gap: 2.5rem;
       align-items: start;
     }
 
@@ -246,6 +252,9 @@ tags:
       margin-top: 0;
       position: sticky;
       top: 1rem;
+      width: 100%;
+      max-width: 32rem;
+      justify-self: end;
     }
 
     .flounder-pipeline-grid {
@@ -288,7 +297,7 @@ tags:
 </style>
 
 <div id="flounder-project-layout">
-<div id="flounder-project-main" markdown="1">
+<div id="flounder-project-main" class="flounder-copy" markdown="1">
 
 ## 프로젝트 개요
 
