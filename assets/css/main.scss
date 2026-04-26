@@ -154,6 +154,23 @@ a {
   opacity: 1;
 }
 
+.project-figure {
+  margin-inline: auto;
+}
+
+.project-figure--wide {
+  max-width: 58rem;
+}
+
+.project-figure--medium {
+  max-width: 48rem;
+}
+
+.project-figure img {
+  width: 100%;
+  height: auto;
+}
+
 .category-mindmap {
   --map-surface: #f5efe5;
   --map-line: rgba(72, 58, 49, 0.12);

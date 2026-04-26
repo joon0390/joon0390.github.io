@@ -6,10 +6,7 @@ collection: projects
 layout: single
 order: 4
 header:
-  image: /assets/img/projects/flounder/pipeline.svg
   teaser: /assets/img/projects/flounder/pipeline.svg
-  image_description: "Visual summary of the flatfish growth prediction study"
-  caption: "Project summary based on the Applied Sciences 2025 paper."
 tags:
   - Bayesian Machine Learning
   - Deep Kernel Learning
@@ -26,7 +23,9 @@ tags:
 
 프로젝트 상단에는 연구 범위, 입력 데이터, 모델 파이프라인, 핵심 성능을 한 장으로 요약한 도식을 배치했습니다. 아래 차트는 논문에 보고된 LOOCV 성능 비교를 시각적으로 정리한 것입니다.
 
-{% include figure image_path="/assets/img/projects/flounder/performance.svg" alt="LOOCV performance comparison across KRR, BKMR, BDKMR Equal, and BDKMR" caption="LOOCV 기준 성능 비교. BDKMR이 KRR, BKMR, BDKMR(Equal)보다 더 낮은 MAE와 MSE를 기록했습니다." %}
+{% include figure image_path="/assets/img/projects/flounder/pipeline.svg" alt="Study overview for flatfish growth prediction with BDKMR" class="project-figure project-figure--wide" caption="연구 범위, 입력 변수, 모델 파이프라인, 핵심 결과를 한 장으로 정리한 요약 도식." %}
+
+{% include figure image_path="/assets/img/projects/flounder/performance.svg" alt="LOOCV performance comparison across KRR, BKMR, BDKMR Equal, and BDKMR" class="project-figure project-figure--medium" caption="LOOCV 기준 성능 비교. BDKMR이 KRR, BKMR, BDKMR(Equal)보다 더 낮은 MAE와 MSE를 기록했습니다." %}
 
 ## 핵심 내용
 
