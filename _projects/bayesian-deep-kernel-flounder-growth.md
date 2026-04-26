@@ -5,6 +5,11 @@ date: 2026-04-18
 collection: projects
 layout: single
 order: 4
+header:
+  image: /assets/img/projects/flounder/pipeline.svg
+  teaser: /assets/img/projects/flounder/pipeline.svg
+  image_description: "Visual summary of the flatfish growth prediction study"
+  caption: "Project summary based on the Applied Sciences 2025 paper."
 tags:
   - Bayesian Machine Learning
   - Deep Kernel Learning
@@ -16,6 +21,12 @@ tags:
 ## 프로젝트 개요
 
 국내 양식 넙치(olive flounder)의 성장 예측을 위해, 가우시안 프로세스 회귀와 신경망 기반 표현 학습을 결합한 Bayesian Deep Kernel Machine Regression (BDKMR) 모델을 제안한 연구입니다. 완도 2개 양식장과 제주 3개 양식장, 총 7개 수조에서 2023년 3월부터 2024년 7월까지 수집한 종단 데이터를 바탕으로 수온, 용존산소, 개체당 사료량이 성장에 미치는 비선형 관계를 모델링했습니다.
+
+## 시각 자료
+
+프로젝트 상단에는 연구 범위, 입력 데이터, 모델 파이프라인, 핵심 성능을 한 장으로 요약한 도식을 배치했습니다. 아래 차트는 논문에 보고된 LOOCV 성능 비교를 시각적으로 정리한 것입니다.
+
+{% include figure image_path="/assets/img/projects/flounder/performance.svg" alt="LOOCV performance comparison across KRR, BKMR, BDKMR Equal, and BDKMR" caption="LOOCV 기준 성능 비교. BDKMR이 KRR, BKMR, BDKMR(Equal)보다 더 낮은 MAE와 MSE를 기록했습니다." %}
 
 ## 핵심 내용
 
