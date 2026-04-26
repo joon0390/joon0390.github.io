@@ -347,6 +347,11 @@ tags:
 
 또한 이 과정을 통해 모델 하나의 성능만 보는 것이 아니라, 백본 선택 자체가 연구의 중요한 변수라는 점을 더 분명하게 배웠습니다. 어떤 모델은 매우 적은 레이블 환경에서도 강한 일반화 성능을 보였고, 어떤 모델은 같은 설정에서도 학습이 잘 되지 않았기 때문에, 실제 적용을 생각하면 정확도와 함께 안정성, 연산량, 도메인 적합성까지 같이 봐야 한다는 점이 남았습니다. 개인적으로는 여러 백본을 직접 바꿔가며 결과 차이를 확인한 경험이, 경량 모델 설계와 실전 배포 관점을 함께 이해하는 데 큰 도움이 되었습니다.
 
+## 관련 발표 및 수상
+
+- `Anomaly Detection in Driving Patterns Using Contrastive Learning` - Best Paper Award, 2023 ITS Korea Fall Conference, `Aug. 2024`
+- `Road Surface Detection System using Smartphone Accelerometer Sensors` - Bronze Prize at Fall 2023 Vertically Integrated Projects Presentation, `Dec. 2023`
+
 ## 논문 정보
 
 - "대조학습 방법을 이용한 주행 패턴 분석 기법 연구"
