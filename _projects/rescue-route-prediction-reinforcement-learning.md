@@ -1,7 +1,7 @@
 ---
 title: "AI 기반 산악사고 요구조자 이동경로 예측 시스템"
 excerpt: "공간정보 전처리와 DQN 기반 강화학습을 결합해 산악사고 요구조자의 이동 경로를 예측하고 수색 지역을 좁히는 특허 기반 프로젝트."
-date: 2026-04-18
+date: 2025-09-01
 collection: projects
 layout: single
 order: 3

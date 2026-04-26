@@ -1,7 +1,7 @@
 ---
 title: "대조학습 방법을 이용한 주행 패턴 분석 기법 연구"
 excerpt: "스마트폰 센서 기반 주행 시계열에 시간 일관성 대조학습을 적용해 변화점을 탐지하고, 소량의 레이블만으로도 패턴 분류를 수행한 연구."
-date: 2026-04-18
+date: 2024-02-01
 collection: projects
 layout: single
 order: 5

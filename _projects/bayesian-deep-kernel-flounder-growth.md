@@ -1,7 +1,7 @@
 ---
 title: "베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측"
 excerpt: "수온, 용존산소, 사료량을 바탕으로 넙치 성장량을 예측하고 BDKMR로 기존 커널 모델보다 더 낮은 오차를 달성한 연구."
-date: 2026-04-18
+date: 2025-08-01
 collection: projects
 layout: single
 order: 4
