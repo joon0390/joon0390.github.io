@@ -5,6 +5,8 @@ date: 2026-04-18
 collection: projects
 layout: single
 order: 4
+classes:
+  - wide
 tags:
   - Bayesian Machine Learning
   - Deep Kernel Learning
@@ -14,13 +16,26 @@ tags:
 ---
 
 <style>
+  #main {
+    max-width: min(96vw, 1720px);
+  }
+
+  .layout--single .page {
+    width: 100% !important;
+    padding-inline-end: 0 !important;
+  }
+
+  .layout--single .page__inner-wrap {
+    width: 100%;
+  }
+
   #flounder-project-layout {
     display: block;
   }
 
   #flounder-project-main {
     min-width: 0;
-    max-width: 48rem;
+    max-width: 56rem;
   }
 
   #flounder-project-viewer {
@@ -243,8 +258,8 @@ tags:
   @media (min-width: 980px) {
     #flounder-project-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) clamp(27rem, 31vw, 32rem);
-      gap: 2.5rem;
+      grid-template-columns: minmax(0, 1.55fr) clamp(28rem, 30vw, 34rem);
+      gap: clamp(1.75rem, 2.4vw, 3rem);
       align-items: start;
     }
 
@@ -253,7 +268,7 @@ tags:
       position: sticky;
       top: 1rem;
       width: 100%;
-      max-width: 32rem;
+      max-width: 34rem;
       justify-self: end;
     }
 
