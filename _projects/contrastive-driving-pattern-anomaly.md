@@ -185,6 +185,20 @@ tags:
     background: #e8f2fb;
   }
 
+  .contrastive-figure {
+    margin: 1.1rem 0 1.9rem;
+  }
+
+  .contrastive-figure img {
+    display: block;
+    width: 100%;
+    max-width: 48rem;
+    margin: 0 auto;
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+  }
+
   @media (min-width: 980px) {
     #contrastive-project-layout {
       display: grid;
@@ -269,6 +283,10 @@ tags:
     </div>
   </div>
 </section>
+
+<figure class="contrastive-figure">
+  <img src="/assets/img/projects/contrastive/figure-3.png" alt="Figure 3 Overview of Time Consistency Learning">
+</figure>
 
 ## 핵심 내용
 
