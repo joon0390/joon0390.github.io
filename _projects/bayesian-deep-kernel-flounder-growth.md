@@ -15,6 +15,9 @@ tags:
   - Growth Prediction
 ---
 
+<div class="project-paper-layout">
+<div class="project-paper-layout__content" markdown="1">
+
 ## 프로젝트 개요
 
 국내 양식 넙치(olive flounder)의 성장 예측을 위해, 가우시안 프로세스 회귀와 신경망 기반 표현 학습을 결합한 Bayesian Deep Kernel Machine Regression (BDKMR) 모델을 제안한 연구입니다. 완도 2개 양식장과 제주 3개 양식장, 총 7개 수조에서 2023년 3월부터 2024년 7월까지 수집한 종단 데이터를 바탕으로 수온, 용존산소, 개체당 사료량이 성장에 미치는 비선형 관계를 모델링했습니다.
@@ -65,3 +68,23 @@ tags:
 
 - Junhee Kim, Seung-Won Seo, Ho-Jin Jung, Hyun-Seok Jang, Han-Kyu Lim, Seongil Jo, "Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines", *Applied Sciences*, 2025.
 - DOI: [10.3390/app15179487](https://doi.org/10.3390/app15179487)
+
+</div>
+
+<aside class="project-paper-layout__viewer">
+  <div class="project-paper-layout__viewer-inner">
+    <p class="project-paper-layout__eyebrow">Paper Viewer</p>
+    <p class="project-paper-layout__title">Applied Sciences 2025 Full Paper</p>
+    <div class="project-paper-layout__frame">
+      <iframe
+        src="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}#view=FitH"
+        title="Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines PDF"
+      ></iframe>
+    </div>
+    <p class="project-paper-layout__note">
+      브라우저에서 PDF 임베드가 지원되지 않으면
+      <a href="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}" target="_blank" rel="noopener">새 탭에서 논문 열기</a>
+    </p>
+  </div>
+</aside>
+</div>
