@@ -5,8 +5,6 @@ date: 2026-04-18
 collection: projects
 layout: single
 order: 4
-header:
-  teaser: /assets/img/projects/flounder/pipeline.svg
 tags:
   - Bayesian Machine Learning
   - Deep Kernel Learning
@@ -15,8 +13,282 @@ tags:
   - Growth Prediction
 ---
 
-<div class="project-paper-layout">
-<div class="project-paper-layout__content" markdown="1">
+<style>
+  #flounder-project-layout {
+    display: block;
+  }
+
+  #flounder-project-main {
+    min-width: 0;
+  }
+
+  #flounder-project-viewer {
+    margin-top: 2rem;
+  }
+
+  .flounder-panel {
+    border: 1px solid rgba(18, 57, 91, 0.12);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.72), transparent 40%),
+      linear-gradient(180deg, #f8fbfc 0%, #edf5f7 100%);
+    box-shadow: 0 18px 40px rgba(17, 57, 91, 0.08);
+    padding: 1.1rem;
+  }
+
+  .flounder-eyebrow {
+    margin: 0 0 0.35rem;
+    color: #73899b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .flounder-title {
+    margin: 0 0 0.9rem;
+    color: #103754;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .flounder-pdf-frame {
+    overflow: hidden;
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    height: 76vh;
+    min-height: 52rem;
+  }
+
+  .flounder-pdf-frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .flounder-note {
+    margin: 0.85rem 0 0;
+    color: #627888;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .flounder-visual {
+    margin: 1.75rem 0 2.2rem;
+  }
+
+  .flounder-visual + .flounder-visual {
+    margin-top: 1.5rem;
+  }
+
+  .flounder-visual__head {
+    margin-bottom: 0.9rem;
+  }
+
+  .flounder-visual__head h3 {
+    margin: 0 0 0.25rem;
+    color: #103754;
+    font-size: 1.1rem;
+  }
+
+  .flounder-visual__head p {
+    margin: 0;
+    color: #627888;
+    font-size: 0.95rem;
+  }
+
+  .flounder-pipeline-grid {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .flounder-pipeline-card {
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .flounder-pipeline-card h4 {
+    margin: 0 0 0.55rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-pipeline-card p,
+  .flounder-pipeline-card li {
+    margin: 0;
+    color: #4f6678;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .flounder-pipeline-card ul {
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  .flounder-pipeline-arrow {
+    display: none;
+  }
+
+  .flounder-summary-grid {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 0.95rem;
+  }
+
+  .flounder-summary-box {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .flounder-summary-box h4 {
+    margin: 0 0 0.35rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-summary-box p {
+    margin: 0;
+    color: #4f6678;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .flounder-summary-box--mint {
+    background: #e3f7f0;
+  }
+
+  .flounder-summary-box--blue {
+    background: #e8f2fb;
+  }
+
+  .flounder-metric-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .flounder-metric-card {
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .flounder-metric-card h4 {
+    margin: 0 0 0.9rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-metric-row + .flounder-metric-row {
+    margin-top: 0.8rem;
+  }
+
+  .flounder-metric-row-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #103754;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .flounder-track {
+    height: 0.7rem;
+    border-radius: 999px;
+    background: #e7eef3;
+    overflow: hidden;
+  }
+
+  .flounder-bar {
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .flounder-bar--krr {
+    background: #bccdda;
+  }
+
+  .flounder-bar--bkmr {
+    background: #7da4c1;
+  }
+
+  .flounder-bar--equal {
+    background: #7fd6c6;
+  }
+
+  .flounder-bar--bdkmr {
+    background: #0f7c87;
+  }
+
+  .flounder-metric-foot {
+    margin-top: 0.9rem;
+    color: #627888;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 980px) {
+    #flounder-project-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(32rem, 1.05fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    #flounder-project-viewer {
+      margin-top: 0;
+      position: sticky;
+      top: 1rem;
+    }
+
+    .flounder-pipeline-grid {
+      grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr) 2rem minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .flounder-pipeline-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #18839a;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .flounder-summary-grid,
+    .flounder-metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 979px) {
+    .flounder-pdf-frame {
+      height: 72vh;
+      min-height: 38rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .flounder-panel {
+      padding: 0.9rem;
+    }
+
+    .flounder-pdf-frame {
+      height: 68vh;
+      min-height: 32rem;
+    }
+  }
+</style>
+
+<div id="flounder-project-layout">
+<div id="flounder-project-main" markdown="1">
 
 ## 프로젝트 개요
 
@@ -24,11 +296,90 @@ tags:
 
 ## 시각 자료
 
-프로젝트 상단에는 연구 범위, 입력 데이터, 모델 파이프라인, 핵심 성능을 한 장으로 요약한 도식을 배치했습니다. 아래 차트는 논문에 보고된 LOOCV 성능 비교를 시각적으로 정리한 것입니다.
+<section class="flounder-visual flounder-panel">
+  <div class="flounder-visual__head">
+    <h3>아키텍처 요약</h3>
+    <p>데이터 정렬, 신경망 기반 특징 학습, 베이지안 커널 회귀를 한 흐름으로 정리했습니다.</p>
+  </div>
+  <div class="flounder-pipeline-grid">
+    <div class="flounder-pipeline-card">
+      <h4>1. Aquaculture Data</h4>
+      <ul>
+        <li>완도 2개, 제주 3개 양식장</li>
+        <li>총 7개 수조, 2023.03-2024.07</li>
+        <li>수온, 용존산소, 개체당 사료량, 초기 로그 체중</li>
+      </ul>
+    </div>
+    <div class="flounder-pipeline-arrow" aria-hidden="true">→</div>
+    <div class="flounder-pipeline-card">
+      <h4>2. Feature Learning</h4>
+      <p>측정 주기가 다른 센서 데이터와 월별 체중 데이터를 동일한 성장 구간으로 정렬한 뒤, ANN 기반 feature map으로 비선형 구조를 학습합니다.</p>
+    </div>
+    <div class="flounder-pipeline-arrow" aria-hidden="true">→</div>
+    <div class="flounder-pipeline-card">
+      <h4>3. Bayesian Kernel Layer</h4>
+      <p>Gaussian process 기반 BDKMR로 예측과 불확실성을 함께 추정하고, 관측별 정밀도를 반영하기 위해 이분산 구조 <code>Var(y_i)=sigma^2/n_i</code> 를 사용합니다.</p>
+    </div>
+  </div>
+  <div class="flounder-summary-grid">
+    <div class="flounder-summary-box flounder-summary-box--mint">
+      <h4>반응 변수</h4>
+      <p>농가별 무작위 50마리 표본에서 계산한 월별 로그 평균 체중</p>
+    </div>
+    <div class="flounder-summary-box flounder-summary-box--blue">
+      <h4>추론 방식</h4>
+      <p>MAP estimation과 Laplace approximation을 사용해 계산 가능성과 베이지안 구조를 동시에 확보</p>
+    </div>
+  </div>
+</section>
 
-{% include figure image_path="/assets/img/projects/flounder/pipeline.svg" alt="Study overview for flatfish growth prediction with BDKMR" class="project-figure project-figure--wide" caption="연구 범위, 입력 변수, 모델 파이프라인, 핵심 결과를 한 장으로 정리한 요약 도식." %}
-
-{% include figure image_path="/assets/img/projects/flounder/performance.svg" alt="LOOCV performance comparison across KRR, BKMR, BDKMR Equal, and BDKMR" class="project-figure project-figure--medium" caption="LOOCV 기준 성능 비교. BDKMR이 KRR, BKMR, BDKMR(Equal)보다 더 낮은 MAE와 MSE를 기록했습니다." %}
+<section class="flounder-visual flounder-panel">
+  <div class="flounder-visual__head">
+    <h3>성능 비교</h3>
+    <p>논문에 보고된 LOOCV 기준 MAE, MSE 수치를 그대로 시각화했습니다.</p>
+  </div>
+  <div class="flounder-metric-grid">
+    <div class="flounder-metric-card">
+      <h4>MAE</h4>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>KRR</span><span>1.1141</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--krr" style="width:100%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BKMR</span><span>0.6977</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bkmr" style="width:62.6%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR(Equal)</span><span>0.2006</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--equal" style="width:18.0%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR</span><span>0.1895</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bdkmr" style="width:17.0%"></div></div>
+      </div>
+    </div>
+    <div class="flounder-metric-card">
+      <h4>MSE</h4>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>KRR</span><span>3.5665</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--krr" style="width:100%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BKMR</span><span>0.9447</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bkmr" style="width:26.5%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR(Equal)</span><span>0.0721</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--equal" style="width:2.0%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR</span><span>0.0629</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bdkmr" style="width:1.8%"></div></div>
+      </div>
+      <p class="flounder-metric-foot">BDKMR은 BKMR 대비 MAE를 약 72.8%, MSE를 약 93.3% 줄였습니다.</p>
+    </div>
+  </div>
+</section>
 
 ## 핵심 내용
 
@@ -71,17 +422,17 @@ tags:
 
 </div>
 
-<aside class="project-paper-layout__viewer">
-  <div class="project-paper-layout__viewer-inner">
-    <p class="project-paper-layout__eyebrow">Paper Viewer</p>
-    <p class="project-paper-layout__title">Applied Sciences 2025 Full Paper</p>
-    <div class="project-paper-layout__frame">
+<aside id="flounder-project-viewer">
+  <div class="flounder-panel">
+    <p class="flounder-eyebrow">Paper Viewer</p>
+    <p class="flounder-title">Applied Sciences 2025 Full Paper</p>
+    <div class="flounder-pdf-frame">
       <iframe
-        src="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}#view=FitH"
+        src="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}#page=1&zoom=125&pagemode=none"
         title="Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines PDF"
       ></iframe>
     </div>
-    <p class="project-paper-layout__note">
+    <p class="flounder-note">
       브라우저에서 PDF 임베드가 지원되지 않으면
       <a href="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}" target="_blank" rel="noopener">새 탭에서 논문 열기</a>
     </p>
