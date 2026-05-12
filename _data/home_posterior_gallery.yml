@@ -61,10 +61,16 @@
   label: "Approximation"
   description: "복잡한 posterior를 tractable한 분포로 근사한다는 VI의 핵심 아이디어를 가장 단순한 그림으로 요약합니다."
 
+- title: "One-Class Classification"
+  url: "/occ/"
+  image: "/assets/img/occ/08_ocsvm_basic_boundary.png"
+  alt: "One-class SVM decision boundary visualization"
+  label: "Anomaly"
+  description: "정상 데이터가 만드는 영역을 먼저 학습하고, 그 바깥의 샘플을 이상치로 판단하는 OCC의 핵심 아이디어를 정리한 글입니다."
+
 - title: "DiT : Scalable Diffusion Models with Transformers"
   url: "/dit/"
   image: "/assets/img/dit/dit.jpg"
   alt: "DiT : Scalable Diffusion Models with Transformers"
   label: "Diffusion"
   description: "DiT (Diffusion Transformer)를 공부하며 통계학적인 관점에서 핵심 개념을 정리한 글입니다."
-
