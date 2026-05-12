@@ -310,7 +310,8 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
+      hide_left_sidebar: true
       read_time: true
       comments: true
       share: true
@@ -334,4 +335,4 @@ defaults:
       path: "_posts/blog"
     values:
       toc: false
-      sidebar: []
+      sidebar: false

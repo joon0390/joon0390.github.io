@@ -595,6 +595,30 @@ a {
   }
 }
 
+.main--no-left-sidebar {
+  .page,
+  .page__related {
+    @include breakpoint($large) {
+      float: none;
+    }
+  }
+}
+
+.main--no-left-sidebar.main--no-right-sidebar {
+  .page,
+  .page__related {
+    @include breakpoint($large) {
+      width: 100%;
+      padding-inline-end: 0;
+    }
+
+    @include breakpoint($x-large) {
+      width: 100%;
+      padding-inline-end: 0;
+    }
+  }
+}
+
 .layout--collection.project-gallery-page {
   #main {
     @include breakpoint($x-large) {
