@@ -970,6 +970,187 @@ a {
   color: #7e5448;
 }
 
+.about-switch {
+  position: relative;
+}
+
+.about-switch__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.about-switch__controls {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+  padding: 0.28rem;
+  border: 1px solid rgba(104, 81, 60, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 251, 245, 0.92);
+  box-shadow: 0 10px 24px rgba(48, 34, 23, 0.06);
+}
+
+.about-switch__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.6rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  color: #5a4739;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.about-switch__button:hover {
+  transform: translateY(-1px);
+}
+
+.about-panel {
+  display: none;
+}
+
+#about-lang-kor:checked ~ .about-switch__controls [for="about-lang-kor"],
+#about-lang-eng:checked ~ .about-switch__controls [for="about-lang-eng"] {
+  background: linear-gradient(180deg, #8d694c, #755640);
+  color: #fffaf3;
+  box-shadow: 0 10px 18px rgba(67, 46, 29, 0.16);
+}
+
+#about-lang-kor:checked ~ .about-switch__panels .about-panel--kor,
+#about-lang-eng:checked ~ .about-switch__panels .about-panel--eng {
+  display: block;
+}
+
+.about-hero {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 1.4rem;
+  align-items: center;
+  padding: 1.45rem;
+  border: 1px solid rgba(104, 81, 60, 0.12);
+  border-radius: 1.55rem;
+  background:
+    radial-gradient(circle at top left, rgba(183, 152, 116, 0.16), transparent 34%),
+    linear-gradient(135deg, rgba(255, 252, 248, 0.98), rgba(246, 238, 228, 0.98));
+  box-shadow: 0 18px 40px rgba(48, 34, 23, 0.08);
+}
+
+.about-hero__media {
+  min-width: 0;
+}
+
+.about-hero__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 20 / 23;
+  object-fit: cover;
+  object-position: center -6px;
+  border-radius: 1.2rem;
+  box-shadow: 0 14px 28px rgba(33, 24, 18, 0.14);
+}
+
+.about-hero__eyebrow {
+  margin: 0 0 0.45rem;
+  color: #8c6e54;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.about-hero__title {
+  margin: 0;
+  color: #2f2520;
+  font-size: 1.65rem;
+  line-height: 1.25;
+}
+
+.about-hero__lead {
+  margin: 0.85rem 0 0;
+  color: #3d312b;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.about-hero__text {
+  margin: 0.8rem 0 0;
+  color: #5e4f45;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.about-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.15rem 0 0;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.15rem;
+}
+
+.about-card {
+  padding: 1.15rem 1.2rem 1.2rem;
+  border: 1px solid rgba(104, 81, 60, 0.1);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(255, 252, 248, 0.96), rgba(250, 245, 238, 0.96));
+  box-shadow: 0 14px 28px rgba(48, 34, 23, 0.06);
+}
+
+.about-card--wide {
+  grid-column: 1 / -1;
+}
+
+.about-card__eyebrow {
+  margin: 0 0 0.45rem;
+  color: #8c6e54;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.about-card__title {
+  margin: 0;
+  color: #2f2520;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.about-card__text,
+.about-card__list {
+  margin-top: 0.8rem;
+  color: #58493f;
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+
+.about-card__list {
+  padding-left: 1.15rem;
+  margin-bottom: 0;
+}
+
+.about-card__list li + li {
+  margin-top: 0.3rem;
+}
+
+.about-panel[lang="ko"] .about-hero__lead,
+.about-panel[lang="ko"] .about-hero__text,
+.about-panel[lang="ko"] .about-card__text,
+.about-panel[lang="ko"] .about-card__list {
+  word-break: keep-all;
+}
+
 .project-gallery-hero {
   margin-bottom: 2rem;
   padding: 1.3rem 1.35rem 1.45rem;
@@ -1251,6 +1432,32 @@ a {
   .study-filter-bar__header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .about-switch__controls {
+    display: flex;
+    width: 100%;
+  }
+
+  .about-switch__button {
+    flex: 1 1 0;
+  }
+
+  .about-hero {
+    grid-template-columns: 1fr;
+    padding: 1.15rem;
+  }
+
+  .about-hero__media {
+    max-width: 220px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-card--wide {
+    grid-column: auto;
   }
 }
 
