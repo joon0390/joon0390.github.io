@@ -25,9 +25,9 @@ classes:
 
         <div class="about-hero__body">
           <p class="about-hero__eyebrow">Bayesian ML · Deep Learning · Graphical Models</p>
-          <h2 class="about-hero__title">안녕하세요, 김준희입니다.</h2>
-          <p class="about-hero__lead">베이지안 머신러닝, 딥러닝, 그래피컬 모델을 중심으로 공부하고 있는 예비 데이터 사이언티스트입니다. 이 블로그에는 이론 정리, 구현 기록, 실험 과정, 그리고 연구 메모를 함께 쌓아가고 있습니다.</p>
-          <p class="about-hero__text">확률적 모델, 신경망, 그래프 기반 방법론을 코드와 함께 정리하면서, 공부한 내용을 제 방식대로 구조화해 두는 아카이브로 운영하고 있습니다.</p>
+          <h2 class="about-hero__title">안녕하세요, 저는 김준희입니다.</h2>
+          <p class="about-hero__lead">베이지안 머신러닝, 딥러닝을 중심으로 공부하고 있는 주니어 데이터 사이언티스트입니다. 이 블로그에는 논문 리뷰, 이론 정리, 구현 기록, 실험 과정, 그리고 여러 메모를 정리하고 있습니다.</p>
+          <p class="about-hero__text">확률적 모델, 신경망, 그래프 기반 방법론을 코드와 함께 정리하면서, 공부한 내용을 제 방식대로 구조화해 두는 곳으로 운영하고 있습니다.</p>
 
           <p class="about-hero__actions">
             <a href="/cv/" class="btn btn--primary">CV 보기</a>
@@ -62,7 +62,7 @@ classes:
         <section class="about-card about-card--wide">
           <p class="about-card__eyebrow">Archive Note</p>
           <h3 class="about-card__title">이 페이지의 역할</h3>
-          <p class="about-card__text">이 블로그는 단순한 기록장이 아니라, 제가 공부하고 구현한 내용을 다시 꺼내볼 수 있도록 정리해두는 개인 연구 아카이브입니다. 시간이 지나도 흐름을 따라가기 쉽도록, 이론과 코드 사이를 연결하는 글들을 차곡차곡 쌓아가고 있습니다.</p>
+          <p class="about-card__text">이 블로그는 제가 공부하고 구현한 내용을 공유하고, 복기할 수 있도록 정리해두는 개인 연구 블로그입니다. 시간이 지나도 흐름을 따라가기 쉽도록, 이론과 코드 사이를 연결하는 글들을 정리해가고 있습니다.</p>
         </section>
       </div>
     </section>
