@@ -30,6 +30,7 @@ classes:
 
           <p class="about-hero__actions">
             <a href="/cv/" class="btn btn--primary">CV 보기</a>
+            <a href="/cv/data/CV_Full_v.pdf" class="btn btn--inverse" download="Junhee_Kim_CV_Full.pdf">CV 다운로드</a>
             <a href="/cv/data/Portfolio.pdf" class="btn btn--inverse">포트폴리오 보기</a>
           </p>
         </div>
@@ -79,7 +80,8 @@ classes:
           <p class="about-hero__text">I use this space as a working archive for probabilistic models, neural networks, and graph-based methods, with a strong emphasis on turning ideas into code and documenting the process clearly.</p>
 
           <p class="about-hero__actions">
-            <a href="/cv/" class="btn btn--primary">View CV</a>
+            <a href="/cv/" class="btn btn--primary">View CV Page</a>
+            <a href="/cv/data/CV_Full_v.pdf" class="btn btn--inverse" download="Junhee_Kim_CV_Full.pdf">Download CV</a>
             <a href="/cv/data/Portfolio.pdf" class="btn btn--inverse">View Portfolio</a>
           </p>
         </div>
