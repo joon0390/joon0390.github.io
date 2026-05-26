@@ -17,12 +17,17 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' # 사용하는 루비 버전에 맞게 조절 가능
-          bundler-cache: true
+          ruby-version: '3.3'
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+
+      - name: Install Bundler
+        run: gem install bundler -v 2.6.8 --no-document
+
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
