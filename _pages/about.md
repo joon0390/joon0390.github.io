@@ -32,9 +32,8 @@ classes:
     <h3 class="about-card__title">Topics on This Blog</h3>
     <ul class="about-card__list">
       <li>Theory breakdowns</li>
-      <li>Implementation notes and experiments</li>
-      <li>Paper reviews and key takeaways</li>
-      <li>Troubleshooting and debugging records</li>
+      <li>Implementation and experiments</li>
+      <li>Paper reviews</li>
     </ul>
   </section>
 
@@ -44,14 +43,7 @@ classes:
     <ul class="about-card__list">
       <li>Bayesian Inference</li>
       <li>Probabilistic Deep Learning</li>
-      <li>Graphical Models</li>
-      <li>Time Series and Representation Learning</li>
+      <li>Statistics Theory</li>
     </ul>
-  </section>
-
-  <section class="about-card about-card--wide">
-    <p class="about-card__eyebrow">Archive Note</p>
-    <h3 class="about-card__title">Why This Page Exists</h3>
-    <p class="about-card__text">This blog is more than a place to post finished results. It is a personal research archive where I organize what I study and build so that the path from theory to implementation remains easy to revisit later.</p>
   </section>
 </div>
