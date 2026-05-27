@@ -13,7 +13,7 @@ classes:
   </div>
 
   <div class="about-hero__body">
-    <p class="about-hero__eyebrow">Bayesian ML · Deep Learning · Graphical Models</p>
+    <p class="about-hero__eyebrow">Statistical Inference · Bayesian ML · Deep Learning </p>
     <h2 class="about-hero__title">Hello, I'm Junhee Kim.</h2>
     <p class="about-hero__lead">I am an aspiring data scientist focusing on Bayesian machine learning, deep learning, and graphical models. This blog is where I collect theory notes, implementation logs, experiment records, and research thoughts in one place.</p>
     <p class="about-hero__text">I use this space as a working archive for probabilistic models, neural networks, and graph-based methods, with a strong emphasis on turning ideas into code and documenting the process clearly.</p>
