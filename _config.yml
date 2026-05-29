@@ -330,9 +330,3 @@ defaults:
       related: false
       comments: false
       toc: false
-# Notes collection removed; using categories instead
-  - scope:
-      path: "_posts/blog"
-    values:
-      toc: false
-      sidebar: false

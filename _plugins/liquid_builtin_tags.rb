@@ -2,10 +2,10 @@
 # are not eagerly registered before Jekyll starts rendering layouts.
 begin
   liquid_spec = Gem.loaded_specs["liquid"] || Gem::Specification.find_by_name("liquid")
-  tag_glob = File.join(liquid_spec.full_gem_path, "lib", "liquid", "tags", "*.rb")
+  tags_dir = File.join(liquid_spec.full_gem_path, "lib", "liquid", "tags")
 
-  Dir.glob(tag_glob).sort.each do |tag_file|
-    require tag_file
+  Dir.children(tags_dir).grep(/\.rb\z/).sort.reject { |tag_file| tag_file == "include.rb" }.each do |tag_file|
+    require File.join(tags_dir, tag_file)
   end
 rescue Gem::LoadError
   warn "Liquid gem could not be located while bootstrapping built-in tags."
