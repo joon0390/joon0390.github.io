@@ -22,15 +22,12 @@
 main:
   - title: "About Me"
     url: /about/
-    children:
-      - title: "Projects"
-        url: /projects/
   - title: "Study"
     url: /posts/
   - title: "Category"
     url: /category-archive/
-  - title: "Uncertain Space"
-    url: /dev-notes/
+  - title: "Projects"
+    url: /projects/
 
 
 # _data/navigation.yml

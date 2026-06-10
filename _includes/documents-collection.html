@@ -9,5 +9,5 @@
 {% endif %}
 
 {%- for post in entries -%}
-  {% include archive-single.html type=include.type %}
+  {% include archive-single.html type=include.type project_index=forloop.index %}
 {%- endfor -%}

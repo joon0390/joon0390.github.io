@@ -257,7 +257,15 @@ tags:
 <div id="contrastive-project-layout">
 <div id="contrastive-project-main" class="contrastive-copy" markdown="1">
 
-## 프로젝트 개요
+## 프로젝트 한눈에 보기
+
+- 개요: 스마트폰 센서 기반 주행 시계열에서 시간 일관성 대조학습으로 변화점 탐지와 소량 레이블 분류를 수행한 연구
+- 기간: 2023-2024, 한국ITS학회논문지 2024년 2월 게재
+- 데이터: Ferreira et al. 공개 스마트폰 주행 데이터셋, 대조학습 913개 세그먼트, 분류 학습 58개/검증 61개 세그먼트
+- 기술 스택: Contrastive Learning, InfoNCE, STFT, Lightweight CNN, SVC, Change Point Detection
+- 성과(성능): 변화점 탐지 precision 0.92(RegNet), 분류 precision/recall 1.0(SqueezeNet), Best Paper Award 수상
+
+## 문제 정의
 
 스마트폰 센서로 수집한 주행 데이터를 바탕으로, 레이블이 거의 없는 환경에서도 주행 패턴의 변화점을 탐지하고 소량의 레이블 데이터만으로 분류까지 확장할 수 있도록 설계한 연구입니다. 핵심은 지도학습에 의존하지 않고, 시간 축에서의 일관성을 기준으로 대조학습을 수행해 주행 데이터의 표현을 먼저 학습한 뒤 이를 변화점 탐지와 패턴 분류에 재사용하는 것입니다.
 
@@ -285,10 +293,10 @@ tags:
 </section>
 
 <figure class="contrastive-figure">
-  <img src="/assets/img/projects/contrastive/figure-3.png" alt="Figure 3 Overview of Time Consistency Learning">
+  <img src="/assets/img/projects/contrastive-driving-pattern-anomaly/figure-3.png" alt="Figure 3 Overview of Time Consistency Learning">
 </figure>
 
-## 핵심 내용
+## 접근 방법
 
 - 전체 프레임워크는 `2단계`로 구성됩니다. 먼저 레이블 없는 데이터로 변화점 탐지를 위한 표현을 학습하고, 이후 소량의 레이블 데이터로 분류기를 학습합니다.
 - 대조학습 단계에서는 시간적으로 가까운 구간을 `positive pair`, 먼 구간을 `negative pair`로 두는 `time consistency` 전략을 사용했습니다.
@@ -307,7 +315,7 @@ tags:
   </div>
 </div>
 
-## 데이터 및 실험 설계
+## 데이터와 EDA
 
 - 데이터셋은 `Ferreira et al. (2017)`의 공개 스마트폰 기반 운전 데이터셋을 사용했습니다.
 - 사용 센서는 가속도, 선형가속도, 자기장, 각속도이며, 각 운전자는 `13분`씩 `4회` 주행하며 특정 이벤트를 수행했습니다.
@@ -316,7 +324,7 @@ tags:
 - 일반화 성능을 보기 위해 학습 차량과 검증 차량을 다르게 분리했습니다. 즉, 동일 차량 분포에만 맞춘 모델이 아니라 차량이 달라져도 유지되는 표현 학습 성능을 보려는 설계입니다.
 - 경량 백본으로는 `SqueezeNet`, `ShuffleNet`, `RegNet`, `MobileNet`, `EfficientNet`, `MnasNet`의 `6개` 모델을 비교했습니다.
 
-## 주요 결과
+## 성과(성능)
 
 - 변화점 탐지에서는 대부분의 모델이 코사인 유사도 임계값 `0.4`에서 가장 좋은 정밀도를 보였습니다.
 - 변화점 탐지 최고 성능은 `RegNet`이 기록했으며, 정밀도는 `0.92`였습니다.
@@ -335,7 +343,7 @@ tags:
 - SVC
 - Lightweight CNN Backbones
 
-## 프로젝트 의의
+## 포트폴리오 관점의 의미
 
 이 연구의 강점은 라벨이 부족한 주행 데이터 문제를 단순 분류가 아니라 `표현 학습 + 변화점 탐지 + 소량 레이블 분류`의 구조로 다시 설계했다는 점입니다. 특히 변화점 탐지를 먼저 학습한 뒤 같은 표현을 분류에도 재활용함으로써, 실제 데이터 수집 환경에서 더 현실적인 접근을 제시했습니다.
 

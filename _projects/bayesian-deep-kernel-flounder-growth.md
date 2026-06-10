@@ -17,7 +17,7 @@ tags:
 
 <style>
   #main {
-    max-width: min(96vw, 1720px);
+    max-width: min(96vw, 1120px);
   }
 
   .layout--single .page {
@@ -35,11 +35,7 @@ tags:
 
   #flounder-project-main {
     min-width: 0;
-    max-width: 56rem;
-  }
-
-  #flounder-project-viewer {
-    margin-top: 2rem;
+    max-width: 64rem;
   }
 
   .flounder-panel {
@@ -50,46 +46,6 @@ tags:
       linear-gradient(180deg, #f8fbfc 0%, #edf5f7 100%);
     box-shadow: 0 18px 40px rgba(17, 57, 91, 0.08);
     padding: 1.1rem;
-  }
-
-  .flounder-eyebrow {
-    margin: 0 0 0.35rem;
-    color: #73899b;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .flounder-title {
-    margin: 0 0 0.9rem;
-    color: #103754;
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  .flounder-pdf-frame {
-    overflow: hidden;
-    border: 1px solid rgba(18, 57, 91, 0.1);
-    border-radius: 1rem;
-    background: #fff;
-    height: 76vh;
-    min-height: 52rem;
-  }
-
-  .flounder-pdf-frame iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .flounder-note {
-    margin: 0.85rem 0 0;
-    color: #627888;
-    font-size: 0.9rem;
-    line-height: 1.6;
   }
 
   .flounder-copy {
@@ -256,22 +212,6 @@ tags:
   }
 
   @media (min-width: 980px) {
-    #flounder-project-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) clamp(28rem, 30vw, 34rem);
-      gap: clamp(1.75rem, 2.4vw, 3rem);
-      align-items: start;
-    }
-
-    #flounder-project-viewer {
-      margin-top: 0;
-      position: sticky;
-      top: 1rem;
-      width: 100%;
-      max-width: 34rem;
-      justify-self: end;
-    }
-
     .flounder-pipeline-grid {
       grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr) 2rem minmax(0, 1fr);
       align-items: stretch;
@@ -292,21 +232,9 @@ tags:
     }
   }
 
-  @media (max-width: 979px) {
-    .flounder-pdf-frame {
-      height: 72vh;
-      min-height: 38rem;
-    }
-  }
-
   @media (max-width: 640px) {
     .flounder-panel {
       padding: 0.9rem;
-    }
-
-    .flounder-pdf-frame {
-      height: 68vh;
-      min-height: 32rem;
     }
   }
 </style>
@@ -314,11 +242,19 @@ tags:
 <div id="flounder-project-layout">
 <div id="flounder-project-main" class="flounder-copy" markdown="1">
 
-## 프로젝트 개요
+## 프로젝트 한눈에 보기
+
+- 개요: 양식 넙치 성장량을 예측하기 위해 ANN 표현 학습과 Gaussian Process 기반 베이지안 커널 회귀를 결합한 연구
+- 기간: 데이터 수집 2023.03-2024.07, 논문 게재 2025
+- 데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조의 수온, 용존산소, 사료량, 월별 체중 데이터
+- 기술 스택: Bayesian Deep Kernel Machine Regression, Gaussian Process, ANN, Heteroscedastic Modeling, LOOCV
+- 성과(성능): BDKMR 기준 MAE 0.1895, MSE 0.0629로 비교 모델 중 최저 오차 달성
+
+## 문제 정의
 
 국내 양식 넙치(olive flounder)의 성장 예측을 위해, 가우시안 프로세스 회귀와 신경망 기반 표현 학습을 결합한 Bayesian Deep Kernel Machine Regression (BDKMR) 모델을 제안한 연구입니다. 완도 2개 양식장과 제주 3개 양식장, 총 7개 수조에서 2023년 3월부터 2024년 7월까지 수집한 종단 데이터를 바탕으로 수온, 용존산소, 개체당 사료량이 성장에 미치는 비선형 관계를 모델링했습니다.
 
-## 모델링 흐름
+## 접근 방법
 
 <section class="flounder-visual flounder-panel">
   <div class="flounder-visual__head">
@@ -405,14 +341,14 @@ tags:
   </div>
 </section>
 
-## 핵심 내용
+## 접근 방법 세부
 
 - 수온과 용존산소는 1분 단위 센서 데이터, 사료량은 일 단위 기록, 체중은 월 단위 측정으로 수집되었으며, 이를 동일한 성장 관측 구간에 맞춰 정렬해 분석용 데이터셋을 구성했습니다.
 - 월별 체중 측정에서는 농가별로 무작위 50마리를 표본 추출해 로그 평균 체중을 반응변수로 사용했고, 개체 수와 측정 변동성을 반영하기 위해 $$Var(y_i) = \sigma^2 / n_i$$ 형태의 이분산 구조를 적용했습니다.
 - BKMR의 불확실성 정량화 장점과 ANN의 표현 학습 능력을 결합한 BDKMR을 설계해, 환경 변수 간 복잡한 비선형 상호작용을 더 유연하게 학습하도록 구성했습니다.
 - 추론은 MAP 추정과 Laplace approximation을 기반으로 수행해 베이지안 구조를 유지하면서도 실제 예측 문제에 적용 가능한 계산 효율을 확보했습니다.
 
-## 데이터 및 실험 설계
+## 데이터와 EDA
 
 - 대상 데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조
 - 수집 기간: 2023년 3월부터 2024년 7월까지
@@ -421,7 +357,7 @@ tags:
 - 비교 모델: KRR, BKMR, BDKMR(Equal), BDKMR
 - 평가 지표: Leave-One-Out Cross-Validation (LOOCV), MAE, MSE
 
-## 주요 결과
+## 성과(성능)
 
 - 제안한 BDKMR은 `MAE 0.1895`, `MSE 0.0629`를 기록해 비교 모델 중 가장 낮은 예측 오차를 보였습니다.
 - 동분산 가정의 `BDKMR(Equal)`보다 이분산 구조를 반영한 BDKMR이 더 우수해, 관측별 정밀도 차이를 고려하는 것이 실제 양식 데이터 예측에 중요함을 확인했습니다.
@@ -435,7 +371,7 @@ tags:
 - Heteroscedastic Modeling
 - Leave-One-Out Cross-Validation
 
-## 프로젝트 의의
+## 포트폴리오 관점의 의미
 
 양식 데이터는 변수별 측정 주기가 다르고 환경 스트레스에 따라 변동성이 크게 달라지는 특성이 있습니다. 이 연구는 딥러닝의 표현 학습과 베이지안 커널 모델의 해석 가능성 및 불확실성 추정을 결합해, 급이 전략, 출하 시점, 환경 제어와 같은 실제 양식 운영 의사결정에 활용할 수 있는 성장 예측 프레임워크를 제시했다는 점에서 의미가 있습니다.
 
@@ -449,23 +385,7 @@ tags:
 
 - Junhee Kim, Seung-Won Seo, Ho-Jin Jung, Hyun-Seok Jang, Han-Kyu Lim, Seongil Jo, "Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines", *Applied Sciences*, 2025.
 - DOI: [10.3390/app15179487](https://doi.org/10.3390/app15179487)
+- 원문 PDF: [Applied Sciences 2025 논문 PDF 열기](/assets/papers/flounder-bdkmr-applsci-2025.pdf)
 
 </div>
-
-<aside id="flounder-project-viewer">
-  <div class="flounder-panel">
-    <p class="flounder-eyebrow">Paper Viewer</p>
-    <p class="flounder-title">Applied Sciences 2025 Full Paper</p>
-    <div class="flounder-pdf-frame">
-      <iframe
-        src="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}#page=1&zoom=125&pagemode=none"
-        title="Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines PDF"
-      ></iframe>
-    </div>
-    <p class="flounder-note">
-      브라우저에서 PDF 임베드가 지원되지 않으면
-      <a href="{{ '/assets/papers/flounder-bdkmr-applsci-2025.pdf' | relative_url }}" target="_blank" rel="noopener">새 탭에서 논문 열기</a>
-    </p>
-  </div>
-</aside>
 </div>

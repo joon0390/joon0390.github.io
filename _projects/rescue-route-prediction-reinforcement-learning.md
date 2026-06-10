@@ -17,7 +17,7 @@ tags:
 
 <style>
   #main {
-    max-width: min(96vw, 1720px);
+    max-width: min(96vw, 1120px);
   }
 
   .layout--single .page {
@@ -35,73 +35,12 @@ tags:
 
   #rescue-project-main {
     min-width: 0;
-    max-width: 56rem;
-  }
-
-  #rescue-project-viewer {
-    margin-top: 2rem;
+    max-width: 64rem;
   }
 
   .rescue-copy {
     word-break: keep-all;
     overflow-wrap: break-word;
-  }
-
-  .rescue-panel {
-    border: 1px solid rgba(20, 54, 82, 0.12);
-    border-radius: 1.25rem;
-    background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.78), transparent 42%),
-      linear-gradient(180deg, #f8fbfc 0%, #edf4f6 100%);
-    box-shadow: 0 18px 40px rgba(17, 57, 91, 0.08);
-    padding: 1.1rem;
-  }
-
-  .rescue-eyebrow {
-    margin: 0 0 0.35rem;
-    color: #73899b;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .rescue-title {
-    margin: 0 0 0.35rem;
-    color: #103754;
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  .rescue-subtitle {
-    margin: 0 0 0.9rem;
-    color: #627888;
-    font-size: 0.92rem;
-    line-height: 1.65;
-  }
-
-  .rescue-pdf-frame {
-    overflow: hidden;
-    border: 1px solid rgba(18, 57, 91, 0.1);
-    border-radius: 1rem;
-    background: #fff;
-    height: 76vh;
-    min-height: 52rem;
-  }
-
-  .rescue-pdf-frame iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .rescue-note {
-    margin: 0.85rem 0 0;
-    color: #627888;
-    font-size: 0.9rem;
-    line-height: 1.6;
   }
 
   .rescue-flow {
@@ -186,22 +125,6 @@ tags:
   }
 
   @media (min-width: 980px) {
-    #rescue-project-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) clamp(28rem, 30vw, 34rem);
-      gap: clamp(1.75rem, 2.4vw, 3rem);
-      align-items: start;
-    }
-
-    #rescue-project-viewer {
-      margin-top: 0;
-      position: sticky;
-      top: 1rem;
-      width: 100%;
-      max-width: 34rem;
-      justify-self: end;
-    }
-
     .rescue-flow-grid {
       grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr) 2rem minmax(0, 1fr);
       align-items: stretch;
@@ -221,29 +144,20 @@ tags:
     }
   }
 
-  @media (max-width: 979px) {
-    .rescue-pdf-frame {
-      height: 72vh;
-      min-height: 38rem;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .rescue-panel {
-      padding: 0.9rem;
-    }
-
-    .rescue-pdf-frame {
-      height: 68vh;
-      min-height: 32rem;
-    }
-  }
 </style>
 
 <div id="rescue-project-layout">
 <div id="rescue-project-main" class="rescue-copy" markdown="1">
 
-## 프로젝트 개요
+## 프로젝트 한눈에 보기
+
+- 개요: 산악사고 요구조자의 이동 가능 경로를 GIS 전처리와 DQN 기반 강화학습으로 예측하는 특허 기반 프로젝트
+- 기간: 출원 2024.12, 등록 2025.09
+- 데이터: 경사도, 수계, 도로, 등산로, 유역 경계 등 산악 공간정보 데이터
+- 기술 스택: GeoPandas, GIS Preprocessing, DQN, Reinforcement Learning, Path Simulation, Visualization
+- 성과(성능): 등록특허 `10-2864114`, 다회 시뮬레이션 기반 수색 후보 경로 생성 구조 설계
+
+## 문제 정의
 
 산악사고 발생 시 요구조자의 마지막 위치만으로는 실제 이동 방향을 빠르게 좁히기 어렵습니다. 이 프로젝트는 산악 지형과 공간정보를 전처리한 뒤, 강화학습 기반 AI 모델로 요구조자의 이동 경로를 시뮬레이션해 수색 범위를 더 빠르게 압축하는 시스템을 설계한 특허 기반 작업입니다. 첨부한 등록특허공보(B1) 문서를 기준으로 정리했습니다.
 
@@ -270,7 +184,7 @@ tags:
   </div>
 </section>
 
-## 핵심 내용
+## 접근 방법
 
 - 입력 데이터로는 경사도와 함께 저수지, 강, 등산로, 도로, 유역 경계, 수로 등 산악 공간정보가 사용됩니다.
 - 에이전트는 요구조자를 가정하며, 나이, 성별, 건강 상태, 탐험 비율 같은 속성을 반영해 행동 특성이 달라지도록 설계됩니다.
@@ -289,7 +203,7 @@ tags:
   </div>
 </div>
 
-## 데이터 및 예측 절차
+## 데이터와 EDA
 
 1. 산악 지역의 공간정보를 수집하고 경로 예측용 피처로 전처리합니다.
 2. 요구조자 속성과 보상 함수를 정의해 강화학습 환경을 구성합니다.
@@ -297,7 +211,14 @@ tags:
 4. 학습된 정책으로 여러 차례 시뮬레이션을 수행해 후보 경로를 생성합니다.
 5. 예측 결과를 시각화해 수색 우선 구역과 구조 동선을 판단할 수 있도록 제공합니다.
 
-## 프로젝트 의의
+## 성과(성능)
+
+- `AI 기반 산악사고 요구조자 이동경로 예측 시스템`으로 특허 등록을 완료했습니다.
+- 등록번호는 `10-2864114`이며, 등록일은 `2025-09-19`입니다.
+- 단일 예측 경로가 아니라 다회 시뮬레이션 기반 후보 경로 집합을 생성하는 구조로 설계했습니다.
+- 성능 평가는 정확도 하나보다 실제 수색에서 후보 영역을 얼마나 줄이는지, 초기 대응 시간을 얼마나 단축할 수 있는지를 중심으로 보는 것이 적합합니다.
+
+## 포트폴리오 관점의 의미
 
 이 작업의 핵심은 산악 수색 문제를 정적인 지도 분석이 아니라, 불확실한 인간 이동을 포함한 순차적 의사결정 문제로 다시 모델링했다는 점입니다. 특히 공간정보 전처리, 강화학습 모델, 경로 시뮬레이션, 시각화까지 하나의 시스템으로 묶어 실제 수색 지원 시나리오로 연결했다는 점에서 의미가 있습니다.
 
@@ -319,18 +240,7 @@ tags:
 - 공고일: `2025-09-24`
 - 문서 기준: 첨부한 등록특허공보(B1) PDF
 - 관련 링크: [10.8080/1020240185328](https://doi.org/10.8080/1020240185328)
+- 문서 링크: [등록특허공보 PDF 열기](/assets/papers/rescue-route-prediction-patent-1020240185328.pdf)
 
 </div>
-
-<aside id="rescue-project-viewer">
-  <div class="rescue-panel">
-    <p class="rescue-eyebrow">Patent Viewer</p>
-    <h2 class="rescue-title">Registered Patent B1</h2>
-    <p class="rescue-subtitle">AI 기반 산악사고 요구조자 이동경로 예측 시스템 특허 원문을 같은 페이지에서 바로 확인할 수 있도록 붙였습니다.</p>
-    <div class="rescue-pdf-frame">
-      <iframe src="/assets/papers/rescue-route-prediction-patent-1020240185328.pdf#view=FitH" title="AI 기반 산악사고 요구조자 이동경로 예측 시스템 특허 PDF"></iframe>
-    </div>
-    <p class="rescue-note">브라우저 내장 PDF 뷰어에 따라 확대 비율과 인터페이스는 조금 다르게 보일 수 있습니다.</p>
-  </div>
-</aside>
 </div>
