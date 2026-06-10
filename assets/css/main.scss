@@ -1386,26 +1386,28 @@ a {
 }
 
 .project-figure {
-  margin: 1.5rem 0 2rem;
+  max-width: 44rem;
+  margin: 1.35rem auto 1.9rem;
 }
 
 .project-figure img {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  max-height: 68vh;
   height: auto;
+  margin: 0 auto;
   border: 1px solid rgba(148, 163, 184, 0.28);
   border-radius: 0.5rem;
   background: #fff;
 }
 
-.project-figure--narrow img {
-  max-width: 48rem;
-  margin: 0 auto;
+.project-figure--narrow {
+  max-width: 32rem;
 }
 
-.project-figure--medium img {
-  max-width: 58rem;
-  margin: 0 auto;
+.project-figure--medium {
+  max-width: 40rem;
 }
 
 .project-figure figcaption {
@@ -1419,11 +1421,13 @@ a {
 .project-figure-grid {
   display: grid;
   gap: 1rem;
-  margin: 1.5rem 0 2rem;
+  max-width: 54rem;
+  margin: 1.5rem auto 2rem;
 }
 
 .project-figure-grid .project-figure {
   margin: 0;
+  max-width: none;
 }
 
 @media (min-width: 860px) {
