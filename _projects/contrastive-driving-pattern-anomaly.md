@@ -17,7 +17,7 @@ tags:
 
 <style>
   #main {
-    max-width: min(96vw, 1720px);
+    max-width: min(96vw, 1120px);
   }
 
   .layout--single .page {
@@ -35,73 +35,12 @@ tags:
 
   #contrastive-project-main {
     min-width: 0;
-    max-width: 56rem;
-  }
-
-  #contrastive-project-viewer {
-    margin-top: 2rem;
+    max-width: 64rem;
   }
 
   .contrastive-copy {
     word-break: keep-all;
     overflow-wrap: break-word;
-  }
-
-  .contrastive-panel {
-    border: 1px solid rgba(20, 54, 82, 0.12);
-    border-radius: 1.25rem;
-    background:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.78), transparent 42%),
-      linear-gradient(180deg, #f8fbfc 0%, #edf4f6 100%);
-    box-shadow: 0 18px 40px rgba(17, 57, 91, 0.08);
-    padding: 1.1rem;
-  }
-
-  .contrastive-eyebrow {
-    margin: 0 0 0.35rem;
-    color: #73899b;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .contrastive-title {
-    margin: 0 0 0.35rem;
-    color: #103754;
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.4;
-  }
-
-  .contrastive-subtitle {
-    margin: 0 0 0.9rem;
-    color: #627888;
-    font-size: 0.92rem;
-    line-height: 1.65;
-  }
-
-  .contrastive-pdf-frame {
-    overflow: hidden;
-    border: 1px solid rgba(18, 57, 91, 0.1);
-    border-radius: 1rem;
-    background: #fff;
-    height: 76vh;
-    min-height: 52rem;
-  }
-
-  .contrastive-pdf-frame iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .contrastive-note {
-    margin: 0.85rem 0 0;
-    color: #627888;
-    font-size: 0.9rem;
-    line-height: 1.6;
   }
 
   .contrastive-flow {
@@ -200,22 +139,6 @@ tags:
   }
 
   @media (min-width: 980px) {
-    #contrastive-project-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) clamp(28rem, 30vw, 34rem);
-      gap: clamp(1.75rem, 2.4vw, 3rem);
-      align-items: start;
-    }
-
-    #contrastive-project-viewer {
-      margin-top: 0;
-      position: sticky;
-      top: 1rem;
-      width: 100%;
-      max-width: 34rem;
-      justify-self: end;
-    }
-
     .contrastive-flow-grid {
       grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr) 2rem minmax(0, 1fr);
       align-items: stretch;
@@ -232,24 +155,6 @@ tags:
 
     .contrastive-summary-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 979px) {
-    .contrastive-pdf-frame {
-      height: 72vh;
-      min-height: 38rem;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .contrastive-panel {
-      padding: 0.9rem;
-    }
-
-    .contrastive-pdf-frame {
-      height: 68vh;
-      min-height: 32rem;
     }
   }
 </style>
@@ -379,16 +284,4 @@ tags:
 - 원문 PDF: [한국ITS학회논문지 2024 논문 PDF 열기](/assets/papers/contrastive-driving-pattern-analysis-2024.pdf)
 
 </div>
-
-<aside id="contrastive-project-viewer">
-  <div class="contrastive-panel">
-    <p class="contrastive-eyebrow">Paper Viewer</p>
-    <h2 class="contrastive-title">Contrastive Driving Paper</h2>
-    <p class="contrastive-subtitle">대조학습 기반 주행 패턴 분석 논문 원문을 같은 페이지에서 바로 확인할 수 있도록 붙였습니다.</p>
-    <div class="contrastive-pdf-frame">
-      <iframe src="/assets/papers/contrastive-driving-pattern-analysis-2024.pdf#view=FitH" title="대조학습 방법을 이용한 주행 패턴 분석 기법 연구 PDF"></iframe>
-    </div>
-    <p class="contrastive-note">브라우저 내장 PDF 뷰어에 따라 확대 비율과 인터페이스는 조금 다르게 보일 수 있습니다.</p>
-  </div>
-</aside>
 </div>
