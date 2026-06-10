@@ -242,7 +242,7 @@ tags:
 <div id="flounder-project-layout">
 <div id="flounder-project-main" class="flounder-copy" markdown="1">
 
-## 프로젝트 한눈에 보기
+## 프로젝트 요약
 
 - 개요: 양식 넙치 성장량을 예측하기 위해 ANN 표현 학습과 Gaussian Process 기반 베이지안 커널 회귀를 결합한 연구
 - 기간: 데이터 수집 2023.03-2024.07, 논문 게재 2025

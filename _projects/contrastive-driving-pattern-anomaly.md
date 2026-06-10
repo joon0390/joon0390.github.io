@@ -1,7 +1,7 @@
 ---
 title: "대조학습 방법을 이용한 주행 패턴 분석 기법 연구"
 excerpt: "스마트폰 센서 기반 주행 시계열에 시간 일관성 대조학습을 적용해 변화점을 탐지하고, 소량의 레이블만으로도 패턴 분류를 수행한 연구."
-date: 2024-02-01
+date: 2023-06-01
 collection: projects
 layout: single
 order: 5
@@ -162,7 +162,7 @@ tags:
 <div id="contrastive-project-layout">
 <div id="contrastive-project-main" class="contrastive-copy" markdown="1">
 
-## 프로젝트 한눈에 보기
+## 프로젝트 요약
 
 - 개요: 스마트폰 센서 기반 주행 시계열에서 시간 일관성 대조학습으로 변화점 탐지와 소량 레이블 분류를 수행한 연구
 - 기간: 2023-2024, 한국ITS학회논문지 2024년 2월 게재
