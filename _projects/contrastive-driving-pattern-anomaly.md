@@ -292,8 +292,9 @@ tags:
   </div>
 </section>
 
-<figure class="contrastive-figure">
-  <img src="/assets/img/projects/contrastive-driving-pattern-anomaly/figure-3.png" alt="Figure 3 Overview of Time Consistency Learning">
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/contrastive-driving-pattern-anomaly/overview_time_consistency_learning.png" alt="시간 일관성 대조학습 개요">
+  <figcaption>시간적으로 가까운 세그먼트를 positive pair, 멀리 떨어진 세그먼트를 negative pair로 두어 레이블 없이 주행 패턴 표현을 학습하는 구조입니다.</figcaption>
 </figure>
 
 ## 접근 방법
@@ -303,6 +304,11 @@ tags:
 - 특징 벡터 간 유사도는 `cosine similarity`로 계산하고, 손실 함수는 `InfoNCE loss`를 사용해 유사한 구간은 가깝게, 다른 구간은 멀어지도록 학습했습니다.
 - 변화점 탐지는 학습된 특징 공간에서 현재 구간과 과거 구간 사이의 코사인 유사도가 임계값 이하로 떨어질 때 발생한 것으로 판단했습니다.
 - 분류 단계에서는 사전학습된 딥러닝 모델을 특징 추출기로 고정하고, 추출된 `32`차원 특징 벡터 위에 `SVC`를 학습하는 하이브리드 구조를 사용했습니다.
+
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/contrastive-driving-pattern-anomaly/overview_classification_process.png" alt="대조학습 기반 주행 패턴 분류 프로세스">
+  <figcaption>사전학습된 백본은 특징 추출기로 사용하고, 작은 수의 레이블 세그먼트는 SVC 분류기에 연결해 소량 레이블 조건에서의 분류 성능을 확인했습니다.</figcaption>
+</figure>
 
 <div class="contrastive-summary-grid">
   <div class="contrastive-summary-box contrastive-summary-box--mint">
@@ -323,6 +329,11 @@ tags:
 - 대조학습 단계에서는 레이블을 제거한 전체 `913`개 세그먼트를 사용했고, 분류 단계에서는 `58`개 세그먼트로 학습, `61`개 세그먼트로 검증했습니다.
 - 일반화 성능을 보기 위해 학습 차량과 검증 차량을 다르게 분리했습니다. 즉, 동일 차량 분포에만 맞춘 모델이 아니라 차량이 달라져도 유지되는 표현 학습 성능을 보려는 설계입니다.
 - 경량 백본으로는 `SqueezeNet`, `ShuffleNet`, `RegNet`, `MobileNet`, `EfficientNet`, `MnasNet`의 `6개` 모델을 비교했습니다.
+
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/contrastive-driving-pattern-anomaly/STFT_visualization.png" alt="스마트폰 주행 센서 데이터의 STFT 시각화">
+  <figcaption>시계열 센서 신호를 STFT로 변환해 시간에 따른 주파수 변화를 함께 보도록 구성했습니다. 이 표현을 통해 급격한 주행 이벤트와 완만한 구간의 차이를 더 뚜렷하게 다룰 수 있었습니다.</figcaption>
+</figure>
 
 ## 성과(성능)
 
@@ -365,6 +376,7 @@ tags:
 - "대조학습 방법을 이용한 주행 패턴 분석 기법 연구"
 - 한국ITS학회논문지, `23권 1호`, `182-196`, `2024`
 - DOI: [10.12815/kits.2024.23.1.182](https://doi.org/10.12815/kits.2024.23.1.182)
+- 원문 PDF: [한국ITS학회논문지 2024 논문 PDF 열기](/assets/papers/contrastive-driving-pattern-analysis-2024.pdf)
 
 </div>
 

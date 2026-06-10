@@ -254,6 +254,11 @@ tags:
 
 국내 양식 넙치(olive flounder)의 성장 예측을 위해, 가우시안 프로세스 회귀와 신경망 기반 표현 학습을 결합한 Bayesian Deep Kernel Machine Regression (BDKMR) 모델을 제안한 연구입니다. 완도 2개 양식장과 제주 3개 양식장, 총 7개 수조에서 2023년 3월부터 2024년 7월까지 수집한 종단 데이터를 바탕으로 수온, 용존산소, 개체당 사료량이 성장에 미치는 비선형 관계를 모델링했습니다.
 
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/log_transformed_weight_by_time.png" alt="시간에 따른 양식 넙치 로그 체중 변화">
+  <figcaption>지역과 수조에 따라 로그 체중 증가 속도와 변동 폭이 다르게 나타납니다. 이 차이가 단순 평균 모델보다 관측별 정밀도를 반영하는 베이지안 모델이 필요한 이유였습니다.</figcaption>
+</figure>
+
 ## 접근 방법
 
 <section class="flounder-visual flounder-panel">
@@ -350,6 +355,8 @@ tags:
 
 ## 데이터와 EDA
 
+EDA에서는 먼저 양식장, 수조, 시간에 따른 성장 곡선이 같은 형태로 움직이는지 확인했습니다. 체중은 전반적으로 증가하지만 수조별 분포와 지역별 밀도는 동일하지 않았고, 환경 변수와 초기 체중 사이에도 단순 선형 관계로 보기 어려운 패턴이 나타났습니다. 이 때문에 고정된 커널 하나보다 ANN feature map을 거친 딥커널 구조를 사용하는 방향으로 모델링을 정했습니다.
+
 - 대상 데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조
 - 수집 기간: 2023년 3월부터 2024년 7월까지
 - 입력 변수: 수온, 용존산소, 개체당 사료량, 초기 로그 체중
@@ -357,11 +364,37 @@ tags:
 - 비교 모델: KRR, BKMR, BDKMR(Equal), BDKMR
 - 평가 지표: Leave-One-Out Cross-Validation (LOOCV), MAE, MSE
 
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/flatfish_pairplot.png" alt="양식 넙치 성장 데이터 변수 간 pairplot">
+  <figcaption>입력 변수와 로그 평균 체중의 관계를 pairplot으로 확인해, 변수 간 상관 구조와 비선형적인 분포 차이를 먼저 점검했습니다.</figcaption>
+</figure>
+
+<div class="project-figure-grid">
+  <figure class="project-figure">
+    <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/boxplot_by_tank.png" alt="수조별 로그 체중 분포 박스플롯">
+    <figcaption>수조별 체중 분포는 위치와 변동 폭이 달라, 모든 관측을 같은 분산으로 보는 가정이 충분하지 않았습니다.</figcaption>
+  </figure>
+  <figure class="project-figure">
+    <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/density_plot_by_region.png" alt="지역별 로그 체중 밀도 분포">
+    <figcaption>지역별 밀도 분포 차이를 통해 완도와 제주 데이터가 같은 성장 분포를 공유하지 않는다는 점을 확인했습니다.</figcaption>
+  </figure>
+</div>
+
+<figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/log_mean_weight_vs_estimated_se.png" alt="로그 평균 체중과 추정 표준오차 관계">
+  <figcaption>로그 평균 체중과 추정 표준오차의 관계를 확인해, 관측마다 다른 정밀도를 모델에 반영할 필요가 있음을 정리했습니다.</figcaption>
+</figure>
+
 ## 성과(성능)
 
 - 제안한 BDKMR은 `MAE 0.1895`, `MSE 0.0629`를 기록해 비교 모델 중 가장 낮은 예측 오차를 보였습니다.
 - 동분산 가정의 `BDKMR(Equal)`보다 이분산 구조를 반영한 BDKMR이 더 우수해, 관측별 정밀도 차이를 고려하는 것이 실제 양식 데이터 예측에 중요함을 확인했습니다.
 - 기준 모델인 KRR은 `MAE 1.1141`, `MSE 3.5665`, BKMR은 `MAE 0.6977`, `MSE 0.9447`로 나타나, 딥커널 기반 표현 학습이 기존 커널 모델 대비 뚜렷한 성능 개선을 제공했습니다.
+
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/scatterplot_models.png" alt="모델별 예측값과 실제값 산점도 비교">
+  <figcaption>예측값과 실제값의 산점도를 비교하면 BDKMR 계열 모델이 기준선 주변에 더 안정적으로 모이며, 기존 KRR/BKMR 대비 오차가 줄어든 흐름을 확인할 수 있습니다.</figcaption>
+</figure>
 
 ## 사용 기술
 

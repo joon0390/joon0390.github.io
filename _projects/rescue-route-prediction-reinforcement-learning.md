@@ -161,6 +161,11 @@ tags:
 
 산악사고 발생 시 요구조자의 마지막 위치만으로는 실제 이동 방향을 빠르게 좁히기 어렵습니다. 이 프로젝트는 산악 지형과 공간정보를 전처리한 뒤, 강화학습 기반 AI 모델로 요구조자의 이동 경로를 시뮬레이션해 수색 범위를 더 빠르게 압축하는 시스템을 설계한 특허 기반 작업입니다. 첨부한 등록특허공보(B1) 문서를 기준으로 정리했습니다.
 
+<figure class="project-figure">
+  <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/data.png" alt="산악사고 요구조자 이동경로 예측을 위한 DEM 및 GIS 공간정보 데이터">
+  <figcaption>DEM과 등산로, 도로, 수계, 유역 경계 등 GIS 레이어를 결합해 요구조자의 이동 가능성을 계산할 수 있는 공간 상태로 변환했습니다.</figcaption>
+</figure>
+
 <section class="rescue-flow">
   <div class="rescue-flow__head">
     <h3>시스템 구성</h3>
@@ -192,6 +197,22 @@ tags:
 - 학습 방식은 `DQN` 기반이며, `epsilon-greedy` 전략으로 탐색과 활용의 균형을 맞추도록 설계됩니다.
 - 최종 출력은 한 번의 단일 경로가 아니라, 다회 시뮬레이션을 통해 얻은 이동 가능 경로 집합과 그 시각화 결과입니다.
 
+<figure class="project-figure">
+  <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/models.png" alt="Vanilla DQN과 Pointer DQN 모델 구조 비교">
+  <figcaption>Vanilla DQN을 기준선으로 두고, 후보 이동 지점의 공간적 관계를 더 직접적으로 반영할 수 있는 Pointer DQN 구조를 함께 비교했습니다.</figcaption>
+</figure>
+
+<div class="project-figure-grid">
+  <figure class="project-figure">
+    <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/my_DQN.png" alt="DQN 에이전트와 산악 환경 상호작용 구조">
+    <figcaption>DQN 에이전트는 현재 위치와 지형 상태를 입력받아 다음 이동 행동을 선택하고, 보상에 따라 Q-value를 업데이트합니다.</figcaption>
+  </figure>
+  <figure class="project-figure">
+    <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/training_process_2.png" alt="요구조자 이동경로 예측 DQN 학습 절차">
+    <figcaption>공간정보 전처리, 환경 초기화, 행동 선택, 보상 계산, replay memory 업데이트로 이어지는 학습 흐름을 구성했습니다.</figcaption>
+  </figure>
+</div>
+
 <div class="rescue-summary-grid">
   <div class="rescue-summary-box rescue-summary-box--mint">
     <h4>입력 관점</h4>
@@ -205,18 +226,32 @@ tags:
 
 ## 데이터와 EDA
 
-1. 산악 지역의 공간정보를 수집하고 경로 예측용 피처로 전처리합니다.
-2. 요구조자 속성과 보상 함수를 정의해 강화학습 환경을 구성합니다.
-3. DQN 기반 학습으로 상태-행동 값을 추정하고 이동 정책을 학습합니다.
-4. 학습된 정책으로 여러 차례 시뮬레이션을 수행해 후보 경로를 생성합니다.
-5. 예측 결과를 시각화해 수색 우선 구역과 구조 동선을 판단할 수 있도록 제공합니다.
+이 프로젝트의 데이터 작업은 표 형태의 정형 데이터 분석보다 공간정보 전처리에 가깝습니다. 등산로, 도로, 수계, 유역 경계, 경사도, 고도 같은 레이어를 같은 좌표계와 해상도로 맞춘 뒤, 강화학습 환경에서 상태와 보상으로 사용할 수 있도록 정리했습니다.
+
+EDA에서는 특정 경로를 바로 예측하기보다, 요구조자가 이동하기 쉬운 공간과 회피 가능성이 높은 공간을 구분하는 데 집중했습니다. 예를 들어 등산로와 도로는 이동 가능성을 높이는 단서가 되고, 급경사나 수계, 유역 경계는 이동 난이도와 위험도를 반영하는 요소가 됩니다.
+
+<figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/simulation_path.png" alt="학습된 정책으로 생성한 요구조자 이동경로 시뮬레이션">
+  <figcaption>학습된 정책으로 생성한 후보 이동 경로를 지도 위에 표시해, 수색 우선 구역을 직관적으로 확인할 수 있도록 했습니다.</figcaption>
+</figure>
 
 ## 성과(성능)
 
 - `AI 기반 산악사고 요구조자 이동경로 예측 시스템`으로 특허 등록을 완료했습니다.
 - 등록번호는 `10-2864114`이며, 등록일은 `2025-09-19`입니다.
 - 단일 예측 경로가 아니라 다회 시뮬레이션 기반 후보 경로 집합을 생성하는 구조로 설계했습니다.
+- 학습 곡선에서는 Pointer DQN이 Vanilla DQN 대비 보상은 더 빠르게 상승하고, loss는 더 낮고 안정적인 흐름을 보였습니다.
 - 성능 평가는 정확도 하나보다 실제 수색에서 후보 영역을 얼마나 줄이는지, 초기 대응 시간을 얼마나 단축할 수 있는지를 중심으로 보는 것이 적합합니다.
+
+<figure class="project-figure">
+  <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/results.png" alt="Vanilla DQN과 Pointer DQN 학습 보상 및 손실 비교">
+  <figcaption>보상과 loss 곡선을 함께 비교해, Pointer DQN이 산악 경로 예측 환경에서 더 안정적인 학습 흐름을 보이는지 확인했습니다.</figcaption>
+</figure>
+
+<figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/rescue-route-prediction-reinforcement-learning/gradio_result.png" alt="조난자 이동 경로 예측 시스템 Gradio 시연 화면">
+  <figcaption>Gradio 기반 시연 화면에서는 시작 위치와 요구조자 조건을 입력하고, 예측 경로와 후보 지점을 지도와 표로 확인할 수 있도록 구성했습니다.</figcaption>
+</figure>
 
 ## 포트폴리오 관점의 의미
 
