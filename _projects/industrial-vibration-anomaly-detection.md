@@ -16,7 +16,7 @@ tags:
 ## 프로젝트 요약
 
 - 개요: 산업용 회전 장비의 진동 신호를 이용한 이상 탐지 및 예지보전 모델링
-- 기간: 2026.04-
+- 기간: 2023.06-
 - 데이터: 회전 장비에서 수집되는 진동 시계열 및 주파수 영역 특징
 - 기술 스택: Time Series Analysis, FFT/STFT, Feature Engineering, Anomaly Detection, Edge AI
 - 성과(성능): 진동 기반 고장 징후 탐지를 위한 분석 파이프라인과 현장 적용 구조 설계

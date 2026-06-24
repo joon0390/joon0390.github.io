@@ -245,7 +245,7 @@ tags:
 ## 프로젝트 요약
 
 - 개요: 양식 넙치 성장량을 예측하기 위해 ANN 표현 학습과 Gaussian Process 기반 베이지안 커널 회귀를 결합한 연구
-- 기간: 데이터 수집 2023.03-2024.07, 논문 게재 2025
+- 기간: 2024.12-2025.08
 - 데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조의 수온, 용존산소, 사료량, 월별 체중 데이터
 - 기술 스택: Bayesian Deep Kernel Machine Regression, Gaussian Process, ANN, Heteroscedastic Modeling, LOOCV
 - 성과(성능): BDKMR 기준 MAE 0.1895, MSE 0.0629로 비교 모델 중 최저 오차 달성

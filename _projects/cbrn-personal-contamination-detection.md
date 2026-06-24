@@ -16,7 +16,7 @@ tags:
 ## 프로젝트 요약
 
 - 개요: 화생방 환경에서 개인 오염 여부를 빠르게 감지하기 위한 환경인지형 AI 모델 설계
-- 기간: 2026.04-
+- 기간: 2025.04-
 - 데이터: 개인 오염 감지 모듈에서 수집되는 센서 시계열 신호
 - 기술 스택: Time Series Anomaly Detection, Time Series Classification, Sensor Signal Processing, Robust AI
 - 성과(성능): 이상 탐지와 상태 분류를 함께 고려한 감지 파이프라인 구조화

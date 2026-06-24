@@ -165,7 +165,7 @@ tags:
 ## 프로젝트 요약
 
 - 개요: 스마트폰 센서 기반 주행 시계열에서 시간 일관성 대조학습으로 변화점 탐지와 소량 레이블 분류를 수행한 연구
-- 기간: 2023-2024, 한국ITS학회논문지 2024년 2월 게재
+- 기간: 2023.11, 한국ITS학회논문지 2024년 2월 게재
 - 데이터: Ferreira et al. 공개 스마트폰 주행 데이터셋, 대조학습 913개 세그먼트, 분류 학습 58개/검증 61개 세그먼트
 - 기술 스택: Contrastive Learning, InfoNCE, STFT, Lightweight CNN, SVC, Change Point Detection
 - 성과(성능): 변화점 탐지 precision 0.92(RegNet), 분류 precision/recall 1.0(SqueezeNet), Best Paper Award 수상
