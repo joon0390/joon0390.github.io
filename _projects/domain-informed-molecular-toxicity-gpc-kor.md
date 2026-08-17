@@ -5,6 +5,10 @@ date: 2026-05-21
 collection: projects
 layout: single
 order: 6
+period: "2026.04–진행 중"
+header:
+  teaser: /assets/img/projects/domain-informed-molecular-toxicity-gpc/arch.png
+teaser_alt: "합성 커널 가우시안 프로세스 분류기 구조"
 classes:
   - wide
 tags:

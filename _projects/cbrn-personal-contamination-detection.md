@@ -5,6 +5,7 @@ date: 2026-04-01
 collection: projects
 layout: single
 order: 1
+period: "2025.04–진행 중"
 tags:
   - CBRN
   - Anomaly Detection

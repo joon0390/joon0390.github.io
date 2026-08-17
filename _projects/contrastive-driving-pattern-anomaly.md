@@ -5,6 +5,10 @@ date: 2023-06-01
 collection: projects
 layout: single
 order: 5
+period: "2022.09–2023.06"
+header:
+  teaser: /assets/img/projects/contrastive-driving-pattern-anomaly/overview_classification_process.png
+teaser_alt: "대조학습 기반 주행 패턴 분류 과정"
 classes:
   - wide
 tags:

@@ -15,15 +15,20 @@
 <div class="{{ include.type | default: 'list' }}__item">
   <article class="project-card" itemscope itemtype="https://schema.org/CreativeWork"{% if post.locale %} lang="{{ post.locale }}"{% endif %}>
     <a class="project-card__link" href="{{ post.url | relative_url }}" rel="permalink">
+      {% if post.header.teaser %}
+      <div class="project-card__media">
+        <img src="{{ post.header.teaser | relative_url }}" alt="{{ post.teaser_alt | default: title }} 대표 시각 자료" loading="lazy">
+      </div>
+      {% endif %}
       <div class="project-card__meta-row">
         <span class="project-card__eyebrow">
           Project
           {% if project_index < 10 %}0{{ project_index }}{% else %}{{ project_index }}{% endif %}
         </span>
-        {% if post.date %}
+        {% if post.period or post.date %}
         <span class="project-card__date">
           <i class="far fa-calendar-alt" aria-hidden="true"></i>
-          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m" }}</time>
+          {% if post.period %}{{ post.period }}{% else %}<time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m" }}</time>{% endif %}
         </span>
         {% endif %}
       </div>
@@ -41,7 +46,7 @@
         {% endif %}
       </div>
       <span class="project-card__cta">
-        View details
+        상세 보기
         <i class="fas fa-arrow-right" aria-hidden="true"></i>
       </span>
     </a>

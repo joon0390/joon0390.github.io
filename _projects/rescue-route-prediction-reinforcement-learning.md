@@ -5,6 +5,10 @@ date: 2024-03-15
 collection: projects
 layout: single
 order: 3
+period: "2023.09–2024.12"
+header:
+  teaser: /assets/img/projects/rescue-route-prediction-reinforcement-learning/simulation_path.png
+teaser_alt: "강화학습으로 생성한 산악 요구조자 후보 이동 경로"
 classes:
   - wide
 tags:

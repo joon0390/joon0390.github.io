@@ -5,6 +5,7 @@ date: 2023-02-01
 collection: projects
 layout: single
 order: 2
+period: "2023.06–진행 중"
 tags:
   - Predictive Maintenance
   - Vibration Analysis

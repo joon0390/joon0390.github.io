@@ -5,6 +5,10 @@ date: 2025-08-18
 collection: projects
 layout: single
 order: 7
+period: "2025.07"
+header:
+  teaser: /assets/img/projects/seoul-fine-dust-prediction/sarimax_2_5_.png
+teaser_alt: "서울시 PM2.5 SARIMAX 예측 결과"
 tags:
   - Time Series Forecasting
   - Air Quality
@@ -16,7 +20,7 @@ tags:
 ## 프로젝트 요약
 
 - 개요: 2017-2018년 서울시 일평균 대기오염 데이터를 기반으로 2019년 PM10, PM2.5 농도를 1, 2, 3일 후까지 예측하는 모델 비교 프로젝트
-- 기간: 2025 여름
+- 기간: 2025.07
 - 데이터: Kaggle `Air Pollution in Seoul`, 서울시 측정소 정보, 일별 대기오염 측정값, 기상청 일별 기온 데이터, 지하철역 근접성 변수
 - 기술 스택: Python, pandas, SARIMA, SARIMAX, LightGBM, DLinear, Moran's I, 시공간 feature engineering
 - 성과(성능): 1일 후 예측 기준 SARIMAX가 PM2.5 `MAE 7.15`, `RMSE 10.44`, PM10 `MAE 10.92`, `RMSE 16.65`로 가장 우수

@@ -5,6 +5,10 @@ date: 2025-08-01
 collection: projects
 layout: single
 order: 4
+period: "2024.09–2025.08"
+header:
+  teaser: /assets/img/projects/bayesian-deep-kernel-flounder-growth/scatterplot_models.png
+teaser_alt: "넙치 성장 예측 모델별 관측값과 예측값 비교"
 classes:
   - wide
 tags:
