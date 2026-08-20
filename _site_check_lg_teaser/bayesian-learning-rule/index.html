@@ -1,0 +1,856 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] The Bayesian Learning Rule Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Khan 등 (2023)의 논문 “The Bayesian Learning Rule”를 읽고 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] The Bayesian Learning Rule">
+<meta property="og:url" content="https://joon0390.github.io/bayesian-learning-rule/">
+
+
+  <meta property="og:description" content="이 포스팅은 Khan 등 (2023)의 논문 “The Bayesian Learning Rule”를 읽고 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-06-20T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/bayesian-learning-rule/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] The Bayesian Learning Rule">
+    <meta itemprop="description" content="  이 포스팅은 Khan 등 (2023)의 논문 “The Bayesian Learning Rule”를 읽고 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-06-20T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/bayesian-learning-rule/" itemprop="url">[Paper Review] The Bayesian Learning Rule
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#the-bayesian-learning-rule-model">The Bayesian Learning Rule Model</a><ul><li><a href="#bayesian-inference--variational-approximation">Bayesian Inference \&amp; Variational Approximation</a></li><li><a href="#natural-gradient">Natural Gradient</a></li><li><a href="#generalised-form-of-bayesian-learning-rule">Generalised Form of Bayesian Learning Rule</a></li></ul></li><li><a href="#from-blr-to-other-algorithms">from BLR to other algorithms</a><ul><li><a href="#1-optimization-algorithms">1. Optimization Algorithms</a><ul><li><a href="#11-gradient-descent--sgd">1.1. Gradient Descent &amp; SGD</a></li><li><a href="#12-newtons-method">1.2. Newton’s Method</a></li><li><a href="#13-ridge-regression">1.3. Ridge Regression</a></li></ul></li><li><a href="#2-deep-learning-techniques">2. Deep Learning Techniques</a><ul><li><a href="#21-dropout">2.1. Dropout</a></li><li><a href="#22-binary-neural-networks">2.2. Binary Neural Networks</a></li></ul></li><li><a href="#3-probabilistic-model-inference">3. Probabilistic Model Inference</a><ul><li><a href="#31-em-algorithm">3.1. EM Algorithm</a></li><li><a href="#32-stochastic-variational-inferencesvi--adam">3.2. Stochastic Variational Inference(SVI) \&amp; Adam</a></li></ul></li></ul></li><li><a href="#significance-of-the-blr-a-unifying-perspective">Significance of the BLR: A Unifying Perspective</a></li><li><a href="#conclusion">Conclusion</a></li><li><a href="#reference">Reference</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Khan 등 (2023)의 논문 <a href="https://arxiv.org/pdf/2107.04562">“The Bayesian Learning Rule”</a>를 읽고 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>머신러닝의 목표는 결국 어떤 입력 $x$가 주어졌을 때 출력 $y$를 예측하는 unknown function $f(x)$를 추론하는 문제입니다.</p>
+
+\[y \approx f(x; \theta)\]
+
+<p>여러 알고리즘, 예를 들어 경사 하강법(Gradient Descent)을 이용한 최적화부터 <a href="/mcmc/">MCMC</a>를 이용한 베이즈 추론까지, 모두 이 최적의 함수 $f$ 또는 $f$의 파라미터 $\theta$를 찾아가는 다양한 방법론으로 볼 수 있습니다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>지금까지 최적화(Optimization)와 베이즈 추론(Bayesian Inference)은 각기 다른 패러다임으로 발전해왔습니다. <strong>최적화</strong>는 손실 함수를 최소화하는 단일 최적점 $\theta^*$를 찾는 데 집중하는 반면, <strong>베이즈 추론</strong>은 데이터로부터 얻을 수 있는 파라미터 $\theta$의 전체 분포, 즉 사후 분포(Posterior Distribution) $p(\theta</td>
+      <td>D)$를 구하는 데 초점을 맞춥니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>하지만 두 방식을 포함한 많은 알고리즘들이 사실은 <strong>단 하나의 일반화된 학습 규칙</strong>의 특별한 경우로 표현될 수 있습니다.</p>
+</blockquote>
+
+<blockquote>
+  <p>이제 본격적으로 “베이지안 학습 규칙(Bayesian Learning Rule, BLR)”에 대한 이야기를 해보겠습니다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>Khan(2021)은 이 질문에 대한 답으로, 여러 머신러닝 알고리즘을 통합하는 단일 프레임워크인 <strong>Bayesian Learning Rule</strong> 을 제안했습니다.</p>
+
+<p>핵심 아이디어는 다음과 같습니다.</p>
+
+<p>$\rightarrow$ <strong>“Bayesian Inference의 Posterior Updating Problem을 Variational Inference와 Natural Gradient를 이용해 푸는 일반화된 Updating Rule을 만들고, 이 규칙의 특정 조건 하에서 다양한 알고리즘이 유도됨을 보인다.”</strong></p>
+
+<p><em>이 논문은 우리가 당연하게 사용하던 알고리즘들이 왜 그런 형태로 동작하는지에 대한 근본적인 통찰을 제공합니다.</em></p>
+
+<hr />
+
+<h2 id="the-bayesian-learning-rule-model">The Bayesian Learning Rule Model</h2>
+
+<p>BLR 모델은 두 가지 핵심 개념 위에 세워져 있습니다: <strong>Bayesian Inference를 위한 Variational Approximation Objective</strong>와, 그 목표를 달성하기 위한 <strong>Update Mechanism</strong>입니다.</p>
+
+<h3 id="bayesian-inference--variational-approximation">Bayesian Inference \&amp; Variational Approximation</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>BI의 최종 목표는 데이터 $D$가 주어졌을 때 파라미터 $\theta$의 사후 분포 $P(\theta</td>
+      <td>D)$를 찾는 것입니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+\[P(\theta|D) = \frac{P(D|\theta)P(\theta)}{P(D)}\]
+
+<table>
+  <tbody>
+    <tr>
+      <td>하지만 분모의 $P(D) = \int P(D</td>
+      <td>\theta)P(\theta)d\theta$ 항은 대부분의 현실 문제에서 계산이 불가능(intractable)합니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>이 문제를 해결하기 위해 <strong>Variational Inference</strong> 는 다루기 쉬운 근사 분포 $q(\theta)$를 도입하여, 이 분포가 실제 사후 분포 $P(\theta</td>
+      <td>D)$와 최대한 비슷해지도록 만듭니다. ‘비슷함’의 척도로는 <strong>KL-Divergenc)</strong> 이 사용되며, 우리의 목표는 이 KLD를 최소화하는 것입니다.</td>
+    </tr>
+  </tbody>
+</table>
+
+\[q^*(\theta) = \arg\min_{q(\theta)} \mathrm{KL}\bigl(q(\theta) \big\| P(\theta|D)\bigr)\]
+
+<blockquote>
+  <p>이것이 바로 BLR이 달성하고자 하는 <strong>최적화 목표</strong>입니다.</p>
+</blockquote>
+
+<hr />
+<h3 id="natural-gradient">Natural Gradient</h3>
+
+<p>KL Divergence를 최소화하기 위해 $q(\theta)$의 파라미터를 어떻게 업데이트해야 가장 효율적일까요?</p>
+
+<ul>
+  <li><strong>Standard Gradient</strong>: ‘파라미터 공간’에서 가장 가파른 방향으로 이동합니다. 이는 유클리드 기하학에 기반한 최단 경로입니다.</li>
+  <li><strong>Natural Gradient</strong>: ‘확률 분포 공간’에서 가장 가파른 방향으로 이동합니다. 이는 두 확률 분포 사이의 거리(ex. KLD)를 가장 빨리 줄이는 경로이며, Information Geometry에 기반합니다.</li>
+</ul>
+
+<p>BLR은 이 Natural Gradient를 Update Mechanism으로 채택합니다. 이를 통해 변분 추론의 목표를 가장 효율적으로 달성하는 이론적 기반을 마련합니다.</p>
+
+<hr />
+<h3 id="generalised-form-of-bayesian-learning-rule">Generalised Form of Bayesian Learning Rule</h3>
+
+<p><strong>BLR</strong> 은 위 두 요소를 결합한 것입니다. 즉, <strong>변분 추론의 KLD를 minimize하는 목표를 natural gradient를 이용해 푸는 generalised updating rule</strong>입니다.</p>
+
+<p>이는 특정 데이터와 사전 믿음이 주어졌을 때, 우리의 믿음(근사 분포 $q$)을 어떻게 합리적으로 업데이트해야 하는지에 대한 일반 원리를 제공합니다. 이 규칙의 놀라운 점은, 근사 분포 $q(\theta)$를 어떤 형태로 가정하느냐에 따라 수많은 알고리즘과 같아진다는 것입니다.</p>
+
+<hr />
+
+<h2 id="from-blr-to-other-algorithms">from BLR to other algorithms</h2>
+
+<h3 id="1-optimization-algorithms">1. Optimization Algorithms</h3>
+
+<h4 id="11-gradient-descent--sgd">1.1. Gradient Descent &amp; SGD</h4>
+
+<ul>
+  <li><strong>가정</strong>: 근사 분포 $q(\theta)$를 파라미터 $\mu$에 위치한 <strong>단일 포인트(Dirac delta function)</strong>, 즉 $q(\theta) = \delta(\theta - \mu)$로 가정합니다.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><strong>유도</strong>: 이 가정 하에서 KL divergence minimization는 **로그 사후 확률 $\log P(\mu</td>
+          <td>D)$를 최대화<strong>하는 MAP 문제와 동일해집니다. 이를 경사 상승법으로 풀면, 사전 분포를 무시할 경우 정확히 **경사 하강법(GD)</strong> 업데이트 규칙 $\mu_{t+1} \leftarrow \mu_t - \eta \nabla_\mu \text{Loss}(\mu_t)$가 됩니다. 전체 데이터가 아닌 미니배치를 사용하면 <strong>SGD</strong>가 됩니다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<h4 id="12-newtons-method">1.2. Newton’s Method</h4>
+
+<ul>
+  <li><strong>가정</strong>: GD와 동일하게 $q(\theta) = \delta(\theta - \mu)$로 가정하여 MAP 문제를 풉니다.</li>
+  <li><strong>유도</strong>: MAP의 목적 함수인 로그 사후 확률 $\mathcal{L}(\mu)$를 1차 미분(경사)이 아닌 <strong>2차 미분(헤시안 행렬 $H$)</strong>까지 고려하여 최적화하면 뉴턴 방법이 됩니다. 뉴턴 업데이트 규칙 $\mu_{t+1} \leftarrow \mu_t - \eta H^{-1} \nabla_\mu \mathcal{L}(\mu_t)$는 BLR 관점에서, 현재 지점 $\mu_t$ 주변에 <strong>국소적인 가우시안 근사</strong>를 적용하고 그에 대한 자연 경사 업데이트를 수행하는 것과 같습니다. 즉, 손실 함수의 곡률(curvature)을 이용해 더 빠르게 최적점에 도달하는 과정으로 해석됩니다.</li>
+</ul>
+
+<h4 id="13-ridge-regression">1.3. Ridge Regression</h4>
+
+<ul>
+  <li><strong>가정</strong>: 모델이 선형($y = X\theta + \epsilon$)이고, 파라미터에 대한 사전 분포가 <strong>가우시안 분포 $p(\theta) = \mathcal{N}(0, \alpha^{-1}I)$</strong> 라고 가정합니다.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><strong>유도</strong>: 이 또한 MAP 문제입니다. 로그 사후 확률은 $\log P(\theta</td>
+          <td>D) \propto -|y - X\theta|^2 - \alpha|\theta|^2$ (상수 제외) 가 됩니다. 이 식을 $\theta$에 대해 미분하여 0으로 두면, 우리가 아는 릿지 회귀의 Closed-form solution $(X^T X + \lambda I)\theta = X^T y$ (단, $\lambda$는 $\alpha$와 관련)를 얻게 됩니다. 즉, 릿지 회귀는 BLR이 특정한 선형-가우시안 모델과 가우시안 사전 분포 하에서 내놓는 정확한 해입니다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<hr />
+<h3 id="2-deep-learning-techniques">2. Deep Learning Techniques</h3>
+
+<h4 id="21-dropout">2.1. Dropout</h4>
+
+<ul>
+  <li><strong>가정</strong>: 가중치 $W$에 대한 근사 분포 $q(W)$를, 각 가중치를 독립적인 <strong>베르누이 분포</strong> $z_{ij} \sim \text{Bernoulli}(p)$와 곱한 형태라고 가정합니다. 즉, 학습 시마다 랜덤하게 일부 뉴런을 0으로 만드는 과정입니다.</li>
+  <li><strong>유도</strong>: 이러한 형태의 근사 분포 $q(W)$를 가정하고 변분 추론의 목적 함수(ELBO)를 최대화하는 것은, 결과적으로 <strong>드롭아웃을 적용하여 신경망을 학습시키는 것</strong>과 수학적으로 동일한 효과를 낳습니다. 즉, 드롭아웃은 가중치에 대한 특정 베이지안 근사를 수행하는 방법으로 해석될 수 있습니다.</li>
+</ul>
+
+<h4 id="22-binary-neural-networks">2.2. Binary Neural Networks</h4>
+
+<ul>
+  <li><strong>가정</strong>: 가중치 $\theta$가 ${-1, +1}$ 같은 <strong>이진 값</strong>만 가질 수 있다고 제약합니다. 근사 분포 $q(\theta)$ 역시 이 이진 상태에 대한 독립적인 분포 $q(\theta) = \prod_i q_i(\theta_i)$로 가정합니다.</li>
+  <li><strong>유도</strong>: 이산적인(discrete) 파라미터에 대한 BLR을 적용하면 특정 형태의 업데이트 규칙이 나옵니다. 이 규칙은 이진 신경망 학습에 사용되는 <strong>Straight-Through Estimator</strong>와 같은 기법들과 깊은 연관성을 가집니다. 즉, BNN의 학습 과정은 이진 파라미터에 대한 변분 추론으로 이해될 수 있습니다.</li>
+</ul>
+
+<hr />
+<h3 id="3-probabilistic-model-inference">3. Probabilistic Model Inference</h3>
+
+<h4 id="31-em-algorithm">3.1. EM Algorithm</h4>
+
+<ul>
+  <li><strong>가정</strong>: 모델에 관측되지 않는 <strong>잠재 변수(latent variable)</strong> $z$가 존재하고, 근사 분포가 $q(\theta, z) = q(\theta)q(z)$ 형태로 <strong>분리(factorize)</strong> 가능하다고 가정합니다.</li>
+  <li><strong>유도</strong>: BLR의 목표인 ELBO를 이 분리된 $q$에 대해 좌표 상승법(coordinate ascent)으로 최적화하면 EM 알고리즘이 됩니다.
+    <ul>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td><strong>E-step</strong>: $q(\theta)$를 고정한 채 $q(z)$에 대해 최적화하면, $q(z)$는 실제 사후 분포 $p(z</td>
+              <td>D, \theta)$와 같아집니다. 이는 잠재 변수의 기댓값을 계산하는 과정입니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li><strong>M-step</strong>: 업데이트된 $q(z)$를 고정한 채 $q(\theta)$에 대해 최적화하면, 이는 완전한 데이터의 로그 가능도 기댓값을 최대화하는 과정입니다.
+따라서 EM 알고리즘은 BLR의 한 종류인 평균장 변분 추론(Mean-field VI)의 특별한 경우입니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="32-stochastic-variational-inferencesvi--adam">3.2. Stochastic Variational Inference(SVI) \&amp; Adam</h4>
+
+<ul>
+  <li><strong>가정</strong>: EM과 달리 $q$의 분리 가능성을 가정하지 않지만, <strong>미니배치(mini-batch) 데이터를 사용</strong>하여 목적 함수의 경사(gradient)를 <strong>확률적으로 추정</strong>합니다.</li>
+  <li><strong>유도</strong>: BLR의 업데이트 규칙에서 사용되는 실제 경사를 미니배치 기반의 확률적 경사로 대체하면, 이것이 바로 <strong>Stochastic Variational Inference(SVI)</strong> 입니다. 위에서 다룬 <strong>Adam/RMSProp</strong>은 SVI를 수행하기 위한 효율적인 방법론 중 하나입니다. 즉, 가우시안 근사($q(\theta) = \mathcal{N}(\mu, \sigma^2)$)를 사용한 SVI에서, 자연 경사를 효율적으로 근사하는 과정이 Adam의 업데이트 규칙으로 귀결됩니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="significance-of-the-blr-a-unifying-perspective">Significance of the BLR: A Unifying Perspective</h2>
+
+<p>BLR은 단지 여러 알고리즘을 유도하는 수학적 트릭이 아니라 머신러닝 알고리즘을 바라보는 근본적인 관점을 제시합니다.</p>
+
+<ul>
+  <li><strong>통합적 이해</strong>: 개별적으로 존재하던 알고리즘들이 ‘Updating Bayesian Belif’라는 원리의 다른 표현임을 보여줌으로써, 깊고 일관된 이해를 가능케 합니다.</li>
+  <li><strong>새로운 알고리즘 설계</strong>: $q(\theta)$에 대한 새로운 가정을 하거나, 계산 과정에서 다른 종류의 근사를 적용함으로써 기존에 없던 새로운 하이브리드 알고리즘을 체계적으로 설계할 수 있는 가능성을 제공합니다.</li>
+  <li><strong>알고리즘의 ‘왜’에 대한 설명</strong>: “왜 Adam이 잘 작동하는가?”와 같은 질문에 “경험적으로 좋았다”를 넘어, “불확실성을 고려한 베이지안 학습 규칙의 효율적인 근사이기 때문”이라는 원리적 답변을 가능하게 합니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>이번 포스팅에서는 [The Bayesian Learning Rule] 논문의 핵심 개념과 의의를 살펴보았습니다. BLR은 Variational Inference과 Natural Gradient를 결합하여, 수많은 머신러닝 알고리즘을 아우르는 Generalised Powerful Framework를 제시합니다.</p>
+
+<p>긴 글 읽어주셔서 감사합니다.</p>
+
+<hr />
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/pdf/2107.04562"><strong>Khan, E. (2021).</strong> The Bayesian Learning Rule.</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Bayesian_inference."><strong>Wikipedia.</strong> *Bayesian inference.</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Natural_gradient."><strong>Wikipedia.</strong> Natural gradient.</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-06-20T00:00:00+09:00">June 20, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+The+Bayesian+Learning+Rule%20https%3A%2F%2Fjoon0390.github.io%2Fbayesian-learning-rule%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fbayesian-learning-rule%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/bayesian-learning-rule/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+The+Bayesian+Learning+Rule%20https%3A%2F%2Fjoon0390.github.io%2Fbayesian-learning-rule%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/gat/" class="pagination--pager" title="[Paper Review] Graph Attention Networks">이전</a>
+    
+    
+      <a href="/normalizing-flows/" class="pagination--pager" title="[Paper Review] Normalizing Flows: Probabilistic Modeling and Inference">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

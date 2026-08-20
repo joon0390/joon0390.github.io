@@ -1,0 +1,424 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 인공지능 모델 Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="화생방 환경에서 수집되는 시계열 신호를 기반으로 개인 오염 여부를 이상 탐지 및 분류하는 프로젝트.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 인공지능 모델">
+<meta property="og:url" content="https://joon0390.github.io/projects/cbrn-personal-contamination-detection/">
+
+
+  <meta property="og:description" content="화생방 환경에서 수집되는 시계열 신호를 기반으로 개인 오염 여부를 이상 탐지 및 분류하는 프로젝트.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-01T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/projects/cbrn-personal-contamination-detection/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar main--no-right-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 인공지능 모델">
+    <meta itemprop="description" content="화생방 환경에서 수집되는 시계열 신호를 기반으로 개인 오염 여부를 이상 탐지 및 분류하는 프로젝트.">
+    <meta itemprop="datePublished" content="2026-04-01T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/projects/cbrn-personal-contamination-detection/" itemprop="url">화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 인공지능 모델
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-01T00:00:00+09:00">April 1, 2026</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <h2 id="프로젝트-요약">프로젝트 요약</h2>
+
+<ul>
+  <li>개요: 화생방 환경에서 개인 오염 여부를 빠르게 감지하기 위한 환경인지형 AI 모델 설계</li>
+  <li>기간: 2025.04-</li>
+  <li>데이터: 개인 오염 감지 모듈에서 수집되는 센서 시계열 신호</li>
+  <li>기술 스택: Time Series Anomaly Detection, Time Series Classification, Sensor Signal Processing, Robust AI</li>
+  <li>성과(성능): 이상 탐지와 상태 분류를 함께 고려한 감지 파이프라인 구조화</li>
+</ul>
+
+<h2 id="문제-정의">문제 정의</h2>
+
+<p>화생방 상황에서는 오염 여부를 빠르게 판단하는 것이 중요하지만, 센서 신호는 온도, 습도, 주변 환경, 장비 상태에 따라 쉽게 흔들릴 수 있습니다. 단순히 특정 임계값을 넘었는지만 보는 방식은 실제 환경에서 오탐과 미탐을 만들 가능성이 높습니다.</p>
+
+<p>이 프로젝트는 개인 오염 감지 모듈에서 발생하는 시계열 신호를 바탕으로, 오염 징후를 조기에 탐지하면서도 환경 변화에 강건한 판단 구조를 만드는 것을 목표로 합니다.</p>
+
+<h2 id="데이터와-eda">데이터와 EDA</h2>
+
+<p>데이터는 개인 오염 감지 모듈에서 수집되는 센서 시계열 신호를 가정합니다. 포트폴리오 관점에서는 먼저 정상 구간과 이상 구간의 분포 차이, 센서별 노이즈 수준, 환경 조건 변화에 따른 baseline drift를 확인하는 것이 핵심입니다.</p>
+
+<p>EDA에서는 다음 질문을 중심으로 데이터를 해석합니다.</p>
+
+<ul>
+  <li>정상 상태에서도 센서 신호가 얼마나 흔들리는가?</li>
+  <li>오염 이벤트는 순간적인 spike인지, 일정 시간 유지되는 패턴인지?</li>
+  <li>센서별로 이상 징후가 먼저 나타나는 순서가 있는가?</li>
+  <li>환경 조건 변화와 실제 오염 신호를 어떻게 분리할 수 있는가?</li>
+</ul>
+
+<h2 id="접근-방법">접근 방법</h2>
+
+<p>문제를 단순 이진 분류로만 보지 않고, <code>이상 징후 탐지 + 상태 분류</code>의 2단계 구조로 나눕니다.</p>
+
+<ol>
+  <li>센서 신호를 정규화하고 노이즈를 줄여 시간 축에서 비교 가능한 형태로 정리합니다.</li>
+  <li>정상 구간의 패턴을 먼저 학습해 평소와 다른 신호 변화를 anomaly score로 계산합니다.</li>
+  <li>이상 가능성이 높은 구간에 대해 오염 여부와 상황별 상태를 분류합니다.</li>
+  <li>환경 변화에 따른 drift를 반영할 수 있도록 모델 입력에 환경 조건 또는 보정 변수를 함께 고려합니다.</li>
+</ol>
+
+<h2 id="성과성능">성과(성능)</h2>
+
+<p>현재 정리된 성과는 모델 성능 수치보다 문제 구조화와 감지 파이프라인 설계에 초점이 있습니다. 고위험 환경에서는 단순 정확도보다 오탐/미탐 관리가 중요하기 때문에, 이후에는 precision, recall, false alarm rate, detection delay를 함께 보고 성능을 평가하는 방향이 적합합니다.</p>
+
+<h2 id="포트폴리오-관점의-의미">포트폴리오 관점의 의미</h2>
+
+<p>이 프로젝트는 시계열 이상 탐지, 센서 신호 처리, 환경 변화에 강건한 모델링을 함께 다룰 수 있다는 점을 보여줍니다. 특히 실제 안전 시스템에서는 모델이 맞췄는지뿐 아니라 언제, 어떤 근거로 위험을 알렸는지가 중요하므로, 연구형 프로젝트와 실전형 프로젝트 사이의 연결고리로 정리할 수 있습니다.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2026-04-01T00:00:00+09:00">April 1, 2026</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/projects/seoul-fine-dust-prediction/" class="pagination--pager" title="서울시 미세먼지 예측">이전</a>
+    
+    
+      <a href="/projects/one-class-classification-bayesian-optimization/" class="pagination--pager" title="베이지안 최적화를 이용한 One-Class Classification">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

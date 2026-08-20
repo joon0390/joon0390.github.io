@@ -1,0 +1,1221 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Variational Inference Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Variational Inference(VI) 를 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Variational Inference">
+<meta property="og:url" content="https://joon0390.github.io/variational-inference/">
+
+
+  <meta property="og:description" content="이 포스팅은 Variational Inference(VI) 를 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-12-01T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/variational-inference/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Variational Inference">
+    <meta itemprop="description" content="  이 포스팅은 Variational Inference(VI) 를 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-12-01T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/variational-inference/" itemprop="url">Variational Inference
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#variational-inference의-핵심-아이디어">Variational Inference의 핵심 아이디어</a></li><li><a href="#kl-최소화-관점">KL 최소화 관점</a></li><li><a href="#elbo-evidence-lower-bound">ELBO: Evidence Lower Bound</a></li><li><a href="#interpretaion-of-elbo">Interpretaion of ELBO</a></li><li><a href="#variational-family">Variational Family</a></li><li><a href="#mean-field-vi와-coordinate-ascent">Mean-field VI와 Coordinate Ascent</a><ul><li><a href="#알고리즘-cavi-coordinate-ascent-vi">알고리즘 (CAVI: Coordinate Ascent VI)</a></li></ul></li><li><a href="#exponential-family와-conjugacy">Exponential Family와 Conjugacy</a></li><li><a href="#stochastic-variational-inference-svi">Stochastic Variational Inference (SVI)</a><ul><li><a href="#score-function-gradient-reinforce">Score Function Gradient (REINFORCE)</a></li></ul></li><li><a href="#reparameterization-trick">Reparameterization Trick</a></li><li><a href="#vi-vs-mcmc--smc">VI vs MCMC / SMC</a></li><li><a href="#예시-bayesian-logistic-regression에서의-vi">예시: Bayesian Logistic Regression에서의 VI</a></li><li><a href="#vi는-언제-좋고-언제-나빠질까">VI는 언제 좋고, 언제 나빠질까</a></li><li><a href="#summary">Summary:</a></li><li><a href="#reference">Reference</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 <strong>Variational Inference(VI)</strong> 를 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>베이지안 추론의 목표는 관측 데이터 $y$ 에 대해 <strong>사후분포(posterior)</strong></p>
+
+\[p(\theta \mid y)
+\propto
+p(\theta)\, p(y \mid \theta)\]
+
+<p>를 계산하는 것입니다.</p>
+
+<p>하지만 실제로는</p>
+
+<ul>
+  <li>복잡한 likelihood</li>
+  <li>고차원 파라미터</li>
+  <li>비선형/비가우시안 모델</li>
+</ul>
+
+<p>때문에 정규화 상수인 <strong>evidence</strong></p>
+
+\[p(y) = \int p(\theta)\,p(y\mid\theta)\,d\theta\]
+
+<p>를 닫힌형태로 구할 수 없는 경우가 대부분입니다.</p>
+
+<p>전통적으로는</p>
+
+<ul>
+  <li>MCMC, SMC, Particle Filter 등 <strong>샘플링 기반 방법</strong></li>
+  <li>Laplace approximation, EP 등 <strong>근사 방법</strong></li>
+</ul>
+
+<p>이 사용되어 왔고, 그 중에서 <strong>Variational Inference(VI)</strong> 는</p>
+
+<blockquote>
+  <p>“샘플링 문제를 <strong>최적화 문제(Optimization)</strong>로 바꿔서 푸는 근사 베이지안 추론 방법”</p>
+</blockquote>
+
+<p>으로 이해할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="variational-inference의-핵심-아이디어">Variational Inference의 핵심 아이디어</h2>
+
+<p>아이디어는 아주 간단합니다.</p>
+
+<ol>
+  <li><strong>복잡한 posterior $p(\theta\mid y)$ 대신</strong></li>
+  <li><strong>“계산 가능한” 분포족 $\mathcal{Q}$ 안에서 하나의 분포 $q(\theta)$를 골라</strong></li>
+  <li><strong>$p(\theta\mid y)$ 와 최대한 비슷하게 만들자.</strong></li>
+</ol>
+
+<p>즉,</p>
+
+<blockquote>
+  <p>posterior를 직접 샘플링하지 않고,<br />
+“<strong>잘 다룰 수 있는 분포 $q(\theta)$</strong>”로 근사하자.</p>
+</blockquote>
+
+<p>이를 위해 <strong>KL divergence</strong> 를 사용합니다.</p>
+
+<p><del>생성모델로 변분추론에 대한 개념도를 쉽게 그려달라고 해보았습니다.ㅎㅎ</del>
+<img src="/assets/img/vi/vi_gpt.png" alt="variational inference" /></p>
+
+<hr />
+
+<h2 id="kl-최소화-관점">KL 최소화 관점</h2>
+
+<p>우리가 하고 싶은 것은</p>
+
+\[q^\star(\theta)
+=
+\arg\min_{q \in \mathcal{Q}}
+\text{KL}\big(q(\theta) \,\|\, p(\theta\mid y)\big)\]
+
+<p>입니다.</p>
+
+<p>여기서 KL divergence는</p>
+
+\[\text{KL}\big(q \,\|\, p\big)
+=
+\mathbb{E}_q \big[
+\log q(\theta) - \log p(\theta)
+\big]\]
+
+<p>로 정의됩니다.</p>
+
+<p>Posterior에 대해서 쓰면</p>
+
+\[\text{KL}\big(q(\theta)\,\|\, p(\theta\mid y)\big)
+=
+\mathbb{E}_q \big[
+\log q(\theta) - \log p(\theta\mid y)
+\big].\]
+
+<p>Bayes 공식 $p(\theta\mid y) = p(y,\theta)/p(y)$ 를 대입하면
+\(\begin{align}
+\text{KL}\big(q \,\|\, p(\theta\mid y)\big)
+&amp;=
+\mathbb{E}_q \big[
+\log q(\theta) - \log p(y,\theta) + \log p(y)
+\big] \\
+&amp;=
+\underbrace{
+\mathbb{E}_q[\log q(\theta)] - \mathbb{E}_q[\log p(y,\theta)]
+}_{\text{(1)}}
++
+\log p(y).
+\end{align}\)
+여기서 $\log p(y)$ 는 $\theta$와 무관한 상수입니다.</p>
+
+<p>따라서</p>
+
+<ul>
+  <li>KL을 최소화하는 대신</li>
+  <li>아래 항을 <strong>최대화</strong>해도 동일한 해를 얻습니다.</li>
+</ul>
+
+\[\mathcal{L}(q)
+=
+\mathbb{E}_q[\log p(y,\theta)]
+-
+\mathbb{E}_q[\log q(\theta)].\]
+
+<p>이 $\mathcal{L}(q)$ 를 <strong>Evidence Lower Bound (ELBO)</strong> 라고 부릅니다.</p>
+
+<hr />
+
+<h2 id="elbo-evidence-lower-bound">ELBO: Evidence Lower Bound</h2>
+
+<p>위 식을 정리하면,</p>
+
+\[\log p(y)
+=
+\mathcal{L}(q)
++
+\text{KL}\big(q(\theta)\,\|\,p(\theta\mid y)\big).\]
+
+<ul>
+  <li>$\log p(y)$ : 고정된 상수 (모델 evidence)</li>
+  <li>KL ≥ 0 이므로</li>
+</ul>
+
+\[\mathcal{L}(q)
+\le
+\log p(y).\]
+
+<p>따라서 ELBO는 이름 그대로 <strong>evidence에 대한 하한(lower bound)</strong> 입니다.</p>
+
+<p>또한, KL 최소화와 ELBO 최대화가 동치이므로</p>
+
+\[q^\star(\theta)
+=
+\arg\max_{q\in\mathcal{Q}} \mathcal{L}(q).\]
+
+<p>즉,</p>
+
+<blockquote>
+  <p>VI는 “<strong>ELBO 최대화 문제</strong>”를 푸는 것과 완전히 같게 됩니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="interpretaion-of-elbo">Interpretaion of ELBO</h2>
+
+<p>ELBO는 두 항으로 분해됩니다.
+\(\begin{align}
+\mathcal{L}(q)
+&amp;=
+\mathbb{E}_q[\log p(y,\theta)]
+-
+\mathbb{E}_q[\log q(\theta)] \\
+&amp;=
+\mathbb{E}_q[\log p(y\mid \theta)]
++
+\mathbb{E}_q[\log p(\theta)]
+-
+\mathbb{E}_q[\log q(\theta)].
+\end{align}\)
+이를 해석하면</p>
+
+<ul>
+  <li>$\mathbb{E}_q[\log p(y\mid\theta)]$ : <strong>expected log-likelihood</strong><br />
+→ 데이터 적합도(fit)</li>
+  <li>$-\text{KL}(q(\theta)\,|\,p(\theta))$<br />
+→ prior와 q 사이의 거리 (regularization 역할)</li>
+</ul>
+
+<p>즉 ELBO는</p>
+
+<blockquote>
+  <p>“데이터 적합도 + prior regularization − 엔트로피 패널티”</p>
+</blockquote>
+
+<p>로 해석할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="variational-family">Variational Family</h2>
+
+<p>VI의 성능은 <strong>어떤 family $\mathcal{Q}$를 선택하느냐</strong>에 강하게 의존합니다.</p>
+
+<p>대표적인 선택은 다음과 같습니다.</p>
+
+<ol>
+  <li>
+    <p><strong>Mean-field family</strong></p>
+
+\[q(\theta) = \prod_{j=1}^d q_j(\theta_j)\]
+
+    <ul>
+      <li>각 파라미터/블록이 서로 독립이라고 가정</li>
+      <li>계산이 매우 단순해짐 (coordinate ascent 가능)</li>
+      <li>하지만 <strong>의존구조(correlation)를 표현하지 못함</strong></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Full-covariance Gaussian</strong></p>
+
+\[q(\theta) = \mathcal{N}(\mu, \Sigma)\]
+
+    <ul>
+      <li>공분산까지 학습하여 상관관계 표현 가능</li>
+      <li>파라미터 수가 $O(d^2)$ 로 증가</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Mixture / Normalizing flow 등 리치한 family</strong></p>
+
+    <ul>
+      <li>Mixture of Gaussians</li>
+      <li>Normalizing Flows 기반 $q(\theta)$</li>
+      <li>매우 표현력이 높지만 최적화가 더 어려움</li>
+    </ul>
+  </li>
+</ol>
+
+<p>이 글에서는 가장 기본이 되는 <strong>mean-field VI</strong> 를 중심으로 설명하겠습니다.</p>
+
+<hr />
+
+<h2 id="mean-field-vi와-coordinate-ascent">Mean-field VI와 Coordinate Ascent</h2>
+
+<p>Mean-field 가정:</p>
+
+\[q(\theta) = \prod_{j=1}^M q_j(\theta_j).\]
+
+<p>이때, ELBO는</p>
+
+\[\mathcal{L}(q_1,\dots,q_M)
+=
+\mathbb{E}_{q}[\log p(y,\theta)]
+-
+\sum_{j=1}^M \mathbb{E}_{q_j}[\log q_j(\theta_j)].\]
+
+<p>여기서 중요한 것은:</p>
+
+<blockquote>
+  <p>나머지를 고정하고 <strong>하나의 factor $q_j$만 최적화</strong> 하면,<br />
+닫힌형태의 update 식을 얻을 수 있다.</p>
+</blockquote>
+
+<p>정확히는,</p>
+
+\[\log q_j^\star(\theta_j)
+=
+\mathbb{E}_{q_{-j}}[\log p(y,\theta)]
++ \text{const},\]
+
+<p>여기서 $q_{-j}$ 는 $j$번째를 제외한 모든 factor의 곱입니다.</p>
+
+<p>즉,</p>
+
+<blockquote>
+  <p><strong>“joint log density를 기대값 취해서 exponentiation → 정규화”</strong><br />
+를 반복하면 된다.</p>
+</blockquote>
+
+<h3 id="알고리즘-cavi-coordinate-ascent-vi">알고리즘 (CAVI: Coordinate Ascent VI)</h3>
+
+<ol>
+  <li>초기화: $q_j^{(0)}(\theta_j)$ 적당히 설정</li>
+  <li>
+    <p>반복 (j = 1,…,M 순회)</p>
+
+\[\log q_j^{\text{new}}(\theta_j)
+\propto
+\mathbb{E}_{q_{-j}^{\text{old}}}[\log p(y,\theta)].\]
+  </li>
+  <li>모든 $j$ 에 대해 업데이트 후, ELBO 수렴 시까지 반복</li>
+</ol>
+
+<p>이 방식은 <strong>conjugate exponential family</strong> 구조에서 closed-form update를 제공하여,</p>
+
+<ul>
+  <li>LDA</li>
+  <li>Bayesian mixture model</li>
+  <li>Factor analysis</li>
+</ul>
+
+<p>등 여러 모델에 대해 <strong>“논문 한 편 = CAVI 업데이트 유도”</strong> 가 되는 경우가 많습니다.</p>
+
+<hr />
+
+<h2 id="exponential-family와-conjugacy">Exponential Family와 Conjugacy</h2>
+
+<p>만약 joint 분포 $p(y,\theta)$ 가 <strong>exponential family</strong> 구조를 가지고 있고, prior–likelihood가 conjugate 하다면,</p>
+
+<p>각 factor $q_j(\theta_j)$ 역시 동일한 family에 속하게 됩니다.</p>
+
+<p>예를 들어,</p>
+
+<ul>
+  <li>Likelihood: $p(y\mid\theta)$ 는 Gaussian</li>
+  <li>Prior: $p(\theta)$ 도 Gaussian</li>
+  <li>Posterior: $p(\theta\mid y)$ 도 Gaussian (conjugate)</li>
+</ul>
+
+<p>이때 Mean-field VI를 적용하면,</p>
+
+<ul>
+  <li>$q(\theta)$도 Gaussian</li>
+  <li>update는 “posterior의 natural parameter에 expectation만 집어넣은 형태”로 표현</li>
+</ul>
+
+<p>→ 완전히 analytic update가 가능해집니다.</p>
+
+<hr />
+
+<h2 id="stochastic-variational-inference-svi">Stochastic Variational Inference (SVI)</h2>
+
+<p>문제는:</p>
+
+<ul>
+  <li>데이터 $y = (y_1,\dots,y_N)$ 가 매우 클 때</li>
+  <li>매 step마다 $\mathbb{E}_q[\log p(y,\theta)]$ 를 계산하는 것은 비현실적</li>
+</ul>
+
+<p>→ <strong>mini-batch 기반 stochastic gradient</strong> 를 사용하자.</p>
+
+<p>SVI는</p>
+
+<ol>
+  <li>ELBO를 <strong>stochastic gradient ascent</strong> 로 최적화</li>
+  <li>각 step에서 mini-batch 데이터만 사용</li>
+  <li>learning rate $\rho_t$ 를 줄여가며 수렴 보장</li>
+</ol>
+
+<h3 id="score-function-gradient-reinforce">Score Function Gradient (REINFORCE)</h3>
+
+<p>ELBO를 $\mathcal{L}(\lambda)$, $q(\theta;\lambda)$ 라 쓰면
+$$
+\begin{align}
+\mathcal{L}(\lambda)
+&amp;=
+\mathbb{E}<em>{q(\theta;\lambda)}[\log p(y,\theta)]
+-
+\mathbb{E}</em>{q(\theta;\lambda)}[\log q(\theta;\lambda)].
+\end{align}</p>
+
+<p>score function trick을 쓰면,</p>
+
+<p>\begin{align}
+\nabla_\lambda \mathcal{L}(\lambda)
+&amp;=
+\mathbb{E}<em>{q(\theta;\lambda)}
+\big[
+\nabla</em>\lambda \log q(\theta;\lambda)
+\big(
+\log p(y,\theta) - \log q(\theta;\lambda)
+\big)
+\big].
+\end{align}
+$$
+이를 Monte Carlo로 근사하면,</p>
+
+<ol>
+  <li>$\theta^{(s)} \sim q(\theta;\lambda)$</li>
+  <li></li>
+</ol>
+
+\[\hat{g}
+   =
+   \frac{1}{S} \sum_{s=1}^S
+   \nabla_\lambda \log q(\theta^{(s)};\lambda)
+   \big(
+   \log p(y,\theta^{(s)}) - \log q(\theta^{(s)};\lambda)
+   \big).\]
+
+<ol>
+  <li>$\lambda \leftarrow \lambda + \rho_t \hat{g}$</li>
+</ol>
+
+<p>하지만 이 gradient는 <strong>분산이 매우 크다</strong>는 단점이 있습니다.</p>
+
+<hr />
+
+<h2 id="reparameterization-trick">Reparameterization Trick</h2>
+
+<p>최근 딥러닝에서 쓰는 VI(예: VAE)는 대부분 <strong>reparameterization gradient</strong> 를 사용합니다.</p>
+
+<p>아이디어:</p>
+
+<ul>
+  <li>$q(\theta;\lambda)$에서 직접 샘플하지 말고</li>
+  <li><strong>고정 분포 $\epsilon \sim p(\epsilon)$</strong> 에서 샘플한 뒤</li>
+  <li>$\theta = g(\epsilon;\lambda)$ 로 변환해서 얻기</li>
+</ul>
+
+<p>예: Gaussian $q(\theta;\mu,\sigma^2)$</p>
+
+<ul>
+  <li>$\epsilon \sim \mathcal{N}(0,1)$</li>
+  <li>$\theta = \mu + \sigma \epsilon$</li>
+</ul>
+
+<p>그러면</p>
+
+\[\mathcal{L}(\lambda)
+=
+\mathbb{E}_{\epsilon\sim p(\epsilon)}
+\big[
+\log p(y, g(\epsilon;\lambda)) - \log q(g(\epsilon;\lambda);\lambda)
+\big].\]
+
+<p>이제 gradient는
+\(\begin{align}
+\nabla_\lambda \mathcal{L}(\lambda)
+&amp;=
+\mathbb{E}_{\epsilon}
+\big[
+\nabla_\lambda
+\big(
+\log p\big(y, g(\epsilon;\lambda)\big)
+-
+\log q\big(g(\epsilon;\lambda);\lambda\big)
+\big)
+\big].
+\end{align}\)</p>
+
+<ul>
+  <li>$\epsilon$ 은 $\lambda$ 와 무관</li>
+  <li>안쪽의 gradient는 일반적인 backprop으로 계산 가능</li>
+  <li>분산이 작은 gradient estimator 확보</li>
+</ul>
+
+<p>그래서 VAE, Bayesian neural net 등에서는</p>
+
+<ul>
+  <li>encoder $q_\phi(z\mid x)$</li>
+  <li>decoder $p_\theta(x\mid z)$</li>
+</ul>
+
+<p>를 두고, reparameterization trick + SGD로 ELBO를 최적화합니다.</p>
+
+<hr />
+
+<h2 id="vi-vs-mcmc--smc">VI vs MCMC / SMC</h2>
+
+<p>간단히 요약하면:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>방법</th>
+      <th>핵심 아이디어</th>
+      <th>장점</th>
+      <th>단점</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCMC</td>
+      <td>Markov chain으로 posterior 샘플링</td>
+      <td>이론적으로 정확 (시간→∞)</td>
+      <td>느릴 수 있음, mixing 문제</td>
+    </tr>
+    <tr>
+      <td>SMC / PF</td>
+      <td>Sequential하게 importance sampling + resampling</td>
+      <td>online, non-linear/non-Gaussian state space에 강함</td>
+      <td>high-dim에서 particle 수 폭발</td>
+    </tr>
+    <tr>
+      <td>VI</td>
+      <td>최적화를 통해 근사 posterior 학습</td>
+      <td>빠름, 대규모 데이터에 좋음</td>
+      <td>mode-seeking, uncertainty 과소추정 가능</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>특히 VI는</p>
+
+<ul>
+  <li><strong>KL$(q|p)$</strong> 를 최소화하기 때문에</li>
+  <li>posterior의 <strong>tail / 작은 모드</strong> 를 무시하고</li>
+  <li><strong>주요 모드 근처에 mass를 집중</strong>시키는 경향(mode-seeking)이 있습니다.</li>
+</ul>
+
+<p>이 부분은 나중에 <strong>Predictive VI / Proper Scoring Rule 기반 VI</strong> 등으로 보완할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="예시-bayesian-logistic-regression에서의-vi">예시: Bayesian Logistic Regression에서의 VI</h2>
+
+<p>간단한 예로, Bayesian logistic regression을 생각해봅시다.</p>
+
+<ul>
+  <li>데이터: $(x_i,y_i)$, $y_i\in{0,1}$</li>
+  <li>파라미터: $\beta\in\mathbb{R}^p$</li>
+</ul>
+
+<p>모델:
+\(\begin{align}
+y_i \mid x_i,\beta &amp;\sim \text{Bernoulli}(\sigma(x_i^\top\beta)), \\
+\beta &amp;\sim \mathcal{N}(0,\alpha^{-1}I).
+\end{align}\)</p>
+
+<ul>
+  <li>posterior $p(\beta\mid y)$ 는 closed form 없음</li>
+  <li>MCMC도 가능하지만, 큰 데이터에서는 느릴 수 있음</li>
+</ul>
+
+<p>여기서 VI:</p>
+
+<ul>
+  <li>$q(\beta)$ 를 Gaussian $\mathcal{N}(m,S)$ 로 가정</li>
+  <li>
+    <p>ELBO:</p>
+
+\[\mathcal{L}(m,S)
+=
+\mathbb{E}_q[\log p(y\mid\beta)]
++
+\mathbb{E}_q[\log p(\beta)]
+-
+\mathbb{E}_q[\log q(\beta)].\]
+  </li>
+  <li>$\mathbb{E}_q[\log p(y\mid\beta)]$ 는 analytic하지 않지만<br />
+→ Monte Carlo + reparameterization 로 gradient 구해서<br />
+→ $(m,S)$ 에 대해 SGD 수행</li>
+</ul>
+
+<p>이 구조가 Bayesian deep learning, VAE 등으로 그대로 확장됩니다.</p>
+
+<hr />
+
+<h2 id="vi는-언제-좋고-언제-나빠질까">VI는 언제 좋고, 언제 나빠질까</h2>
+
+<p><strong>좋은 경우</strong></p>
+
+<ul>
+  <li>posterior가 거의 unimodal</li>
+  <li>mean-field 근사로도 크게 정보 손실이 없는 경우</li>
+  <li>아주 큰 데이터셋, deep model처럼 MCMC가 비현실적인 경우</li>
+</ul>
+
+<p><strong>나빠지는 경우</strong></p>
+
+<ul>
+  <li>posterior가 <strong>강하게 multi-modal</strong></li>
+  <li>변수 간 <strong>강한 상관관계</strong>가 있음에도 factorized family 사용</li>
+  <li>model misspecification 하에서 <strong>uncertainty를 과소추정</strong>하는 경우</li>
+</ul>
+
+<hr />
+
+<h2 id="summary">Summary:</h2>
+
+<ul>
+  <li>VI는 posterior 추론을 <strong>최적화 문제(ELBO 최대화)</strong> 로 바꾸는 방법이다.</li>
+  <li>Mean-field VI는 계산이 간단하지만 상관구조를 잃기 쉽다.</li>
+  <li>Stochastic VI + reparameterization은 딥러닝에서는 사실상 표준이다.</li>
+  <li>KL$(q|p)$ 특성 때문에 <strong>mode-seeking + 과도한 확신</strong>이라는 한계가 있다.</li>
+</ul>
+
+<hr />
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/pdf/1601.00670">David M. B (2018). Variational Inference: A Review for Statistician</a></li>
+  <li><a href="https://www.jmlr.org/papers/volume14/hoffman13a/hoffman13a.pdf">Matthew D. H (2013). Stochastic Variational Inference</a></li>
+  <li><a href="https://www.tandfonline.com/doi/full/10.1080/01621459.2017.1285773">David M. B (2017). Variational Inference: A Review for Statisticians</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-12-01T00:00:00+09:00">December 1, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Variational+Inference%20https%3A%2F%2Fjoon0390.github.io%2Fvariational-inference%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fvariational-inference%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/variational-inference/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Variational+Inference%20https%3A%2F%2Fjoon0390.github.io%2Fvariational-inference%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/particle-filter/" class="pagination--pager" title="Particle Filter : Sequential Monte Carlo">이전</a>
+    
+    
+      <a href="/generalized-variational-inference/" class="pagination--pager" title="[Paper Review] Generalized Variational Inference: Three arguments for deriving new posteriors">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

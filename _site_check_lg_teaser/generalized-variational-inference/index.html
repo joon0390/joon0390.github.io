@@ -1,0 +1,1174 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] Generalized Variational Inference: Three arguments for deriving new posteriors Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Knoblauch, Jewson, Damoulas (2019) 의 “Generalized Variational Inference: Three arguments for deriving new posteriors” 를 읽고 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] Generalized Variational Inference: Three arguments for deriving new posteriors">
+<meta property="og:url" content="https://joon0390.github.io/generalized-variational-inference/">
+
+
+  <meta property="og:description" content="이 포스팅은 Knoblauch, Jewson, Damoulas (2019) 의 “Generalized Variational Inference: Three arguments for deriving new posteriors” 를 읽고 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-12-06T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/generalized-variational-inference/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] Generalized Variational Inference: Three arguments for deriving new posteriors">
+    <meta itemprop="description" content="  이 포스팅은 Knoblauch, Jewson, Damoulas (2019) 의“Generalized Variational Inference: Three arguments for deriving new posteriors” 를 읽고 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-12-06T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/generalized-variational-inference/" itemprop="url">[Paper Review] Generalized Variational Inference: Three arguments for deriving new posteriors
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a><ul><li><a href="#problem-and-proposed-solution">Problem and Proposed Solution</a></li></ul></li><li><a href="#method-1">Method 1</a><ul><li><a href="#bayes의-multiplicative-form">Bayes의 Multiplicative Form</a></li><li><a href="#bayes-posterior는-무한-차원에서의-최적화-문제">Bayes Posterior는 무한 차원에서의 최적화 문제</a></li><li><a href="#optimality-of-standard-vi">Optimality of Standard VI</a></li></ul></li><li><a href="#method-2-rule-of-three-rot">Method 2: Rule of Three (RoT)</a><ul><li><a href="#rot-세-개의-argument-로-정의되는-generalized-posterior">RoT: 세 개의 argument 로 정의되는 generalized posterior</a></li><li><a href="#axioms">Axioms</a></li></ul></li><li><a href="#method-3-generalized-variational-inference-gvi">Method 3: Generalized Variational Inference (GVI)</a><ul><li><a href="#gvi-vs-dvi-discrepancy-vi">GVI vs DVI (Discrepancy VI)</a></li><li><a href="#black-box-gvi-bbgvi">Black-box GVI (BBGVI)</a></li><li><a href="#applications-bnn-deep-gp-에서의-gvi">Applications: BNN, Deep GP 에서의 GVI</a></li></ul></li><li><a href="#discussion--takeaways">Discussion &amp; Takeaways</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Knoblauch, Jewson, Damoulas (2019) 의<br />
+<a href="https://arxiv.org/pdf/1904.02063">“Generalized Variational Inference: Three arguments for deriving new posteriors”</a> 를 읽고 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<h3 id="problem-and-proposed-solution">Problem and Proposed Solution</h3>
+
+<p>베이지안 추론은 다음과 같은 형태의 posterior 를 사용합니다.</p>
+
+\[q_B^*(\theta \mid x_{1:n})
+\propto \pi(\theta)\; p_n(x_{1:n} \mid \theta)\]
+
+<p>여기서 $\pi$ 는 prior, $p_n$ 은 likelihood 입니다.</p>
+
+<p>논문 저자들은 이 posterior 를 실제로 사용하기 위해서는 암묵적으로 <strong>세 가지 가정</strong>이 수반된다고 강조합니다.</p>
+
+<ol>
+  <li><strong>Well-specified prior</strong>
+    <ul>
+      <li>사전 지식을 잘 반영하는 prior $\pi(\theta)$ 를 알고 있고, 그걸 수학적으로 잘 표기할 수 있다고 가정합니다.</li>
+    </ul>
+  </li>
+  <li><strong>Well-specified likelihood model</strong>
+    <ul>
+      <li>실제 데이터의 분포가 $p_n(x_{1:n}\mid \theta)$ 꼴이라고 믿습니다. (모델이 참이라고 가정)</li>
+    </ul>
+  </li>
+  <li><strong>Infinite computing power</strong>
+    <ul>
+      <li>일반적으로 intractable 한 posterior $q_B^*(\theta)$ 를 <strong>정확하게</strong> 다룰 수 있다고 봅니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>&lt;/br&gt;</p>
+
+<p>작거나 전통적인 통계 task 에서는 이 세 가지 가정이 그럭저럭 성립할 수 있지만,<br />
+데이터 및 모델의 규모가 커질수록 현실과의 간극이 커집니다.</p>
+
+<ul>
+  <li>prior 는 사실상 “fake” 인 경우가 많습니다.</li>
+  <li>likelihood 는 misspecification, heavy tails, contamination 이 흔합니다.</li>
+  <li>posterior 는 너무 커서 MCMC, standard VI 로도 다루기 힘든 경우가 많습니다.</li>
+</ul>
+
+<p>&lt;/br&gt;</p>
+
+<p>따라서 저자들은 아예 <strong>Bayes rule 을 최적화 문제로 재해석</strong>하고,<br />
+그 틀을 일반화하여 “새로운 posterior” 를 설계하자고 제안합니다.</p>
+
+<p>그 결과물이 바로</p>
+
+<ul>
+  <li><strong>Rule of Three (RoT)</strong> : 3개의 argument 로 정의되는 generalized posterior</li>
+  <li><strong>GVI (Generalized Variational Inference)</strong> : RoT 의 tractable 한 특수 케이스</li>
+</ul>
+
+<p>입니다.</p>
+
+<hr />
+
+<h2 id="method-1">Method 1</h2>
+
+<h3 id="bayes의-multiplicative-form">Bayes의 Multiplicative Form</h3>
+
+<p>먼저 generalized Bayesian posterior 를 다음과 같이 씁니다.</p>
+
+\[q_B^*(\theta)
+\propto
+\pi(\theta)\prod_{i=1}^n \exp\{-\ell(\theta, x_i)\}.\]
+
+<ul>
+  <li><strong>Standard Bayes</strong> 인 경우<br />
+$\ell(\theta, x_i) = -\log p(x_i \mid \theta)$ 입니다.</li>
+  <li><strong>Generalized Bayes</strong> 인 경우<br />
+$\ell$ 은 임의의 loss function 입니다. (예: median 추론이면 $|\theta - x_i|$)</li>
+</ul>
+
+<p>이 multiplicative form 은 <strong>loss 를 quasi-likelihood</strong> 로 보는 관점에서도 해석할 수 있습니다.<br />
+(예: Bissiri et al. 의 generalized Bayes)</p>
+
+<hr />
+
+<h3 id="bayes-posterior는-무한-차원에서의-최적화-문제">Bayes Posterior는 무한 차원에서의 최적화 문제</h3>
+
+<p><a href="https://projecteuclid.org/journals/annals-of-probability/volume-3/issue-1/I-Divergence-Geometry-of-Probability-Distributions-and-Minimization-Problems/10.1214/aop/1176996454.full">Csiszár (1975)</a> 와<br />
+<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/cpa.3160280102">Donsker &amp; Varadhan (1975)</a> 에 따르면,<br />
+Bayes posterior 는 다음과 같은 <strong>무한 차원 최적화 문제의 해</strong>로 쓸 수 있습니다.</p>
+
+\[q_B^*
+=
+\arg\min_{q \in \mathcal P(\Theta)}
+\bigg\{
+\mathbb{E}_q\bigg[\sum_{i=1}^n \ell(\theta, x_i)\bigg]
++ \mathrm{KL}(q \,\|\, \pi)
+\bigg\}\]
+
+<ul>
+  <li>$\mathcal P(\Theta)$ : $\Theta$ 위의 <strong>모든 확률분포들의 집합</strong></li>
+  <li>첫 항 : 데이터에 대한 <strong>loss 의 기댓값</strong></li>
+  <li>둘째 항 : prior 와의 <strong>KLD regularization</strong></li>
+</ul>
+
+<p>즉,</p>
+
+<blockquote>
+  <p><strong>Bayes posterior 는<br />
+“loss + KLD” 를 최소화하는 무한 차원 최적화 문제의 해입니다.</strong></p>
+</blockquote>
+
+<p>이것이 논문에서 계속 끌고 가는 핵심 isomorphism 입니다.</p>
+
+<hr />
+
+<h3 id="optimality-of-standard-vi">Optimality of Standard VI</h3>
+
+<p>Exact posterior 는 계산 cost 가 크기 때문에,<br />
+posterior 후보를 어떤 variational family<br />
+$\mathcal Q = { q(\theta \mid \kappa) : \kappa \in K }$ 로 제한합니다.</p>
+
+\[\text{original: } \min_{q \in \mathcal P(\Theta)} \;\;\longrightarrow\;\;
+\text{constrained: } \min_{q \in \mathcal Q}\]
+
+<p>그러면 최적화 문제는 다음과 같이 바뀝니다.</p>
+
+\[q_{\mathrm{VI}}^*
+=
+\arg\min_{q\in \mathcal Q}
+\bigg\{
+\mathbb{E}_q\bigg[\sum_{i=1}^n \ell(\theta, x_i)\bigg]
++ \mathrm{KL}(q \,\|\, \pi)
+\bigg\}\]
+
+<p>이 식은 우리가 알고 있는 <strong>standard VI 의 objective (ELBO 최대화와 동치)</strong> 와 동일합니다.</p>
+
+<blockquote>
+  <p><strong>즉, standard VI 는<br />
+variational family $\mathcal Q$ 가 고정된 상황에서<br />
+Bayes optimization 문제의 “제한된 최적해”입니다.</strong></p>
+</blockquote>
+
+<p>같은 $\mathcal Q$ 를 사용하면서 <strong>다른 divergence</strong> 를 최적화하는 VI 들(α-VI, Rényi-VI 등)은<br />
+이 base optimization 문제를 그대로 계승하지 않기 때문에,<br />
+저자들은 이를 “Bayesian optimality 관점에서 suboptimal 하다”라고 봅니다.</p>
+
+<hr />
+
+<h2 id="method-2-rule-of-three-rot">Method 2: Rule of Three (RoT)</h2>
+
+<h3 id="rot-세-개의-argument-로-정의되는-generalized-posterior">RoT: 세 개의 argument 로 정의되는 generalized posterior</h3>
+
+<p>앞의 isomorphism 을 보고 나면 자연스럽게 다음과 같은 생각을 할 수 있습니다.</p>
+
+<blockquote>
+  <p>“그렇다면 <strong>loss, divergence, feasible set</strong> 을 바꾸면<br />
+새로운 posterior 들을 통일된 방식으로 정의할 수 있지 않을까?”</p>
+</blockquote>
+
+<p>이 생각을 공식화한 것이 <strong>Rule of Three (RoT)</strong> 입니다.</p>
+
+<p>수식으로 쓰면 다음과 같습니다.</p>
+
+\[q^*(\theta)
+=
+\arg\min_{q\in \Pi}
+\bigg\{
+\mathbb{E}_q\bigg[\sum_{i=1}^n \ell(\theta, x_i)\bigg]
++ D(q \,\|\, \pi)
+\bigg\}
+\;\;\overset{\text{def}}{=}\;\;
+P(\ell, D, \Pi)\]
+
+<p>여기서 세 가지 argument 는 다음과 같습니다.</p>
+
+<ol>
+  <li><strong>Loss $\ell(\theta, x)$</strong>
+    <ul>
+      <li>반드시 $-\log p(x\mid\theta)$ 일 필요는 없습니다.</li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td>예: median 추론이면 absolute error $</td>
+              <td>\theta - x</td>
+              <td>$, robust loss, scoring rule 등입니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Divergence $D(q \,|\, \pi)$</strong>
+    <ul>
+      <li>prior 와 posterior 사이의 distance 입니다.</li>
+      <li>Standard Bayes 에서는 $D = \mathrm{KL}$ 입니다.</li>
+      <li>대신 Rényi divergence, β-divergence 등 다른 divergence 도 사용할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>Feasible set $\Pi \subset \mathcal P(\Theta)$</strong>
+    <ul>
+      <li>posterior 후보 분포들의 집합입니다.</li>
+      <li>$\Pi = \mathcal P(\Theta)$ 이면 “full” generalized Bayes 입니다.</li>
+      <li>$\Pi = \mathcal Q$ 이면 variational inference 가 됩니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>이 RoT 안에서 여러 방법들을 special case 로 볼 수 있습니다.</p>
+
+<ul>
+  <li><strong>Standard Bayes</strong>
+    <ul>
+      <li>$\ell = -\log \text{Likelihood}$</li>
+      <li>$D = \mathrm{KL}$</li>
+      <li>$\Pi = \mathcal P(\Theta)$</li>
+    </ul>
+  </li>
+  <li><strong>Standard VI</strong>
+    <ul>
+      <li>$\ell = -\log \text{Likelihood}$</li>
+      <li>$D = \mathrm{KL}$</li>
+      <li>$\Pi = \mathcal Q$ (variational family)</li>
+    </ul>
+  </li>
+  <li><strong>Generalized Bayes</strong>
+    <ul>
+      <li>$\ell$ 또는 $D$ 를 수정하고, $\Pi$ 는 전체 공간으로 유지합니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="axioms">Axioms</h3>
+
+<p>RoT 가 만족해야 할 <strong>세 가지 공리(Axioms)</strong> 가 있습니다 (논문 4.1절).</p>
+
+<p>대략적으로 정리하면 다음과 같습니다.</p>
+
+<ol>
+  <li><strong>Coherence / Consistency</strong>
+    <ul>
+      <li>loss 와 divergence 를 어떻게 조합해야<br />
+“일관된 belief 업데이트” 가 되는지에 대한 조건입니다.</li>
+    </ul>
+  </li>
+  <li><strong>Modular decomposition</strong>
+    <ul>
+      <li>loss 는 <strong>goodness of fit</strong> (어떤 $\theta$ 가 좋은지),</li>
+      <li>divergence 는 <strong>belief regularization</strong> (prior 대비 얼마나 멀어질 수 있는지)<br />
+를 담당해야 합니다.</li>
+      <li>divergence 를 바꿀 때, loss 의 의미를 훼손하면 안 됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>Invariance / Reparameterization 등 기술적 조건</strong>
+    <ul>
+      <li>reparametrization 에 대해 잘 작동하는지,</li>
+      <li>적절한 regularity / measurability 등을 만족하는지에 대한 조건입니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>저자들은 <strong>이 공리들을 만족하는 generalized posterior 는 RoT 형태로 표현될 수 있다</strong>고 주장합니다.<br />
+즉, RoT 는 “합리적인 generalized Bayesian 업데이트” 들을 하나의 형태로 묶는 프레임워크라고 볼 수 있습니다.</p>
+
+<figure style="text-align: center;">
+  <img src="/assets/img/gvi/image.png" alt="RoT" width="1000" />
+</figure>
+
+<hr />
+
+<h2 id="method-3-generalized-variational-inference-gvi">Method 3: Generalized Variational Inference (GVI)</h2>
+
+<p>이제 RoT 는 정의되었지만, 여전히 $\Pi = \mathcal P(\Theta)$ 로 두면 계산 cost 가 매우 크게 됩니다.</p>
+
+<p>그래서 tractable 한 <strong>special case</strong> 로서 <strong>GVI</strong> 를 정의합니다.</p>
+
+\[\Pi = \mathcal Q = \{q(\theta \mid \kappa) : \kappa \in K\}
+\subset \mathcal P(\Theta)\]
+
+<p>를 variational family 로 잡아서 RoT 를 푸는 것을 <strong>GVI</strong> 라고 부릅니다.</p>
+
+<p>즉, GVI 의 objective 는 다음과 같습니다.</p>
+
+\[q_{\mathrm{GVI}}^*
+=
+\argmin_{q \in \mathcal Q}
+\bigg\{
+\mathbb{E}_q\bigg[\sum_{i=1}^n \ell(\theta, x_i)\bigg]
++ D(q \,\|\, \pi)
+\bigg\}\]
+
+<ul>
+  <li>$\ell$ : 원하는 loss (NLL, robust loss, scoring rule, pseudo-likelihood 등)</li>
+  <li>$D$ : 원하는 divergence (KL, Rényi, β-divergence 등)</li>
+  <li>$\mathcal Q$ : mean-field Gaussian, normalizing flow, BNN 등 variational family</li>
+</ul>
+
+<p>GVI 는 RoT 의 특수 케이스이기 때문에 <strong>Axiom 1, 2, 3 을 모두 만족</strong>합니다.</p>
+
+<p>이로부터 다음과 같은 해석이 가능합니다.</p>
+
+<ul>
+  <li>Loss $\ell$ 은 <strong>어떤 $\theta$ 가 좋은가</strong>를 결정하는 역할,</li>
+  <li>Divergence $D$ 는 <strong>prior 대비 posterior 가 얼마나 멀어질 수 있는가</strong>를 규제하는 역할을 합니다.</li>
+</ul>
+
+<p>따라서 두 요소를 <strong>분리해서 조절할 수 있습니다.</strong></p>
+
+<ul>
+  <li>$\ell$ 을 바꾸면 “best parameter” 의 선택 기준이 바뀌고,</li>
+  <li>$D$ 를 바꾸면 <strong>uncertainty quantification</strong> 의 크기/모양만 바뀌는 식입니다.</li>
+</ul>
+
+<hr />
+
+<h3 id="gvi-vs-dvi-discrepancy-vi">GVI vs DVI (Discrepancy VI)</h3>
+
+<p>최근 VI 문헌에서는, posterior 와의 KL 대신 다른 divergence (또는 discrepancy) 를 쓰는 방식들이 많이 제안됩니다.</p>
+
+<ul>
+  <li>Rényi-α divergence 기반 VI</li>
+  <li>χ²-divergence 기반 VI</li>
+  <li>Wasserstein distance 기반 VI</li>
+  <li>기타 f-divergence 기반 VI 등</li>
+</ul>
+
+<p>논문에서는 이런 계열을 통칭해 <strong>Discrepancy Variational Inference (DVI)</strong> 라고 부르며,<br />
+RoT/GVI 관점에서 다음과 같이 비판합니다.</p>
+
+<ol>
+  <li><strong>같은 $\mathcal Q$ 를 쓰면서 posterior 와의 divergence 를 바꾸는 것은 Bayesian 의미에서 suboptimal</strong>입니다.
+    <ul>
+      <li>Bayes-as-optimization 관점에서 base 문제는 이미<br />
+\(\min_q \big\{\mathbb E_q[\ell] + \mathrm{KL}(q\|\pi)\big\}\)
+로 정해져 있습니다.</li>
+      <li>variational family $\mathcal Q$ 로 제한하면,<br />
+이 문제의 최적해는 <strong>KL 기반 VI 하나뿐</strong>입니다.</li>
+      <li>posterior 와의 다른 divergence 를 직접 줄이는 DVI 는<br />
+이 base optimization 의 “제한된 해” 가 아니므로,<br />
+이러한 의미에서 <strong>Bayesian optimality 를 잃는다</strong>고 주장합니다.</li>
+    </ul>
+  </li>
+  <li><strong>Modularity 가 깨집니다.</strong>
+    <ul>
+      <li>GVI (RoT) 에서는
+        <ul>
+          <li>$\ell$ 이 “어떤 $\theta$ 가 좋은가” 를</li>
+          <li>$D$ 가 “prior 대비 얼마나 멀어질 수 있는가 / dispersion” 을<br />
+담당하도록 설계되어 있습니다.</li>
+        </ul>
+      </li>
+      <li>따라서 divergence 를 바꾸더라도, 이상적으로 <strong>argmin 위치(최선의 $\theta$)</strong> 는<br />
+loss 가 결정하고 유지되며, $D$ 는 “그 주변에 mass 를 얼마나/어떻게 둘지” 만 조정해야 합니다.</li>
+      <li>반면 DVI 는 posterior 와의 divergence 를 직접 최적화하기 때문에,<br />
+divergence 를 바꾸는 순간 <strong>최적점 위치 자체까지 같이 움직여 버릴 수 있습니다.</strong><br />
+→ loss 역할과 regularization 역할이 뒤엉기게 됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>실제 예시: Bimodal mixture 에서의 비직관적 posterior</strong>
+    <ul>
+      <li>논문은 simple bimodal Gaussian mixture 예시에서
+        <ul>
+          <li>standard VI (KL, mean-field) 와</li>
+          <li>여러 DVI (다른 discrepancy) 를 비교합니다.</li>
+        </ul>
+      </li>
+      <li>일부 discrepancy 는
+        <ul>
+          <li>두 모드 사이의 어중간한 곳에 mass 를 두거나,</li>
+          <li>한 모드만 과도하게 살리는 등,
+직관적인 “좋은 parameter” 와는 동떨어진 posterior 를 만듭니다.</li>
+        </ul>
+      </li>
+      <li>저자들의 메시지는 다음과 같습니다.
+        <blockquote>
+          <p>단순히 divergence 를 바꾸는 것만으로<br />
+항상 “좋은 approximate posterior” 를 얻을 수 있다고 믿는 것은 위험하다.</p>
+        </blockquote>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>이에 반해 GVI 는 RoT/axioms 를 따르기 때문에</p>
+
+<ul>
+  <li>$\ell$ 과 $D$ 의 역할이 명확히 분리되고 (modular),</li>
+  <li>$D$ 를 바꾸더라도 “최선의 $\theta$” 는 동일하게 유지한 채,</li>
+  <li><strong>불확실성의 크기와 모양만 조정</strong>하는 것이 가능하다고 주장합니다.</li>
+</ul>
+
+<hr />
+
+<h3 id="black-box-gvi-bbgvi">Black-box GVI (BBGVI)</h3>
+
+<p>실제 계산 관점에서 보면, GVI objective 는</p>
+
+\[\mathcal J(q)
+=
+\mathbb E_q\bigg[\sum_{i=1}^n \ell(\theta, x_i)\bigg]
++ D(q \,\|\, \pi)\]
+
+<p>이며, 우리는 $q(\theta)$ 를 어떤 파라미터 $\kappa$ 를 가진 분포 $q_\kappa(\theta)$ 로 표현합니다.</p>
+
+<p>대부분의 경우 위 기대값과 regularization 항은 <strong>analytic 하지 않기 때문에</strong>,<br />
+논문에서는 <strong>Black-box GVI (BBGVI)</strong> 라는 이름으로 일반적인 최적화 스킴을 제안합니다.</p>
+
+<p>아이디어는 standard black-box VI 와 거의 동일합니다.</p>
+
+<ol>
+  <li><strong>Variational family 파라미터화</strong>
+    <ul>
+      <li>$q_\kappa(\theta)$ 의 예시:
+        <ul>
+          <li>Mean-field Gaussian: $\kappa = (\mu, \log \sigma)$</li>
+          <li>Normalizing flow: base Gaussian + invertible transform</li>
+          <li>BNN: 네트워크 weight 에 대한 factorized Gaussian 등</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Reparameterization / 샘플링</strong>
+    <ul>
+      <li>고정된 noise $\epsilon \sim p(\epsilon)$ 를 샘플링하고,</li>
+      <li>$\theta = g(\epsilon; \kappa)$ 로 변환하여 $\theta \sim q_\kappa$ 를 구현합니다.</li>
+    </ul>
+  </li>
+  <li><strong>Monte Carlo 로 objective 및 gradient 근사</strong>
+    <ul>
+      <li>샘플 ${\theta^{(s)}}$ 에 대해
+$$
+\widehat{\mathcal J}(\kappa)
+=
+\frac{1}{S}\sum_{s=1}^S
+\bigg[
+  \sum_{i=1}^n \ell(\theta^{(s)}, x_i)
+\bigg]
+        <ul>
+          <li>\widehat{D}(q_\kappa \,|\, \pi)
+$$</li>
+        </ul>
+      </li>
+      <li>$D$ 역시 analytic form 이 없으면 Monte Carlo / score function / reparam gradient 등으로 근사합니다.</li>
+      <li>reparameterization trick 덕분에<br />
+$\nabla_\kappa \widehat{\mathcal J}(\kappa)$ 는 backprop 으로 계산할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>Stochastic optimization</strong>
+    <ul>
+      <li>미니배치 $x_{1:m}$ 을 사용하면 SVI 스타일로 확장할 수 있습니다.</li>
+      <li>Adam / SGD 등을 사용해<br />
+$\kappa \leftarrow \kappa - \eta \nabla_\kappa \widehat{\mathcal J}(\kappa)$ 로 업데이트합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Standard VI (ELBO, NLL + KL) 도 이 틀의 특수 케이스이므로,<br />
+기존 black-box VI 코드가 있다면 <strong>loss $\ell$ 과 divergence $D$ 만 바꾸어 GVI 실험</strong>을 수행할 수 있다는 점을 강조합니다.</p>
+
+<hr />
+
+<h3 id="applications-bnn-deep-gp-에서의-gvi">Applications: BNN, Deep GP 에서의 GVI</h3>
+
+<p>논문 후반부에서는 GVI 를 실제 모델에 적용한 실험을 보여줍니다. (간단 요약)</p>
+
+<ol>
+  <li><strong>Bayesian Neural Networks (BNN)</strong>
+    <ul>
+      <li>Standard VI (NLL + KL, mean-field) 와<br />
+GVI (robust loss / tempered divergence 등) 를 비교합니다.</li>
+      <li>heavy-tailed noise, outlier 가 많은 상황에서
+        <ul>
+          <li>standard VI 는 overconfident / miscalibrated posterior 를 생성하는 반면,</li>
+          <li>GVI 는 분산을 더 적절히 키우고, 예측 calibration 이 개선되는 모습을 보입니다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Deep Gaussian Processes (Deep GP)</strong>
+    <ul>
+      <li>generalized loss + divergence 를 넣은 GVI 를 적용합니다.</li>
+      <li>Noise / model misspecification 세팅에서<br />
+GVI 가 standard VI 보다 더 robust 한 predictive performance 를 보인다고 보고합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>이 실험들은 “loss 와 divergence 라는 두 개의 다이얼을 돌려서,<br />
+Bayesian 추론의 <strong>robustness / calibration / misspecification 대응력</strong>을 조절할 수 있다”는 주장의 정성적 근거로 등장합니다.</p>
+
+<hr />
+
+<h2 id="discussion--takeaways">Discussion &amp; Takeaways</h2>
+
+<p>마지막으로, 이 논문을 정리하면 다음과 같습니다.</p>
+
+<ol>
+  <li><strong>Bayes 를 “최적화 문제”로 이해하자.</strong>
+    <ul>
+      <li>Bayes posterior 는
+\(\min_q \big\{ \mathbb E_q[\text{loss}] + \mathrm{KL}(q \,\|\, \pi) \big\}\)
+라는 무한 차원 최적화 문제의 해입니다.</li>
+      <li>이 관점은 VI, EM, generalized Bayes, PVI 등을 한 프레임에서 비교·확장하는 데 매우 유용합니다.</li>
+    </ul>
+  </li>
+  <li><strong>Standard VI(KL + ELBO) 는, 주어진 family 안에서는 “정석”이다.</strong>
+    <ul>
+      <li>Variational family $\mathcal Q$ 가 고정되어 있을 때,<br />
+KL 기반 VI 는 Bayes-as-optimization 을 $\mathcal Q$ 로 제한한 문제의 최적해입니다.</li>
+      <li>같은 $\mathcal Q$ 에서 다른 divergence 기반 VI(DVI)를 사용할 경우,<br />
+Bayesian optimality 관점에서 “왜 그것이 자연스러운 선택인지”를 추가로 설명해야 합니다.</li>
+    </ul>
+  </li>
+  <li><strong>RoT: 세 개의 다이얼로 posterior 를 디자인하는 프레임워크</strong>
+    <ul>
+      <li>Loss $\ell$ : 어떤 파라미터가 좋은지 (fit / scoring rule)</li>
+      <li>Divergence $D$ : prior 대비 얼마나 멀어질 수 있는지, 불확실성의 크기/모양</li>
+      <li>Feasible set $\Pi$ : 계산·표현 측면에서의 제약 (full, variational, flow, …)</li>
+    </ul>
+
+    <p>→ 이 세 가지를 동시에 튜닝하면서 “새로운 posterior” 를 설계하는 통일된 언어를 제공합니다.</p>
+  </li>
+  <li><strong>GVI: RoT 를 실제로 쓰기 위한 variational 버전</strong>
+    <ul>
+      <li>$\Pi = \mathcal Q$ 로 제한하여 tractable 하게 만들고,</li>
+      <li>Black-box 최적화(SVI, reparam, MC gradient) 를 사용해 구현할 수 있습니다.</li>
+      <li>RoT 의 공리를 계승하므로, loss 와 regularizer 의 역할이 modular 하게 유지된다는 장점이 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>PVI / scoring-rule 기반 VI 와의 연결</strong>
+    <ul>
+      <li>우리가 관심 있는 <strong>Predictive Variational Inference (PVI)</strong> 는<br />
+RoT/GVI 에서 보면 “loss $\ell$ 을 log-score 대신 다른 proper scoring rule 로 바꾸는 조합”으로 자연스럽게 해석할 수 있습니다.</li>
+      <li>즉, 이 논문은 PVI 를<br />
+“Bayes-as-optimization 의 한 generalization” 으로 어디에 위치시킬지 설명해 주는 이론적 배경이 됩니다.</li>
+    </ul>
+  </li>
+</ol>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-12-06T00:00:00+09:00">December 6, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+Generalized+Variational+Inference%3A+Three+arguments+for+deriving+new+posteriors%20https%3A%2F%2Fjoon0390.github.io%2Fgeneralized-variational-inference%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fgeneralized-variational-inference%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/generalized-variational-inference/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+Generalized+Variational+Inference%3A+Three+arguments+for+deriving+new+posteriors%20https%3A%2F%2Fjoon0390.github.io%2Fgeneralized-variational-inference%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/variational-inference/" class="pagination--pager" title="Variational Inference">이전</a>
+    
+    
+      <a href="/gibbs-posteriors/" class="pagination--pager" title="Gibbs Posteriors">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

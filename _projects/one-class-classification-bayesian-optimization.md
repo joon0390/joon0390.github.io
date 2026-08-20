@@ -6,6 +6,9 @@ collection: projects
 layout: single
 order: 8
 period: "2024.06-2026.04"
+header:
+  teaser: /assets/img/projects/one-class-classification-bayesian-optimization/OC-SVM.png
+teaser_alt: "OC-SVM 기반 정상 영역 경계 학습 개념"
 tags:
   - One-Class Classification
   - Bayesian Optimization
@@ -29,6 +32,11 @@ One-Class Classification(OCC)은 정상 데이터는 충분하지만 이상 데�
 
 이 프로젝트는 OCC 모델 자체보다 `하이퍼파라미터를 어떻게 찾을 것인가`에 초점을 둔 연구입니다. 특히 OC-SVM과 Deep SVDD는 모델 구조가 비교적 명확하더라도 `nu`, `gamma`, 네트워크 설정, 학습 조건 같은 하이퍼파라미터에 따라 성능 차이가 크게 나타날 수 있습니다. 따라서 Grid Search, Random Search, Bayesian Optimization을 비교해 어떤 탐색 전략이 불균형 이상 탐지 문제에서 더 효과적인지 확인했습니다.
 
+<figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/one-class-classification-bayesian-optimization/class_imbalance.png" alt="정상 데이터가 다수이고 이상 데이터가 소수인 클래스 불균형 예시">
+  <figcaption>One-Class Classification에서 다루는 클래스 불균형 상황</figcaption>
+</figure>
+
 ## 데이터와 EDA
 
 실험은 synthetic dataset과 실제 데이터 응용을 함께 고려했습니다. synthetic dataset에서는 정상:이상 비율을 `95:5`, `90:10`, `80:20`, `70:30`, `60:40`으로 바꾸며 불균형 정도가 달라질 때 탐색 방법별 성능이 어떻게 변하는지 확인했습니다. train/test 비율은 `8:2`로 유지했습니다.
@@ -48,6 +56,11 @@ EDA에서는 단순히 클래스 비율만 보는 것이 아니라, 이상 데�
 Grid Search는 해석이 쉽지만 후보 공간이 조금만 커져도 계산량이 빠르게 증가합니다. Random Search는 넓은 공간을 가볍게 훑을 수 있지만, 이전 실험 결과를 다음 탐색에 충분히 활용하지 못합니다. 반면 Bayesian Optimization은 이전 평가 결과를 바탕으로 성능이 좋을 가능성이 높은 영역과 아직 불확실한 영역을 균형 있게 탐색할 수 있습니다.
 
 모델 관점에서는 OC-SVM과 Deep SVDD를 중심으로 비교했습니다. OC-SVM은 정상 데이터가 놓이는 경계를 kernel 기반으로 학습하고, Deep SVDD는 딥러닝 표현 공간에서 정상 데이터를 하나의 중심 주변으로 모으는 방식입니다. 두 방법 모두 정상 패턴의 경계를 어떻게 잡느냐가 핵심이며, 이 경계는 하이퍼파라미터 설정에 매우 민감합니다.
+
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/one-class-classification-bayesian-optimization/OC-SVM.png" alt="OC-SVM이 정상 데이터 영역의 경계를 학습하고 바깥쪽 샘플을 이상으로 판단하는 개념도">
+  <figcaption>OC-SVM 기반 정상 영역 경계 학습 개념</figcaption>
+</figure>
 
 ## 성과(성능)
 

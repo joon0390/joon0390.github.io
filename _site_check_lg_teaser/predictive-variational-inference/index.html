@@ -1,0 +1,1265 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문 “Predictive variational inference: Learn the predictively optimal posterior distribution” 를 읽고 정리한 글입니다. 이 글에서 참고한 버전은 2026년 3월 30일 공개된 v3 입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution">
+<meta property="og:url" content="https://joon0390.github.io/predictive-variational-inference/">
+
+
+  <meta property="og:description" content="이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문 “Predictive variational inference: Learn the predictively optimal posterior distribution” 를 읽고 정리한 글입니다. 이 글에서 참고한 버전은 2026년 3월 30일 공개된 v3 입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-06T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/predictive-variational-inference/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution">
+    <meta itemprop="description" content="  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문“Predictive variational inference: Learn the predictively optimal posterior distribution”를 읽고 정리한 글입니다. 이 글에서 참고한 버전은 2026년 3월 30일 공개된 v3 입니다.">
+    <meta itemprop="datePublished" content="2026-04-06T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/predictive-variational-inference/" itemprop="url">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#standard-vi-와-뭐가-다른가">Standard VI 와 뭐가 다른가?</a><ul><li><a href="#vi는-posterior를-pvi는-predictive를-target으로-삼는다">VI는 posterior를, PVI는 predictive를 target으로 삼는다</a></li></ul></li><li><a href="#proper-scoring-rule-로-predictive-optimality-정의하기">Proper Scoring Rule 로 predictive optimality 정의하기</a><ul><li><a href="#1-logarithmic-score">1. Logarithmic score</a></li><li><a href="#2-quadratic-score--brier-score">2. Quadratic score / Brier score</a></li><li><a href="#3-interval-score">3. Interval score</a></li><li><a href="#4-crps">4. CRPS</a></li></ul></li><li><a href="#regularization-prior-쪽으로-붙일지-posterior-쪽으로-붙일지">Regularization: prior 쪽으로 붙일지, posterior 쪽으로 붙일지</a></li><li><a href="#가장-중요한-해석-pvi는-implicit-hierarchical-expansion-이다">가장 중요한 해석: PVI는 implicit hierarchical expansion 이다</a><ul><li><a href="#normal-example">Normal example</a></li></ul></li><li><a href="#heterogeneity-detection">Heterogeneity Detection</a></li><li><a href="#구현-측면에서-무엇이-새롭나">구현 측면에서 무엇이 새롭나?</a><ul><li><a href="#1-log-score-에-대한-rejection-sampling-기반-unbiased-gradient">1. Log score 에 대한 rejection-sampling 기반 unbiased gradient</a></li><li><a href="#2-crps-기반-likelihood-free-optimization">2. CRPS 기반 likelihood-free optimization</a></li></ul></li><li><a href="#experiments">Experiments</a><ul><li><a href="#1-golf-putting-misspecification-detection">1. Golf putting: misspecification detection</a></li><li><a href="#2-us-election-analysis-model-expansion-guide">2. U.S. election analysis: model expansion guide</a></li><li><a href="#3-cryoem-likelihood-free-inference">3. CryoEM: likelihood-free inference</a></li></ul></li><li><a href="#generalized-vi-와의-차이">Generalized VI 와의 차이</a></li><li><a href="#limitations">Limitations</a></li><li><a href="#summary">Summary</a></li><li><a href="#references">References</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문<br />
+<a href="https://arxiv.org/abs/2410.14843">“Predictive variational inference: Learn the predictively optimal posterior distribution”</a><br />
+를 읽고 정리한 글입니다. 이 글에서 참고한 버전은 <strong>2026년 3월 30일 공개된 v3</strong> 입니다.</p>
+</blockquote>
+
+<p>이전에 정리한 <a href="/variational-inference/"><strong>Variational Inference</strong></a> 와<br />
+<a href="/generalized-variational-inference/"><strong>Generalized Variational Inference</strong></a> 를 먼저 보고 오면 더 잘 연결됩니다.</p>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>이 논문의 핵심 메시지는 아주 명확합니다.</p>
+
+<blockquote>
+  <p><strong>모델이 틀릴 수 있다면, exact Bayes posterior 를 잘 근사하는 것 자체가 목표가 아닐 수 있다.</strong></p>
+</blockquote>
+
+<p>기존의 VI는 보통</p>
+
+\[q^\star(\theta)=
+\arg\min_{q\in\mathcal F}
+\mathrm{KL}\big(q(\theta)\,\|\,p(\theta\mid y)\big)\]
+
+<p>를 풀어서 <strong>Bayesian posterior</strong> 를 근사합니다.</p>
+
+<p>하지만 논문 저자들은 문제를 제기합니다.</p>
+
+<ul>
+  <li>우리가 정말 원하는 것이 parameter recovery 인가?</li>
+  <li>아니면 <strong>좋은 posterior predictive distribution</strong> 인가?</li>
+  <li>그리고 모델이 misspecified 되어 있다면, exact posterior 자체가 이미 잘못된 target 아닌가?</li>
+</ul>
+
+<p><strong>Predictive Variational Inference (PVI)</strong> 는 이 질문에서 시작합니다.</p>
+
+<p>PVI는 posterior 자체를 맞추는 대신,</p>
+
+\[q_\phi^Y(\tilde y)=
+\int_\Theta p(\tilde y\mid \theta)\,q_\phi(\theta)\,d\theta\]
+
+<p>라는 <strong>posterior predictive distribution</strong> 이
+실제 데이터 생성 과정에 최대한 가깝도록 하는 $q_\phi(\theta)$ 를 학습합니다.</p>
+
+<p>즉, VI가</p>
+
+<blockquote>
+  <p>“posterior approximation”</p>
+</blockquote>
+
+<p>에 가깝다면,</p>
+
+<p>PVI는</p>
+
+<blockquote>
+  <p>“predictive distribution optimization”</p>
+</blockquote>
+
+<p>에 가깝습니다.</p>
+
+<hr />
+
+<h2 id="standard-vi-와-뭐가-다른가">Standard VI 와 뭐가 다른가?</h2>
+
+<h3 id="vi는-posterior를-pvi는-predictive를-target으로-삼는다">VI는 posterior를, PVI는 predictive를 target으로 삼는다</h3>
+
+<p>기존 VI의 ELBO는 다음과 같습니다.</p>
+
+\[\mathrm{ELBO}(q)=
+\mathbb E_q\left[\sum_{i=1}^n \log p(y_i\mid\theta)\right]
+-\mathrm{KL}\big(q(\theta)\,\|\,p^{\mathrm{prior}}(\theta)\big).\]
+
+<p>반면 PVI는 적절한 scoring rule $S$ 를 정한 뒤,</p>
+
+\[\phi^\star=
+\arg\max_{\phi\in\Phi}
+\left\{
+\sum_{i=1}^n
+S\big(q_\phi^Y, y_i\big)-
+\lambda r(\phi)
+\right\}\]
+
+<p>를 풉니다.</p>
+
+<p>여기서 핵심은 <strong>어디에 로그가 붙는가</strong> 입니다.</p>
+
+<ul>
+  <li>
+    <p>VI:</p>
+
+\[\mathbb E_q[\log p(y_i\mid\theta)]\]
+  </li>
+  <li>
+    <p>PVI의 log-score 버전:</p>
+
+\[\log \int p(y_i\mid\theta)\,q_\phi(\theta)\,d\theta\]
+  </li>
+</ul>
+
+<p>즉,</p>
+
+<ul>
+  <li>VI는 <strong>posterior 평균을 낸 local likelihood fit</strong></li>
+  <li>PVI는 <strong>mixing 후의 predictive distribution fit</strong></li>
+</ul>
+
+<p>을 본다는 점에서 다릅니다.</p>
+
+<p>이 차이는 단순한 수식 위치 차이가 아니라,
+<strong>무엇을 최적화하는지 자체가 다르다</strong>는 뜻입니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>관점</th>
+      <th>Standard VI</th>
+      <th>PVI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>목표</td>
+      <td>$p(\theta\mid y)$ 근사</td>
+      <td>$q_\phi^Y(\tilde y)$ 최적화</td>
+    </tr>
+    <tr>
+      <td>공간</td>
+      <td>parameter space</td>
+      <td>outcome space</td>
+    </tr>
+    <tr>
+      <td>기준</td>
+      <td>posterior divergence / ELBO</td>
+      <td>scoring rule 기반 predictive fit</td>
+    </tr>
+    <tr>
+      <td>misspecification 에서</td>
+      <td>정확한 posterior를 잘 근사해도 predictive가 나쁠 수 있음</td>
+      <td>predictive quality 자체를 바로 target으로 삼음</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="proper-scoring-rule-로-predictive-optimality-정의하기">Proper Scoring Rule 로 predictive optimality 정의하기</h2>
+
+<p>PVI는 “좋은 예측”을 <strong>proper scoring rule</strong> 로 정의합니다.</p>
+
+<p>논문에서 쓰는 기본 아이디어는 다음과 같습니다.</p>
+
+<p>확률적 예측 분포 $P$ 에 대해 score 를 $S(P,\tilde y)$ 라고 하면,
+proper scoring rule 은 참분포 $p_{\mathrm{true}}$ 에서 최대가 되는 score 입니다.</p>
+
+<p>이를 이용하면</p>
+
+\[D_S(P, p_{\mathrm{true}})=
+S(p_{\mathrm{true}}, p_{\mathrm{true}})-
+S(P, p_{\mathrm{true}})\]
+
+<p>처럼 <strong>outcome space 상의 divergence</strong> 를 정의할 수 있습니다.</p>
+
+<p>즉 PVI는</p>
+
+<blockquote>
+  <p>parameter space 에서 posterior를 맞추는 대신,<br />
+outcome space 에서 predictive distribution을 맞춥니다.</p>
+</blockquote>
+
+<p>논문에서 다루는 대표적인 score 는 다음 네 가지입니다.</p>
+
+<h3 id="1-logarithmic-score">1. Logarithmic score</h3>
+
+\[S(P, y)=\log P(y)\]
+
+<ul>
+  <li>가장 표준적인 score 입니다.</li>
+  <li>이 경우 PVI는 predictive log-likelihood 를 직접 최적화합니다.</li>
+  <li>KL 관점과 연결되지만, <strong>Bayes posterior approximation</strong> 과는 여전히 다릅니다.</li>
+</ul>
+
+<h3 id="2-quadratic-score--brier-score">2. Quadratic score / Brier score</h3>
+
+<ul>
+  <li>categorical outcome 에 적합합니다.</li>
+  <li>log score 보다 calibration 차이를 더 민감하게 볼 수 있습니다.</li>
+</ul>
+
+<h3 id="3-interval-score">3. Interval score</h3>
+
+<ul>
+  <li>prediction interval 의 <strong>sharpness + coverage</strong> 를 함께 봅니다.</li>
+  <li>예측구간이 좁으면서도 데이터가 그 안에 잘 들어오는지를 평가합니다.</li>
+</ul>
+
+<h3 id="4-crps">4. CRPS</h3>
+
+<ul>
+  <li>예측분포 전체의 calibration 을 보는 score 입니다.</li>
+  <li>논문에서 특히 중요한 이유는,
+<strong>likelihood 값을 계산하지 못해도 posterior predictive sample 만 있으면 쓸 수 있기 때문</strong>입니다.</li>
+  <li>그래서 PVI는 <strong>simulation-based inference (SBI)</strong> 나 likelihood-free setting 에도 바로 연결됩니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="regularization-prior-쪽으로-붙일지-posterior-쪽으로-붙일지">Regularization: prior 쪽으로 붙일지, posterior 쪽으로 붙일지</h2>
+
+<p>논문은 PVI objective 에 regularization 항을 넣습니다.</p>
+
+<p>두 가지 선택이 있습니다.</p>
+
+\[r^{\mathrm{prior}}(\phi)=
+\mathrm{KL}\big(q_\phi(\theta)\,\|\,p^{\mathrm{prior}}(\theta)\big)\]
+
+\[r^{\mathrm{post}}(\phi)=
+\mathrm{KL}\big(q_\phi(\theta)\,\|\,p(\theta\mid y)\big)\]
+
+<p>해석은 다음과 같습니다.</p>
+
+<ol>
+  <li><strong>Prior regularization</strong>
+    <ul>
+      <li>standard VI 에서 보던 prior regularization 과 비슷합니다.</li>
+      <li>predictive fit 을 보되, prior 에서 너무 멀어지지 않게 합니다.</li>
+    </ul>
+  </li>
+  <li><strong>Posterior regularization</strong>
+    <ul>
+      <li>exact posterior 쪽으로 당기는 regularization 입니다.</li>
+      <li>$\lambda$ 를 키우면 PVI가 점점 Bayes/VI 쪽으로 가까워집니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>즉 PVI는</p>
+
+<ul>
+  <li>$\lambda=0$ 이면 pure predictive optimization</li>
+  <li>$\lambda\to\infty$ 이면 Bayes 쪽</li>
+</ul>
+
+<p>으로 이해할 수 있습니다.</p>
+
+<p>이 부분이 좋은 이유는,
+PVI를 “Bayes를 완전히 버리는 방법”이 아니라</p>
+
+<blockquote>
+  <p><strong>predictive robustness 와 Bayesian regularization 사이를 조절하는 방법</strong></p>
+</blockquote>
+
+<p>으로 볼 수 있게 해준다는 점입니다.</p>
+
+<hr />
+
+<h2 id="가장-중요한-해석-pvi는-implicit-hierarchical-expansion-이다">가장 중요한 해석: PVI는 implicit hierarchical expansion 이다</h2>
+
+<p>이 논문에서 가장 인상적인 부분은,
+PVI posterior 의 분산이 줄어들지 않는 현상을
+“VI approximation error” 가 아니라
+“parameter heterogeneity” 로 해석한다는 점입니다.</p>
+
+<h3 id="normal-example">Normal example</h3>
+
+<p>논문은 아주 간단한 예를 듭니다.</p>
+
+<p>모델은</p>
+
+\[y\mid \theta \sim \mathcal N(\theta, 1)\]
+
+<p>인데, 실제 데이터 생성 과정은</p>
+
+\[y \sim \mathcal N(0, 2)\]
+
+<p>라고 합시다.</p>
+
+<p>이때 exact Bayes posterior 는 데이터가 많아질수록
+$\theta=0$ 주변의 점질량으로 수렴합니다.
+즉, regular Bayes 는</p>
+
+<blockquote>
+  <p>“하나의 고정된 $\theta$ 가 있다”</p>
+</blockquote>
+
+<p>는 complete pooling view 를 끝까지 유지합니다.</p>
+
+<p>그런데 PVI는 다르게 움직입니다.
+논문에 따르면 이 경우 PVI posterior 는</p>
+
+\[q(\theta)\to \mathcal N(0,\sqrt{3})\]
+
+<p>로 수렴합니다.</p>
+
+<p>왜냐하면 이 분포를 mixing 하면 posterior predictive 가</p>
+
+\[\tilde y \sim \mathcal N(0, 2)\]
+
+<p>를 정확히 재현할 수 있기 때문입니다.</p>
+
+<p>즉 PVI는</p>
+
+<ul>
+  <li>“모델이 틀렸으니 uncertainty 가 0 으로 가면 안 된다”</li>
+  <li>“오히려 이 분산은 population-level heterogeneity 를 설명하는 분산일 수 있다”</li>
+</ul>
+
+<p>고 해석합니다.</p>
+
+<p>이 관점에서 저자들은 PVI를</p>
+
+<blockquote>
+  <p><strong>explicit hierarchical Bayes 를 직접 쓰지 않고도,<br />
+parameter population distribution 을 학습하는 implicit hierarchical expansion</strong></p>
+</blockquote>
+
+<p>으로 봅니다.</p>
+
+<p>이 해석은 상당히 강합니다.</p>
+
+<ul>
+  <li>standard Bayes: 하나의 true parameter 에 수렴</li>
+  <li>PVI: 필요하다면 parameter distribution 자체에 수렴</li>
+</ul>
+
+<p>즉 misspecification 하에서는 posterior variance 가
+“사라져야 할 approximation artifact” 가 아니라
+“남아 있어야 하는 signal” 이 됩니다.</p>
+
+<hr />
+
+<h2 id="heterogeneity-detection">Heterogeneity Detection</h2>
+
+<p>이제 위 해석을 practical 하게 쓰면,
+PVI posterior 의 분산은 <strong>model check</strong> 도구가 됩니다.</p>
+
+<p>논문의 주장은 대략 이렇습니다.</p>
+
+<ul>
+  <li>잘 지정된 모델이면 PVI도 결국 좁은 posterior 로 수렴</li>
+  <li>모델이 틀렸거나 어떤 parameter 가 population 에서 실제로 변하면,
+PVI posterior 가 넓게 남을 수 있음</li>
+</ul>
+
+<p>그래서</p>
+
+<blockquote>
+  <p><strong>PVI variance 가 크면, 해당 parameter 를 varying effect 나 hierarchical effect 로 확장해야 할 가능성</strong></p>
+</blockquote>
+
+<p>을 시사합니다.</p>
+
+<p>물론 논문도 이 부분의 한계를 같이 인정합니다.</p>
+
+<ul>
+  <li>finite sample 에서는 variance 가 큰 이유가
+정말 misspecification 때문인지,
+아니면 PVI의 느린 수렴률 때문인지 구분이 쉽지 않습니다.</li>
+  <li>따라서 heterogeneity detection 은 좋은 heuristic 이지만,
+자동화된 정답 판정기로 받아들이면 위험합니다.</li>
+</ul>
+
+<p>그래도 “posterior가 넓으면 모델을 더 유연하게 바꿔라” 라는 메시지는
+실전 모델링에서 꽤 유용합니다.</p>
+
+<hr />
+
+<h2 id="구현-측면에서-무엇이-새롭나">구현 측면에서 무엇이 새롭나?</h2>
+
+<p>PVI는 아이디어만 보면 간단하지만,
+실제로는 gradient 계산이 쉽지 않습니다.</p>
+
+<p>특히 log score 에서는</p>
+
+\[\log \int p(y_i\mid\theta)\,q_\phi(\theta)\,d\theta\]
+
+<p>를 직접 최적화해야 하므로,
+Monte Carlo 근사와 로그가 섞이면서 bias 문제가 생깁니다.</p>
+
+<p>논문은 여기서 두 가지 포인트를 제안합니다.</p>
+
+<h3 id="1-log-score-에-대한-rejection-sampling-기반-unbiased-gradient">1. Log score 에 대한 rejection-sampling 기반 unbiased gradient</h3>
+
+<p>저자들은 finite minibatch 에서 생기는 bias 를 줄이기 위해
+rejection sampling 을 이용한 unbiased gradient estimator 를 제안합니다.</p>
+
+<p>이 부분은 단순히 “PVI라는 철학”만 이야기하는 논문이 아니라,</p>
+
+<blockquote>
+  <p><strong>실제로 stochastic optimization 이 가능하도록 gradient estimator 까지 설계한 논문</strong></p>
+</blockquote>
+
+<p>이라는 점에서 중요합니다.</p>
+
+<h3 id="2-crps-기반-likelihood-free-optimization">2. CRPS 기반 likelihood-free optimization</h3>
+
+<p>CRPS는 density evaluation 이 아니라 <strong>simulation</strong> 만 있으면 쓸 수 있기 때문에,
+likelihood-free model 에 바로 적용됩니다.</p>
+
+<p>즉,</p>
+
+<ul>
+  <li>posterior sample $\theta \sim q_\phi(\theta)$ 를 뽑고</li>
+  <li>simulator 에 넣어 $y^{\mathrm{sim}} \sim p(y\mid\theta)$ 를 생성한 뒤</li>
+  <li>관측 데이터와 simulation 사이의 discrepancy 를 줄이도록 학습</li>
+</ul>
+
+<p>할 수 있습니다.</p>
+
+<p>이건 ABC, neural SBI 류 문제와도 자연스럽게 연결됩니다.</p>
+
+<hr />
+
+<h2 id="experiments">Experiments</h2>
+
+<p>논문은 세 가지 대표 실험을 보여줍니다.</p>
+
+<h3 id="1-golf-putting-misspecification-detection">1. Golf putting: misspecification detection</h3>
+
+<p>Gelman and Nolan (2002)의 골프 퍼팅 데이터에서
+logistic regression 과 geometric model 을 비교합니다.</p>
+
+<ul>
+  <li>misspecified 된 logistic regression 에서는
+Bayes posterior 가 너무 좁고 잘못된 predictive curve 를 고릅니다.</li>
+  <li>PVI는 posterior 를 더 넓게 잡아 predictive fit 을 개선합니다.</li>
+  <li>반대로 geometric model 처럼 잘 맞는 경우에는
+Bayes 와 PVI가 거의 같은 결론으로 갑니다.</li>
+</ul>
+
+<p>즉,</p>
+
+<blockquote>
+  <p><strong>PVI posterior 가 넓게 남는 현상 자체가 misspecification signal</strong></p>
+</blockquote>
+
+<p>이라는 것을 보여주는 예시입니다.</p>
+
+<h3 id="2-us-election-analysis-model-expansion-guide">2. U.S. election analysis: model expansion guide</h3>
+
+<p>미국 대선 turnout 데이터를 이용한 다층 로지스틱 회귀 예제에서는,
+어떤 interaction 이 더 필요할지를 PVI variance 로 진단합니다.</p>
+
+<ul>
+  <li>VI는 misspecified model 에서도 계속 concentrate 합니다.</li>
+  <li>PVI는 특정 state 에서 variance 가 더 크게 남는 것을 보여줍니다.</li>
+  <li>저자들은 이를 근거로
+“이 state 들은 coefficient 가 population 에서 vary 해야 한다”
+고 해석합니다.</li>
+</ul>
+
+<p>즉 PVI는 단순 예측 개선을 넘어서,</p>
+
+<blockquote>
+  <p><strong>어떤 방향으로 hierarchical model 을 확장할지 알려주는 진단 도구</strong></p>
+</blockquote>
+
+<p>로 쓰입니다.</p>
+
+<h3 id="3-cryoem-likelihood-free-inference">3. CryoEM: likelihood-free inference</h3>
+
+<p>이 논문의 응용 측면에서 가장 강한 부분입니다.</p>
+
+<p>cryoEM에서는</p>
+
+<ul>
+  <li>simulator 는 있지만</li>
+  <li>likelihood 는 intractable 하고</li>
+  <li>게다가 분자 구조 자체가 population 내에서 heterogeneous 합니다.</li>
+</ul>
+
+<p>이 상황에서 exact Bayes posterior 는
+샘플 수가 많아질수록 오히려 <strong>과신한 point estimate</strong> 로 붕괴할 수 있습니다.</p>
+
+<p>반면 PVI-CRPS 는</p>
+
+<ul>
+  <li>likelihood 계산 없이</li>
+  <li>simulator 기반으로</li>
+  <li>분자 opening angle 의 <strong>population distribution</strong> 을 직접 학습합니다.</li>
+</ul>
+
+<p>즉 이 예제에서는 $q_\phi(\theta)$ 가 단순한 variational artifact 가 아니라,
+실제로 물리적으로 의미 있는 population distribution 으로 해석됩니다.</p>
+
+<hr />
+
+<h2 id="generalized-vi-와의-차이">Generalized VI 와의 차이</h2>
+
+<p>이 논문은 기존 generalized Bayes / generalized VI 와도 비교합니다.</p>
+
+<p>표면적으로 보면 둘 다</p>
+
+<ul>
+  <li>loss 를 바꾸고</li>
+  <li>divergence 를 바꾸고</li>
+  <li>Bayes를 일반화한다</li>
+</ul>
+
+<p>는 점에서 비슷해 보입니다.</p>
+
+<p>하지만 논문의 주장은 분명합니다.</p>
+
+<blockquote>
+  <p><strong>PVI는 generalized VI와 “정신적으로” 다른 프레임워크다.</strong></p>
+</blockquote>
+
+<p>왜냐하면 generalized VI는 여전히</p>
+
+<ul>
+  <li>$(y,\theta)$ space 의 loss</li>
+  <li>$\theta$ space 의 divergence</li>
+</ul>
+
+<p>를 중심으로 posterior 를 정의하는 반면,
+PVI는</p>
+
+<ul>
+  <li><strong>posterior predictive distribution</strong></li>
+  <li><strong>outcome-space scoring rule</strong></li>
+</ul>
+
+<p>을 중심으로 objective 를 짜기 때문입니다.</p>
+
+<p>특히 log score 를 쓰더라도</p>
+
+<ul>
+  <li>generalized VI: $\mathbb E_q[\log p(y\mid\theta)]$</li>
+  <li>PVI: $\log \int p(y\mid\theta)q(\theta)d\theta$</li>
+</ul>
+
+<p>라서 둘은 일반적으로 같지 않습니다.</p>
+
+<p>이 차이 때문에 PVI는</p>
+
+<blockquote>
+  <p><strong>continuous stacking</strong> 혹은<br />
+<strong>continuous predictive model averaging</strong></p>
+</blockquote>
+
+<p>처럼 읽는 편이 더 자연스럽습니다.</p>
+
+<hr />
+
+<h2 id="limitations">Limitations</h2>
+
+<p>논문이 인정하는 한계도 분명합니다.</p>
+
+<ol>
+  <li><strong>score 선택이 중요합니다.</strong>
+    <ul>
+      <li>어떤 predictive property 를 중요하게 보는지에 따라 결과가 달라집니다.</li>
+      <li>log score, interval score, CRPS 는 서로 다른 목적을 가집니다.</li>
+    </ul>
+  </li>
+  <li><strong>IID / exchangeable 가정에 기대고 있습니다.</strong>
+    <ul>
+      <li>논문 전개는 기본적으로 conditionally IID setting 위에 서 있습니다.</li>
+      <li>시계열, dependent data, structured data 로 가면 확장이 더 필요합니다.</li>
+    </ul>
+  </li>
+  <li><strong>finite-sample 해석은 아직 조심해야 합니다.</strong>
+    <ul>
+      <li>posterior variance 가 큰 이유를
+misspecification 과 느린 수렴 중 무엇으로 볼지 모호할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>parameter truth 보다는 predictive truth 에 더 가깝습니다.</strong>
+    <ul>
+      <li>따라서 해석의 중심은 “이 posterior가 진짜 posterior 인가?” 가 아니라
+“이 posterior가 predictive distribution 을 잘 만들도록 돕는가?” 에 있어야 합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="summary">Summary</h2>
+
+<p>제가 읽고 느낀 이 논문의 핵심은 네 가지입니다.</p>
+
+<ol>
+  <li><strong>PVI는 Bayes posterior approximation 이 아니라 predictive optimization 이다.</strong>
+    <ul>
+      <li>이 점을 놓치면 논문의 핵심을 거의 놓치게 됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>misspecification 하에서는 posterior variance 가 줄어들지 않는 것이 오히려 장점일 수 있다.</strong>
+    <ul>
+      <li>이 분산은 latent heterogeneity 나 model expansion 필요성을 드러냅니다.</li>
+    </ul>
+  </li>
+  <li><strong>PVI는 implicit hierarchical Bayes 로 읽을 수 있다.</strong>
+    <ul>
+      <li>“parameter 하나” 대신 “parameter population” 을 학습하는 관점입니다.</li>
+    </ul>
+  </li>
+  <li><strong>CRPS 덕분에 likelihood-free inference 로 자연스럽게 확장된다.</strong>
+    <ul>
+      <li>이 부분은 SBI 문맥에서 특히 매력적입니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>개인적으로는 이 논문을</p>
+
+<blockquote>
+  <p><strong>“VI를 predictive scoring rule 관점으로 다시 세운 논문”</strong></p>
+</blockquote>
+
+<p>이라기보다,</p>
+
+<blockquote>
+  <p><strong>“Bayesian inference의 목표를 posterior accuracy 에서 predictive adequacy 로 옮겨 놓은 논문”</strong></p>
+</blockquote>
+
+<p>으로 읽는 것이 더 정확하다고 느꼈습니다.</p>
+
+<p>정리하면 PVI는</p>
+
+<ul>
+  <li>exact posterior 를 근사하는 또 하나의 VI 변형이라기보다</li>
+  <li><strong>misspecified world 에서 어떤 uncertainty 를 남겨야 하는가</strong> 를 다시 묻는 프레임워크</li>
+</ul>
+
+<p>에 가깝다고 할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/2410.14843">Lai, J., Linero, A., &amp; Yao, Y. (2024; revised 2026-03-30). <em>Predictive variational inference: Learn the predictively optimal posterior distribution</em>. arXiv:2410.14843.</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2026-04-06T00:00:00+09:00">April 6, 2026</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+Predictive+variational+inference%3A+Learn+the+predictively+optimal+posterior+distribution%20https%3A%2F%2Fjoon0390.github.io%2Fpredictive-variational-inference%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fpredictive-variational-inference%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/predictive-variational-inference/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+Predictive+variational+inference%3A+Learn+the+predictively+optimal+posterior+distribution%20https%3A%2F%2Fjoon0390.github.io%2Fpredictive-variational-inference%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/abc-posterior/" class="pagination--pager" title="Approximate Bayesian Computation Posterior">이전</a>
+    
+    
+      <a href="/dit/" class="pagination--pager" title="DiT : Scalable Diffusion Models with Transformers">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/sampling-can-be-faster-than-optimization/" rel="permalink">[Paper Review] Sampling Can Be Faster Than Optimization
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Ma, Chen, Jin, Flammarion, Jordan (2019) 의 논문
+Sampling Can Be Faster Than Optimization 을 읽고 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

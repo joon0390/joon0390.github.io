@@ -1,0 +1,832 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>AIC &amp; BIC Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="회귀분석에 대한 기본적인 내용은 Linear Regression 포스팅을 참고해주세요">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="AIC &amp; BIC">
+<meta property="og:url" content="https://joon0390.github.io/aicbic/">
+
+
+  <meta property="og:description" content="회귀분석에 대한 기본적인 내용은 Linear Regression 포스팅을 참고해주세요">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-11-10T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/aicbic/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="AIC &amp; BIC">
+    <meta itemprop="description" content="회귀분석에 대한 기본적인 내용은 Linear Regression 포스팅을 참고해주세요">
+    <meta itemprop="datePublished" content="2025-11-10T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/aicbic/" itemprop="url">AIC &amp; BIC
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#multiple-linear-regression">Multiple Linear Regression</a></li><li><a href="#model-assumption">Model Assumption</a></li><li><a href="#why-model-selection">Why Model Selection</a></li><li><a href="#aic-bic">AIC, BIC</a><ul><li><a href="#aic">AIC</a><ul><li><a href="#formula">Formula</a></li><li><a href="#interpretation">Interpretation</a></li><li><a href="#왜--2-logl인가">왜 $-2 \log(L)$인가?</a></li></ul></li><li><a href="#bic">BIC</a><ul><li><a href="#formula-1">Formula</a></li><li><a href="#interpretation-1">Interpretation</a></li></ul></li></ul></li><li><a href="#code">Code</a></li><li><a href="#summary">Summary</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p>회귀분석에 대한 기본적인 내용은 <a href="/linear-regression/">Linear Regression</a> 포스팅을 참고해주세요</p>
+
+<h2 id="multiple-linear-regression">Multiple Linear Regression</h2>
+
+<p>2개 이상의 변수를 설명변수로 사용하는 경우 다음과 같은 회귀 모델을 고려합니다.</p>
+
+\[y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_p x_p + \epsilon\]
+
+<ul>
+  <li>이를 통해 여러 변수의 효과를 파악하고 변수 간의 Partial Effect를 추정합니다.</li>
+</ul>
+
+<p>하지만 변수의 개수가 많아짐에 따라 문제가 발생할 수 있습니다.</p>
+
+<h2 id="model-assumption">Model Assumption</h2>
+<p>AIC/BIC에 앞서 회귀모델이 왜 모델의 “품질”을 점검해야 하는 지부터 알아야 합니다.</p>
+
+<ol>
+  <li><strong>선형성</strong>
+    <ul>
+      <li>$x$와 $y$는 선형 관계에 있어야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>독립성</strong>
+    <ul>
+      <li>모델의 Residual은 서로 독립이어야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>등분산성</strong>
+    <ul>
+      <li>오차의 분산은 일정해야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>정규성</strong>
+    <ul>
+      <li>오차는 정규분포에 가까워야 한다.</li>
+    </ul>
+  </li>
+  <li><strong>다중공선성 없음</strong>
+    <ul>
+      <li>설명변수 간의 지나치게 높은 상관관계는 문제를 일으킨다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>$\rightarrow$ 이 가정들이 만족되지 않는 경우에는 예측력이 떨어지며 추론에 왜곡이 생길 수 있습니다.</p>
+
+<h2 id="why-model-selection">Why Model Selection</h2>
+<p>Multiple Linear Regression에서는 변수를 많이 넣을수록 학습 데이터에 대한 적합도는 좋아집니다.</p>
+
+<p>극단적인 예시로 $R^2$는 더미 변수를 추가하여도 항상 증가하고 SS는 항상 감소합니다.
+그래서 Full Model이 더 좋은 것이라고 오해할 수 있습니다.</p>
+
+<p>하지만 이런 경우에는 과적합(overfitting)이 발생하며 해석 가능성이 저하되고 불필요한 변수를 포함하게 될 수 있습니다.</p>
+
+<p>그래서 모델을 비교하고 적절하게 선택할 기준이 필요해집니다.</p>
+
+<p>여기서 오늘의 주제인 AIC, BIC 같은 모델 평가 지표들의 개념이 나오게 됩니다.</p>
+
+<h2 id="aic-bic">AIC, BIC</h2>
+<ul>
+  <li><strong>AIC : Akaike Information Criterion</strong></li>
+  <li><strong>BIC : Bayesian Information Criterion</strong></li>
+</ul>
+
+<p>두 기준들은 다음을 동시에 고려합니다.</p>
+<ol>
+  <li>모델의 적합도(Likelihood)</li>
+  <li>변수 개수 $k$에 대한 패널티</li>
+</ol>
+
+<p>즉, 너무 복잡하지 않으면서도 잘 맞는 모델을 선택하기 위한 Information Criterion입니다.</p>
+
+<h3 id="aic">AIC</h3>
+<p>AIC는 1974년 Akaike가 정보이론에 기반하여 제안한 Criterion이며, 특히 예측 성능을 중요하게 여기는 방향으로 설계되어 있다.</p>
+
+<h4 id="formula">Formula</h4>
+<p>\(\text{AIC} = -2\log(L) + 2k\)</p>
+<ul>
+  <li>$L$ : Likelihood(모델의 적합도)</li>
+  <li>$k$ : 모델의 파라미터 개수</li>
+</ul>
+
+<h4 id="interpretation">Interpretation</h4>
+<ul>
+  <li>$-2\log(L)$은 모델이 데이터를 잘 설명할수록 작아집니다.</li>
+  <li>하지만 변수를 많이 넣으면 Likelihood는 항상 증가하기 때문에 복잡한 모델이 무조건 낮아지는 문제가 발생합니다.</li>
+</ul>
+
+<p>그래서 $2k$ 패널티 term을 추가하여 복잡성을 조절합니다.</p>
+
+<h4 id="왜--2-logl인가">왜 $-2 \log(L)$인가?</h4>
+
+<p>Likelihood Ratio Test(LRT)에서는 다음 통계량을 사용합니다.</p>
+
+\[-2 \left\{ \log L_{\text{reduced}} - \log L_{\text{full}} \right\}\]
+
+<p>이 값이 <a href="https://en.wikipedia.org/wiki/Wilks%27_theorem">Wilks’ Theorem</a>에 의해 근사적으로 $\chi^2$ 분포를 따르기 때문에 매우 다루기 쉽습니다.</p>
+
+<p>따라서 AIC에서도 <strong>일관성 및 비교 편의성</strong>을 위해 $-2\log(L)$ 형태를 사용합니다.</p>
+
+<ul>
+  <li>모델의 deviance</li>
+  <li>가능도비 검정(LRT)</li>
+  <li>$\chi^2$ 기반 해석</li>
+  <li>F-test 구조</li>
+</ul>
+
+<p>와 스케일을 맞추기 위한 선택입니다.</p>
+
+<p>즉, <strong>이론적으로 자연스럽고 기존 통계 검정 도구와 호환되는 형태이기 때문에</strong><br />
+AIC를 $-2\log(L)$ 형태로 정의하는 것입니다.</p>
+
+<h3 id="bic">BIC</h3>
+<p>BIC는 1978년 Schwarz가 Bayesian 관점에서 제안한 정보 기준입니다. IC와 비슷하지만 패널티를 훨씬 더 강하게 주기 때문에 “단순한 모델”을 선호하게 됩니다.</p>
+
+<h4 id="formula-1">Formula</h4>
+<p>\(\text{BIC} = -2\log(L) + k\log(n)\)</p>
+
+<ul>
+  <li>$n$ : sample size</li>
+  <li>$k$ : 파라미터 개수</li>
+  <li>$\log(n)$이 penalty 역할</li>
+</ul>
+
+<h4 id="interpretation-1">Interpretation</h4>
+<ul>
+  <li>적합도(데이터 설명력) $\rightarrow$ $-2\log(L)$</li>
+  <li>복잡도 패널티 $\rightarrow$ $k\log(n)$</li>
+</ul>
+
+<p>따라서 BIC는</p>
+
+<ul>
+  <li>불필요한 변수가 있으면 매우 강하게 패널티를 부여합니다.</li>
+  <li>따라서 중요한 변수만 남기고 싶은 간결한 모델을 찾는 데 유리합니다.</li>
+</ul>
+
+<h2 id="code">Code</h2>
+
+<p>아래는 Boston 데이터를 이용해 여러 회귀모형을 만들고 각 모델의 AIC와 BIC를 계산하는 코드와 결과입니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-{R}">library(MASS)
+
+df &lt;- Boston
+
+# 여러 회귀모형 만들기
+fit1 &lt;- lm(medv ~ lstat, data=df)
+fit2 &lt;- lm(medv ~ lstat + rm, data=df)
+fit3 &lt;- lm(medv ~ lstat + rm + ptratio, data=df)
+fit4 &lt;- lm(medv ~ lstat + rm + ptratio + nox, data=df)
+fit_full &lt;- lm(medv ~ ., data=df)
+
+# AIC, BIC 추출
+aic_values &lt;- c(
+  Model1 = AIC(fit1),
+  Model2 = AIC(fit2),
+  Model3 = AIC(fit3),
+  Model4 = AIC(fit4),
+  Full   = AIC(fit_full)
+)
+
+bic_values &lt;- c(
+  Model1 = BIC(fit1),
+  Model2 = BIC(fit2),
+  Model3 = BIC(fit3),
+  Model4 = BIC(fit4),
+  Full   = BIC(fit_full)
+)
+
+aic_values
+bic_values
+
+</code></pre>
+<p><img src="/assets/img/aicbic/image.png" alt="AIC&amp;BIC" /></p>
+
+<p>Boston 데이터에서는</p>
+
+<ul>
+  <li><strong>Full Model이 AIC/BIC 모두 최적</strong></li>
+  <li>이는 13개의 변수들이 medv와 모두 어느 정도 관련이 있어 적합도 개선이 penalty보다 훨씬 크기 때문으로 보입니다.</li>
+</ul>
+
+<p>하지만 해석 가능성을 고려하면 <code>lstat</code>, <code>rm</code>, <code>ptratio</code>만 포함한 <strong>Model3</strong>는 단순하면서도 성능이 높은 “해석 중심 모델”로 충분히 의미가 있다고 볼 수 있습니다.</p>
+
+<h2 id="summary">Summary</h2>
+
+<ul>
+  <li>AIC와 BIC는 모두 “모델의 적절한 복잡도”를 찾기 위한 정보 기준입니다.</li>
+  <li>둘 다 적합도(−2logL)에서 시작하지만 패널티가 다릅니다.</li>
+  <li>AIC는 예측력 중심 → 패널티 작음(2k)</li>
+  <li>BIC는 단순한 모델 중심 → 패널티 큼(k log n)</li>
+  <li>그래서 두 기준은 서로 다른 모델을 선택할 수 있습니다.</li>
+  <li>목적이 “예측”이면 AIC, “해석·단순성”이면 BIC가 적합하다고 할 수 있습니다.</li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-11-10T00:00:00+09:00">November 10, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=AIC+%26+BIC%20https%3A%2F%2Fjoon0390.github.io%2Faicbic%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Faicbic%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/aicbic/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=AIC+%26+BIC%20https%3A%2F%2Fjoon0390.github.io%2Faicbic%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/graphpca/" class="pagination--pager" title="Graph PCA">이전</a>
+    
+    
+      <a href="/filtering/" class="pagination--pager" title="Filtering &amp; State Space Model">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

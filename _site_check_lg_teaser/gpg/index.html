@@ -1,0 +1,911 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] Gaussian Processes Over Graphs Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Venkitaraman et al. (2018) 의 논문 Gaussian Processes Over Graphs를 읽고 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] Gaussian Processes Over Graphs">
+<meta property="og:url" content="https://joon0390.github.io/gpg/">
+
+
+  <meta property="og:description" content="이 포스팅은 Venkitaraman et al. (2018) 의 논문 Gaussian Processes Over Graphs를 읽고 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-05-23T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/gpg/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] Gaussian Processes Over Graphs">
+    <meta itemprop="description" content="  이 포스팅은 Venkitaraman et al. (2018) 의 논문 Gaussian Processes Over Graphs를 읽고 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-05-23T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/gpg/" itemprop="url">[Paper Review] Gaussian Processes Over Graphs
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#background-graph-signal-processing">Background: Graph Signal Processing</a><ul><li><a href="#graph-laplacian">Graph Laplacian</a></li><li><a href="#graph-fourier--smoothing-filter">Graph Fourier &amp; Smoothing Filter</a></li></ul></li><li><a href="#methodology">Methodology</a><ul><li><a href="#1-graph-smoothing-prior">1. Graph-Smoothing Prior</a></li><li><a href="#2-gpg-covariance-function">2. GPG Covariance Function</a></li><li><a href="#3-variance-reduction-proof">3. Variance Reduction Proof</a></li><li><a href="#4-inference--predictive-distribution">4. Inference &amp; Predictive Distribution</a></li></ul></li><li><a href="#experiments">Experiments</a><ul><li><a href="#synthetic-graph-signal">Synthetic Graph Signal</a></li></ul></li><li><a href="#conclusion">Conclusion</a></li><li><a href="#references">References</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Venkitaraman et al. (2018) 의 논문 <a href="https://arxiv.org/pdf/1803.05776">Gaussian Processes Over Graphs</a>를 읽고 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<blockquote>
+  <p>그래프에 대한 개념은 <a href="/graph/">Graph</a> 글을 참고하세요.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>전통적인 Gaussian Process(GP)는 <strong>입력</strong> 간의 유사도만을 반영해 함수값을 모델링하지만, <strong>출력 벡터</strong>의 구조(예: 그래프 연결)에는 무관심합니다. 본 논문은 <strong>그래프 라플라시안</strong>을 GP prior에 결합함으로써, 노드 간 ‘매끄러움(smoothness)’ 제약을 추가한 <strong>GPG (Gaussian Processes on Graphs)</strong> 를 제안합니다.</p>
+
+<ul>
+  <li><strong>문제</strong>: GP의 predictive variance가 소량·노이즈 데이터에서 과도하게 큼.</li>
+  <li><strong>해결</strong>: 출력 노드 차원에서 $(I + \alpha L)^{-1}$ 스무딩 필터를 공분산에 삽입.</li>
+  <li><strong>주장</strong>: GPG는 non‐trivial 그래프에서 항상 predictive variance를 줄이며, 실제 데이터에서도 성능 우수.</li>
+</ul>
+
+<hr />
+
+<h2 id="background-graph-signal-processing">Background: Graph Signal Processing</h2>
+
+<h3 id="graph-laplacian">Graph Laplacian</h3>
+<p>그래프 $G=(V,E)$에 대해 라플라시안 행렬 $L$ 은 
+\(L = D - A,\quad D_{ii}=\sum_j A_{ij}\)<br />
+이며,<br />
+\(y^\top L\,y = \sum_{(i,j)\in E}A_{ij}(y_i-y_j)^2\)<br />
+는 <strong>그래프 이차형식</strong> 또는 <strong>그래프 신호 $y$의 Dirichlet 에너지</strong>라고 부르며, 노드 값의 차이의 제곱합(매끄러움)의 척도가 됩니다. 이는 그래프 신호의 부드러움(Smoothness)을 정량화하는 핵심적인 지표로 자주 사용됩니다.</p>
+
+<p><br /></p>
+
+<h3 id="graph-fourier--smoothing-filter">Graph Fourier &amp; Smoothing Filter</h3>
+<p>라플라시안 고유분해 $L=V\Lambda V^\top$를 통해 주파수 성분을 분해하면,<br />
+\((I + \alpha L)^{-1} = V\,(I + \alpha\Lambda)^{-1}\,V^\top\)<br />
+로 <strong>저역(low-pass) 필터</strong>로 해석할 수 있습니다.</p>
+
+<p><a href="/graph/#graph-filtering">Graph Filtering</a> 참고</p>
+
+<hr />
+
+<h2 id="methodology">Methodology</h2>
+
+<h3 id="1-graph-smoothing-prior">1. Graph-Smoothing Prior</h3>
+<p>출력 벡터 $\mathbf{f}\in\mathbb R^M$에 대해<br />
+\(p(\mathbf{f}) 
+\propto
+\exp\Bigl(-\tfrac12\,\mathbf{f}^\top (I + \alpha L)\,\mathbf{f}\Bigr)
+\quad\Longrightarrow\quad
+\mathbf{f}\sim\mathcal N\bigl(0,\,(I+\alpha L)^{-1}\bigr).\)</p>
+
+<p><br /></p>
+
+<h3 id="2-gpg-covariance-function">2. GPG Covariance Function</h3>
+<p>Bayesian 선형 회귀 관점의 전통 GP:<br />
+\(K_{\rm GP}(x,x')
+=\Phi(x)\,\tfrac1\alpha I\,\Phi(x')^\top.\)<br />
+GPG에서는 여기에 그래프 스무딩을 추가하여<br />
+\(\boxed{
+K_{\rm GPG}(x,x')
+= \Phi(x)\,(I+\alpha L)^{-1}\,\Phi(x')^\top
+}\)<br />
+을 사용합니다.</p>
+<ul>
+  <li>Toy 예제: $\Phi(x)=xI$ 로 두면 $K_{\rm GPG}(x,x’)=x\,x’\,(I+\alpha L)^{-1}$.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="3-variance-reduction-proof">3. Variance Reduction Proof</h3>
+<p>GPG가 기존 GP보다 예측 분산을 줄이는 이유는 다음과 같습니다:</p>
+
+<ol>
+  <li><strong>PSD 순서 관계</strong>
+    <ul>
+      <li>$L\succeq0$ 이므로 $I+\alpha L\succeq I$</li>
+      <li>양의 정부호 행렬의 역행렬은 순서를 반전: $(I+\alpha L)^{-1}\preceq I$</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Prior 공분산 비교</strong><br />
+\(K_{\rm GPG}(x,x')
+  = \Phi(x)\,(I+\alpha L)^{-1}\,\Phi(x')^\top
+  \preceq
+  \Phi(x)\,I\,\Phi(x')^\top
+  = \alpha\,K_{\rm GP}(x,x').\)</p>
+  </li>
+  <li><strong>Predictive Covariance 부등식</strong><br />
+GP의 predictive covariance는
+$\Sigma_* = k_{<strong>} - k_<em>^\top\,(K + \beta^{-1}I)^{-1}k_</em>$ 입니다.<br />
+Prior 공분산 $K_{\rm GPG}\preceq K_{\rm GP}$ 이므로<br />
+\((K_{\rm GPG}+\beta^{-1}I)^{-1} \succeq (K_{\rm GP}+\beta^{-1}I)^{-1},
+  \quad
+  k_*^{\rm GPG}\preceq k_*^{\rm GP},
+  \quad
+  k_{**}^{\rm GPG}\preceq k_{**}^{\rm GP}.\)<br />
+이를 종합하면
+\(\Sigma_*^{\rm GPG} \;\preceq\; \Sigma_*^{\rm GP},\)
+즉 **예측 분산이 항상 감소</strong>함을 보장합니다.</li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="4-inference--predictive-distribution">4. Inference &amp; Predictive Distribution</h3>
+<p>학습세트 ${x_i,\mathbf{t}<em>i}</em>{i=1}^N$에 대해<br />
+\(\begin{pmatrix} T \\ \mathbf{f}_* \end{pmatrix}
+\sim
+\mathcal N\!\Bigl(0,\,
+\begin{pmatrix}
+K + \beta^{-1}I &amp; k_*\\
+k_*^\top &amp; k_{**}
+\end{pmatrix}\Bigr),\)</p>
+
+<p>\(\boxed{
+\mathbf{f}_* \mid T
+\sim
+\mathcal N\bigl(\mu_*,\,\Sigma_*\bigr),
+\quad
+\mu_*=k_*^\top(C)^{-1}T,\;
+\Sigma_*=k_{**}-k_*^\top(C)^{-1}k_*,
+}\)<br />
+where $C=K+\beta^{-1}I$.</p>
+
+<hr />
+
+<h2 id="experiments">Experiments</h2>
+
+<h3 id="synthetic-graph-signal">Synthetic Graph Signal</h3>
+
+<pre><code class="language-python"># Define graph (chain of 5 nodes)
+N = 5
+A = np.zeros((N, N))
+for i in range(N-1):
+    A[i, i+1] = A[i+1, i] = 1
+</code></pre>
+<figure style="text-align: center;">
+  <img src="/assets/img/gpg/A.png" alt="Graph Structure" />
+  <figcaption>Adjacency matrix </figcaption>
+</figure>
+
+<ul>
+  <li>노드 간 연결 정보를 (0,1)로 표현한 행렬</li>
+</ul>
+
+<pre><code class="language-python">D = np.diag(A.sum(axis=1))
+</code></pre>
+
+<figure style="text-align: center;">
+  <img src="/assets/img/gpg/D.png" alt="Graph Structure" />
+  <figcaption>Degree matrix </figcaption>
+</figure>
+
+<ul>
+  <li>각 노드의 차수(각 노드에 연결된 노드의 수)를 표현한 행렬</li>
+</ul>
+
+<pre><code class="language-python">L = D - A
+</code></pre>
+
+<figure style="text-align: center;">
+  <img src="/assets/img/gpg/L.png" alt="Graph Structure" />
+  <figcaption>Laplacian matrix </figcaption>
+</figure>
+
+<ul>
+  <li>D−A로 구성하여 이웃 간 차이를 측정한 행렬</li>
+</ul>
+
+<pre><code class="language-python"># Graph smoothing filter
+alpha = 1.0
+F = np.linalg.inv(np.eye(N) + alpha * L)
+</code></pre>
+<figure style="text-align: center;">
+  <img src="/assets/img/gpg/filter.png" alt="Graph Structure" />
+  <figcaption>Graph smoothing filter </figcaption>
+</figure>
+
+<ul>
+  <li>Smoothing filter $F = (I + αL)^{-1}$.</li>
+  <li>저주파 성분을 강조합니다.</li>
+</ul>
+
+<pre><code class="language-python"># Training inputs and outputs (example)
+x_train = np.array([1.0, 2.0, 3.0])
+y_train = np.array([
+    [1, 3, 2, 4, 3],
+    [2, 1, 3, 2, 4],
+    [3, 2, 1, 3, 5]
+])
+</code></pre>
+
+<pre><code class="language-python"># Input kernel function
+def k(x1, x2):
+    return x1 * x2
+
+#Traditional GP covariance (3x3)
+K_gp = np.array([[k(x1, x2) for x2 in x_train] for x1 in x_train])
+beta_inv = 0.1
+
+#Predictive variance for GP at x_star
+x_star = 2.5
+k_star = np.array([k(x, x_star) for x in x_train])
+K_star_star = k(x_star, x_star)
+C_gp = K_gp + beta_inv * np.eye(len(x_train))
+var_gp = K_star_star - k_star.T @ np.linalg.inv(C_gp) @ k_star
+var_gp_nodes = np.full(N, var_gp)  # Same variance for all nodes
+
+# GPG covariance via Kronecker
+K_gpg = np.kron(K_gp, F)
+k_star_blocks = np.vstack([k_star[i] * F for i in range(len(x_train))])
+C_gpg = K_gpg + beta_inv * np.eye(N * len(x_train))
+Var_gpg = K_star_star * F - k_star_blocks.T @ np.linalg.inv(C_gpg) @ k_star_blocks
+var_gpg_nodes = np.diag(Var_gpg)  # Variance per node
+</code></pre>
+
+<figure style="text-align: center;">
+  <img src="/assets/img/gpg/pv.png" alt="Graph Structure" />
+  <figcaption>Predictve variance </figcaption>
+</figure>
+<ul>
+  <li>모든 노드에서 기존의 GP에 비해 예측분산이 줄어든 모습을 볼 수 있습니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>“Gaussian Processes Over Graphs”는 <strong>그래프 라플라시안</strong>을 GP prior에 결합해 출력 노드 간 smoothness를 강제함으로써,</p>
+<ul>
+  <li>예측 분산을 수학적으로 <strong>항상</strong> 줄이고,</li>
+  <li>실험적으로 소량·노이즈 환경에서 RMSE 및 신뢰구간 성능을 크게 개선합니다.</li>
+</ul>
+
+<blockquote>
+  <p>기존의 GP와 제안된 GPG를 비교하여 요약하면 다음과 같습니다.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>전통 GP</th>
+      <th>그래프 GP (GPG)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>출력 간 상관</strong></td>
+      <td>독립 가정: <br />$Cov(f_i(x),f_j(x’)) = k(x,x’)·δ_{ij}$</td>
+      <td>그래프 라플라시안 스무딩: <br />$Cov(f(x),f(x’)) = Φ(x)·(I+αL)⁻¹·Φ(x’)ᵀ$</td>
+    </tr>
+    <tr>
+      <td><strong>예측 불확실성</strong></td>
+      <td>노드별 불확실성 분리 → 관측 적거나 노이즈 크면 개별 노드 불확실성 폭증</td>
+      <td>“가상의 관측” 효과 → 이웃 노드 정보 전파로 예측 불확실성 감소</td>
+    </tr>
+    <tr>
+      <td><strong>데이터 효율성</strong></td>
+      <td>입력–출력 매핑 정보만 활용 → 출력 노드마다 별도 학습 필요</td>
+      <td>입력 정보 ＋ 그래프 구조 정보 동시 활용 → 적은 관측으로도 안정적 예측</td>
+    </tr>
+    <tr>
+      <td><strong>커널 수식</strong></td>
+      <td>$K_{GP}(x,x’) = Φ(x)·(1/α I)·Φ(x’)ᵀ$</td>
+      <td>$K_{GPG}(x,x’) = Φ(x)·(I+αL)⁻¹·Φ(x’)ᵀ$</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/pdf/1803.05776">Giraldo, L. M., Zhang, H., &amp; Ribeiro, A. (2020). <em>Gaussian Processes Over Graphs</em>. IEEE Transactions on Signal Processing.</a></li>
+  <li><a href="https://gaussianprocess.org/gpml/chapters/RW.pdf">Rasmussen, C. E., &amp; Williams, C. K. I. (2006). <em>Gaussian Processes for Machine Learning</em>. MIT Press.</a></li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-05-23T00:00:00+09:00">May 23, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+Gaussian+Processes+Over+Graphs%20https%3A%2F%2Fjoon0390.github.io%2Fgpg%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fgpg%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/gpg/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+Gaussian+Processes+Over+Graphs%20https%3A%2F%2Fjoon0390.github.io%2Fgpg%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/graph/" class="pagination--pager" title="Graph Basics">이전</a>
+    
+    
+      <a href="/gat/" class="pagination--pager" title="[Paper Review] Graph Attention Networks">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

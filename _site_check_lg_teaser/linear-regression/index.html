@@ -1,0 +1,787 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Linear Regression Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="Linear Regressio은 연속형 반응 변수와 설명 변수의 선형 관계를 모델링하는 가장 기본적인 통계 모델입니다. 이 글에서는 OLS(Ordinary Least Squares)의 수식적 구조, 가정, 해석을 중심으로 정리하고, 간단한 파이썬 실습을 해보려고 합니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Linear Regression">
+<meta property="og:url" content="https://joon0390.github.io/linear-regression/">
+
+
+  <meta property="og:description" content="Linear Regressio은 연속형 반응 변수와 설명 변수의 선형 관계를 모델링하는 가장 기본적인 통계 모델입니다. 이 글에서는 OLS(Ordinary Least Squares)의 수식적 구조, 가정, 해석을 중심으로 정리하고, 간단한 파이썬 실습을 해보려고 합니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-10-09T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/linear-regression/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Linear Regression">
+    <meta itemprop="description" content="  Linear Regressio은 연속형 반응 변수와 설명 변수의 선형 관계를 모델링하는 가장 기본적인 통계 모델입니다. 이 글에서는 OLS(Ordinary Least Squares)의 수식적 구조, 가정, 해석을 중심으로 정리하고, 간단한 파이썬 실습을 해보려고 합니다.">
+    <meta itemprop="datePublished" content="2025-10-09T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/linear-regression/" itemprop="url">Linear Regression
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#1-model-definition">1. Model Definition</a></li><li><a href="#2-ols-estimator">2. OLS Estimator</a></li><li><a href="#3-geometric-interpretation">3. Geometric Interpretation</a></li><li><a href="#4-basic-assumption-of-linear-regression">4. Basic Assumption of Linear Regression</a></li><li><a href="#5-inference-variance-and-confidence-intervals">5. Inference: Variance and Confidence Intervals</a></li><li><a href="#6-worked-example-ols-in-python">6. Worked Example: OLS in Python</a></li><li><a href="#7-model-diagnostics">7. Model Diagnostics</a><ul><li><a href="#references">References</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>Linear Regressio은 <strong>연속형 반응 변수</strong>와 <strong>설명 변수</strong>의 선형 관계를 모델링하는 가장 기본적인 통계 모델입니다. 이 글에서는 OLS(Ordinary Least Squares)의 수식적 구조, 가정, 해석을 중심으로 정리하고, 간단한 파이썬 실습을 해보려고 합니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-model-definition">1. Model Definition</h2>
+
+<p>관측값 $i = 1, \ldots, n$에 대해 $p$개의 설명 변수를 갖는 다중선형회귀 모델은 다음과 같이 표현됩니다.</p>
+
+\[y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} + \varepsilon_i, \quad \varepsilon_i \sim \mathcal{N}(0, \sigma^2)\]
+
+<p>행렬 형태로 작성하면</p>
+
+\[\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},\]
+
+<p>여기서</p>
+
+<ul>
+  <li>$\mathbf{y} \in \mathbb{R}^n$ : 반응 벡터</li>
+  <li>$\mathbf{X} \in \mathbb{R}^{n \times (p+1)}$ : 설계행렬(design matrix), 첫 번째 열은 1</li>
+  <li>$\boldsymbol{\beta} \in \mathbb{R}^{p+1}$ : 회귀계수</li>
+  <li>$\boldsymbol{\varepsilon} \in \mathbb{R}^n$ : 오차항</li>
+</ul>
+
+<hr />
+
+<h2 id="2-ols-estimator">2. OLS Estimator</h2>
+
+<p>OLS는 잔차제곱합(Residual Sum of Squares, RSS)을 최소화합니다.</p>
+
+\[\text{RSS}(\boldsymbol{\beta}) = \Vert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \Vert_2^2\]
+
+<p>이를 $\boldsymbol{\beta}$에 대해 미분하여 0으로 놓으면</p>
+
+\[\frac{\partial \text{RSS}}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) = \mathbf{0}\]
+
+<p>따라서 <strong>정규방정식(normal equation)</strong> 은</p>
+
+\[\mathbf{X}^\top \mathbf{X} \hat{\boldsymbol{\beta}} = \mathbf{X}^\top \mathbf{y}\]
+
+<p>이고, $\mathbf{X}^\top \mathbf{X}$가 가역(invertible)일 때 OLS 해는</p>
+
+\[\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}\]
+
+<p>입니다.</p>
+
+<hr />
+
+<h2 id="3-geometric-interpretation">3. Geometric Interpretation</h2>
+
+<p>OLS는 $\mathbf{y}$를 $\mathbf{X}$의 열공간(column space)에 정사영(project)하는 문제로 이해할 수 있습니다. 즉, 추정된 반응 $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$는 $\mathbf{X}$의 열공간에 속하며, 잔차 $\hat{\boldsymbol{\varepsilon}} = \mathbf{y} - \hat{\mathbf{y}}$는 $\mathbf{X}$의 열공간과 직교합니다.</p>
+
+\[\mathbf{X}^\top \hat{\boldsymbol{\varepsilon}} = \mathbf{X}^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \mathbf{0}\]
+
+<p>이 직교조건이 정규방정식과 동일합니다.</p>
+
+<hr />
+
+<h2 id="4-basic-assumption-of-linear-regression">4. Basic Assumption of Linear Regression</h2>
+
+<ol>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><strong>선형성(linearity)</strong>: $\mathbb{E}[y</td>
+          <td>\mathbf{x}] = \mathbf{x}^\top \boldsymbol{\beta}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><strong>독립성(independence)</strong>: 관측치 간 오차가 독립</li>
+  <li><strong>등분산성(homoscedasticity)</strong>: $\operatorname{Var}(\varepsilon_i) = \sigma^2$ 일정</li>
+  <li><strong>비다중공선성(no multicollinearity)</strong>: $\mathbf{X}^\top \mathbf{X}$는 가역</li>
+  <li><strong>정규성(normality)</strong> <em>(추론 목적)</em>: $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I})$</li>
+</ol>
+
+<p>가정을 만족하면 OLS 추정량은 Gauss–Markov 정리에 따라 BLUE(Best Linear Unbiased Estimator)가 됩니다.</p>
+
+<hr />
+
+<h2 id="5-inference-variance-and-confidence-intervals">5. Inference: Variance and Confidence Intervals</h2>
+
+<p>OLS 추정량의 분산은</p>
+
+\[\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}\]
+
+<p>이며, $\sigma^2$는 잔차제곱합으로 추정합니다.</p>
+
+\[\hat{\sigma}^2 = \frac{1}{n - p - 1} \Vert \mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}} \Vert_2^2\]
+
+<p>각 계수의 표준오차는 $\sqrt{\operatorname{diag}(\hat{\sigma}^2 (\mathbf{X}^\top \mathbf{X})^{-1})}$로 계산하고, $t$-통계량을 통해 유의성 검정 및 신뢰구간을 구성합니다.</p>
+
+<hr />
+
+<h2 id="6-worked-example-ols-in-python">6. Worked Example: OLS in Python</h2>
+
+<p>간단한 2차원 설명 변수 예제를 통해 OLS 절차를 직접 구현해 보겠습니다.</p>
+
+<ol>
+  <li>모의 데이터를 생성하고</li>
+  <li>정규방정식을 이용해 수작업으로 추정량을 계산한 뒤</li>
+  <li><code>statsmodels.OLS</code>와 결과를 비교합니다.</li>
+</ol>
+
+<pre><code class="language-python">import numpy as np
+import statsmodels.api as sm
+
+rs = np.random.default_rng(42)
+n = 200
+
+# 데이터 생성
+beta_true = np.array([1.5, -2.0, 0.8])
+X = rs.normal(size=(n, 2))
+X_with_intercept = np.column_stack([np.ones(n), X])
+noise = rs.normal(scale=0.5, size=n)
+y = X_with_intercept @ beta_true + noise
+
+# OLS 수작업
+beta_hat = np.linalg.inv(X_with_intercept.T @ X_with_intercept) @ X_with_intercept.T @ y
+residuals = y - X_with_intercept @ beta_hat
+sigma2_hat = (residuals @ residuals) / (n - X_with_intercept.shape[1])
+
+print(\"β̂ (manual):\", beta_hat)
+print(\"σ̂²:\", sigma2_hat)
+
+# statsmodels 비교
+model = sm.OLS(y, X_with_intercept)
+result = model.fit()
+print(result.summary())
+</code></pre>
+
+<blockquote>
+  <p>공선성이 존재해 $\mathbf{X}^\top\mathbf{X}$가 역행렬을 갖지 않는다면 <code>np.linalg.pinv(X_with_intercept) @ y</code>처럼 <strong>Moore–Penrose 역행렬</strong>을 사용하면 최소노름 해를 얻을 수 있습니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="7-model-diagnostics">7. Model Diagnostics</h2>
+
+<p>모델 적합 후 다음과 같은 진단 플롯과 통계를 확인해야 합니다.</p>
+
+<ul>
+  <li><strong>잔차 vs 적합값</strong>: 패턴이 있으면 비선형 구조 또는 이분산을 의심</li>
+  <li><strong>QQ Plot</strong>: 잔차 정규성 판단</li>
+  <li><strong>VIF (Variance Inflation Factor)</strong>: 다중공선성 점검</li>
+  <li><strong>Cook’s Distance</strong>: 영향력(observation influence) 탐지</li>
+</ul>
+
+<hr />
+
+<h3 id="references">References</h3>
+
+<ul>
+  <li>Statsmodels Documentation: <a href="https://www.statsmodels.org/stable/regression.html">https://www.statsmodels.org/stable/regression.html</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-10-09T00:00:00+09:00">October 9, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Linear+Regression%20https%3A%2F%2Fjoon0390.github.io%2Flinear-regression%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Flinear-regression%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/linear-regression/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Linear+Regression%20https%3A%2F%2Fjoon0390.github.io%2Flinear-regression%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/gbart/" class="pagination--pager" title="[Paper Review] Generalized Bayesian Additive Regression Trees Models: Beyond Conditional Conjugacy">이전</a>
+    
+    
+      <a href="/bayesian/deep%20learning/machine%20learning/TabPFN/" class="pagination--pager" title="TabPFN: Foundation Models for Tabular Data">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

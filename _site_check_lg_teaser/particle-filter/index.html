@@ -1,0 +1,958 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Particle Filter : Sequential Monte Carlo Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Sequential Monte Carlo(SMC) 방법의 대표 알고리즘인 Particle Filter 의 핵심 개념과 구조를 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Particle Filter : Sequential Monte Carlo">
+<meta property="og:url" content="https://joon0390.github.io/particle-filter/">
+
+
+  <meta property="og:description" content="이 포스팅은 Sequential Monte Carlo(SMC) 방법의 대표 알고리즘인 Particle Filter 의 핵심 개념과 구조를 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-11-14T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/particle-filter/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Particle Filter : Sequential Monte Carlo">
+    <meta itemprop="description" content="  이 포스팅은 Sequential Monte Carlo(SMC) 방법의 대표 알고리즘인 Particle Filter 의 핵심 개념과 구조를 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-11-14T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/particle-filter/" itemprop="url">Particle Filter : Sequential Monte Carlo
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#particle-filter의-핵심-아이디어">Particle Filter의 핵심 아이디어</a></li><li><a href="#sir-particle-filter-bootstrap-filter">SIR Particle Filter (Bootstrap Filter)</a></li><li><a href="#1-initialization">1) Initialization</a></li><li><a href="#2-prediction-sampling">2) Prediction (Sampling)</a></li><li><a href="#3-update-importance-weighting">3) Update (Importance Weighting)</a></li><li><a href="#4-resampling-필수-단계">4) Resampling (필수 단계)</a></li><li><a href="#효율성-판단-기준-ess-effective-sample-size">효율성 판단 기준: ESS (Effective Sample Size)</a><ul><li><a href="#-sample-degeneracy">✔ Sample degeneracy</a></li><li><a href="#-curse-of-dimensionality">✔ Curse of Dimensionality</a></li></ul></li><li><a href="#1-auxiliary-particle-filter-apf">1) Auxiliary Particle Filter (APF)</a></li><li><a href="#2-raoblackwellized-particle-filter-rbpf">2) Rao–Blackwellized Particle Filter (RBPF)</a></li><li><a href="#3-particle-learning-pl">3) Particle Learning (PL)</a></li><li><a href="#4-smc">4) SMC²</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 <strong>Sequential Monte Carlo(SMC)</strong> 방법의 대표 알고리즘인 <strong>Particle Filter</strong> 의 핵심 개념과 구조를 정리한 글입니다.</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="/filtering/">“Filtering &amp; State Space Model”</a> 에 이어지는 내용입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>앞선 글에서는 Filtering이 무엇인지,<br />
+그리고 선형·정규성 가정하에서 Kalman Filter가 어떻게 closed-form 해를 제공하는지 정리했었습니다.</p>
+
+<p>하지만 대부분의 실제 시스템은</p>
+
+<ul>
+  <li><strong>비선형(nonlinear)</strong></li>
+  <li><strong>비가우시안(non-Gaussian)</strong></li>
+  <li><strong>multi-modal posterior</strong></li>
+  <li><strong>outlier 포함</strong></li>
+  <li><strong>복잡한 likelihood</strong></li>
+</ul>
+
+<p>을 가지기 때문에 칼만 계열(EKF/UKF 포함)만으로는 정확한 추정이 어렵습니다.</p>
+
+<p>이 문제를 해결하기 위한 가장 일반적인 방법이 바로 <strong>Particle Filter(입자 필터)</strong> 입니다.</p>
+
+<p>Particle Filter는 <strong>posterior 분포 자체를 Monte Carlo method로 직접 근사하는 방법</strong>이며, 필터링 문제에 대한 <strong>가장 유연한 범용 해법</strong>이라고 할 수 있습니다.</p>
+
+<h2 id="particle-filter의-핵심-아이디어">Particle Filter의 핵심 아이디어</h2>
+
+<p>Particle Filter는 posterior 분포 $p(x_t \mid y_{1:t})$를 <strong>일련의 샘플(particles)</strong> 과 <strong>가중치(weights)</strong> 의 조합으로 근사합니다.</p>
+
+<p>즉,</p>
+
+\[p(x_t \mid y_{1:t}) \approx
+\sum_{i=1}^N w_t^{(i)} \, \delta(x_t - x_t^{(i)})\]
+
+<p>여기서</p>
+
+<ul>
+  <li>$x_t^{(i)}$: i번째 particle</li>
+  <li>$w_t^{(i)}$: 해당 particle의 중요도 가중치</li>
+  <li>$\delta(\cdot)$: Dirac delta (point mass)</li>
+</ul>
+
+<p>즉, posterior라는 복잡한 분포를 “<strong>여러 개의 Weighted Samples</strong>” 로 나타내는 것입니다.</p>
+
+<p>핵심은 다음과 같습니다.</p>
+
+<blockquote>
+  <p><strong>비선형이든 비정규성이든 상관없이, 샘플만 잘 뿌리면 어떤 분포든 근사할 수 있다.</strong></p>
+</blockquote>
+
+<p>이런 관점에서 PF는 매우 강력합니다.</p>
+
+<h2 id="sir-particle-filter-bootstrap-filter">SIR Particle Filter (Bootstrap Filter)</h2>
+
+<p>가장 기본적이면서 널리 쓰이는 PF는 <strong>SIR (Sampling–Importance–Resampling)</strong> 입니다.</p>
+
+<p>각 단계는 다음과 같습니다.</p>
+
+<h2 id="1-initialization">1) Initialization</h2>
+
+<p>초기 prior로부터 particle를 샘플링:</p>
+
+\[x_0^{(i)} \sim p(x_0), \qquad w_0^{(i)} = \frac{1}{N}\]
+
+<h2 id="2-prediction-sampling">2) Prediction (Sampling)</h2>
+
+<p>각 particle을 transition model에 따라 다음 시점으로 이동시킴:</p>
+
+\[x_t^{(i)} \sim p(x_t \mid x_{t-1}^{(i)})\]
+
+<p>이는 filtering 공식의 <strong>Prediction 단계</strong>에 해당합니다.</p>
+
+<h2 id="3-update-importance-weighting">3) Update (Importance Weighting)</h2>
+
+<p>새로운 관측값 $y_t$가 주어지면, likelihood로 가중치를 업데이트합니다.</p>
+
+\[w_t^{(i)} \propto p(y_t \mid x_t^{(i)})\]
+
+<p>정규화:</p>
+
+\[w_t^{(i)} =
+\frac{w_t^{(i)}}{\sum_{j=1}^N w_t^{(j)}}\]
+
+<p>여기까지가 filtering 공식의 <strong>Update 단계</strong>입니다.</p>
+
+<h2 id="4-resampling-필수-단계">4) Resampling (필수 단계)</h2>
+
+<p>문제는, 시간이 지나면 대부분의 weight가 0이 되고<br />
+몇 개의 particle만 큰 weight를 가지는 <strong>degeneracy issue</strong>가 발생합니다.</p>
+
+<p>이를 해결하기 위해:</p>
+
+<ul>
+  <li>weight가 큰 particle 중심으로 다시 샘플링하고</li>
+  <li>weight를 모두 동일하게 만들어줍니다.</li>
+</ul>
+
+<p>Resampling의 주요 방식:</p>
+
+<ul>
+  <li>Multinomial</li>
+  <li>Systematic</li>
+  <li>Stratified</li>
+</ul>
+
+<h2 id="효율성-판단-기준-ess-effective-sample-size">효율성 판단 기준: ESS (Effective Sample Size)</h2>
+
+<p>가중치가 얼마나 collapse 되었는지 확인하기 위해:</p>
+
+\[\text{ESS} = \frac{1}{\sum_{i=1}^N (w_t^{(i)})^2}\]
+
+<ul>
+  <li>ESS가 작아지면 → 대부분 weight가 0 → resampling 필요</li>
+  <li>실전에서는 보통<br />
+$\text{ESS} &lt; N/2$ 또는 $N/3$ 를 기준으로 사용</li>
+</ul>
+
+<h1 id="pf는-importance-sampling-기반-방법이다">PF는 Importance Sampling 기반 방법이다</h1>
+
+<p>PF는 사실상 <strong>Sequential Importance Sampling(SIS)</strong> 과 필수적으로 따라오는 <strong>Resampling(SIR)</strong> 의 조합입니다.</p>
+
+<p>즉,</p>
+
+<ul>
+  <li>proposal distribution: transition model</li>
+  <li>target distribution: filtering posterior</li>
+  <li>importance weight: likelihood</li>
+</ul>
+
+<p>이 구조는 MCMC와도 유사한 probabilistic intuition을 제공하기 때문에, PF는 Bayesian computation 영역에서 매우 중요한 알고리즘입니다.</p>
+
+<h1 id="왜-pf는-강력한가">왜 PF는 강력한가?</h1>
+
+<p><strong>비선형 + 비가우시안 + multimodal posterior를 그대로 다룰 수 있기 때문입니다.</strong></p>
+
+<p>만약 posterior가 아래처럼 두 개의 모드를 가진다면:</p>
+
+<ul>
+  <li>EKF: 망함 (선형화 + Gaussian 강제)</li>
+  <li>UKF: 망함 (Gaussian 강제)</li>
+  <li>PF: particle가 두 모드에 각각 분포하면 그대로 표현 가능</li>
+</ul>
+
+<p>또한 이상치(outlier)가 등장해 likelihood가 heavy-tailed일 때도 PF는 Monte Carlo 방식이기 때문에 자연스럽게 적응합니다.</p>
+
+<h1 id="하지만-pf도-한계가-있다">하지만 PF도 한계가 있다</h1>
+
+<p>특히:</p>
+
+<h3 id="-sample-degeneracy">✔ Sample degeneracy</h3>
+<p>weight collapse → resampling 필요<br />
+너무 자주 resampling하면 diversity 감소</p>
+
+<h3 id="-curse-of-dimensionality">✔ Curse of Dimensionality</h3>
+<p>state dimension이 커지면 particle 수가 폭발적으로 필요</p>
+
+<p>그래서 등장하는 여러 개선 알고리즘들이 있습니다.</p>
+
+<h1 id="pf의-주요-변형들">PF의 주요 변형들</h1>
+
+<h2 id="1-auxiliary-particle-filter-apf">1) Auxiliary Particle Filter (APF)</h2>
+
+<ul>
+  <li>관측 $y_t$ 정보를 미리 사용해 더 나은 proposal을 구성</li>
+  <li>weight degeneracy를 줄이는 데 효과적</li>
+</ul>
+
+<h2 id="2-raoblackwellized-particle-filter-rbpf">2) Rao–Blackwellized Particle Filter (RBPF)</h2>
+
+<p>PF로는 일부 state만 추적하고<br />
+다른 state는 Kalman Filter로 처리하는 hybrid 방식.</p>
+
+<p>예:<br />
+SLAM에서 landmark map → KF<br />
+robot pose → PF</p>
+
+<h2 id="3-particle-learning-pl">3) Particle Learning (PL)</h2>
+
+<p>posterior의 sufficient statistics를 업데이트하여<br />
+파라미터 learning까지 동시에 수행.</p>
+
+<h2 id="4-smc">4) SMC²</h2>
+
+<p>parameter + latent state 둘 다 PF로 처리하는 확장.<br />
+Bayesian inference 전체를 Sequential하게 수행.</p>
+
+<h1 id="예시">예시</h1>
+
+<p>단순한 비선형 시스템:</p>
+
+\[x_t = x_{t-1} + 0.5\sin(x_{t-1}) + \epsilon_t,
+\quad
+y_t = \frac{x_t^2}{20} + \eta_t\]
+
+<ul>
+  <li>transition에 sine → 비선형</li>
+  <li>observation에 square → 매우 비선형</li>
+</ul>
+
+<p>EKF/UKF는 대부분 실패하는 경우라고 볼 수 있습니다.</p>
+
+<p>그러나 PF는 particle들이 분포의 모양을 그대로 따라가기 때문에 잘 작동합니다.</p>
+
+<h1 id="code-example">Code Example</h1>
+
+<p>아래 셀을 돌리면 1D Particle Filter가 동작합니다. <code>cfg</code>를 수정하며 센서 노이즈, outlier, 재샘플 방식을 실험할 수 있습니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Resampling
+def multinomial_resample(w, rng):
+    n = len(w)
+    return rng.choice(n, size=n, p=w)
+
+def systematic_resample(w, rng):
+    n = len(w)
+    positions = (np.arange(n) + rng.random()) / n
+    idx, cdf = np.zeros(n, dtype=int), np.cumsum(w)
+    i = j = 0
+    while i &lt; n:
+        if positions[i] &lt; cdf[j]:
+            idx[i] = j; i += 1
+        else:
+            j += 1
+    return idx
+
+# Synthetic data
+def make_synthetic(T=80, u=1.0, sigma_motion=0.4, sigma_obs=1.2,
+                   outlier_prob=0.0, outlier_scale=8.0, seed=42):
+    rng = np.random.default_rng(seed)
+    x_true, z_obs, us = [], [], []
+    x = 0.0
+    for _ in range(T):
+        x = x + u + rng.normal(0, sigma_motion)
+        z = x + rng.normal(0, sigma_obs)
+        if rng.random() &lt; outlier_prob:
+            z += outlier_scale * rng.standard_normal()
+        x_true.append(x); z_obs.append(z); us.append(u)
+    return np.asarray(x_true), np.asarray(z_obs), np.asarray(us)
+
+# Particle Filter
+def particle_filter(zs, us, n=800, sigma_motion=0.4, sigma_obs=1.2,
+                    rough_sigma=0.0, resample_thresh=0.5,
+                    resample_method="systematic", seed=0):
+    rng = np.random.default_rng(seed)
+    xs = rng.normal(0, 5, size=n)
+    w = np.ones(n) / n
+    est, n_eff_hist = [], []
+    resample_count = 0
+    resampler = systematic_resample if resample_method == "systematic" else multinomial_resample
+
+    for u, z in zip(us, zs):
+        xs = xs + u + rng.normal(0, sigma_motion, size=n)  # Predict
+        ll = np.exp(-0.5 * ((z - xs) / sigma_obs) ** 2) / (sigma_obs * np.sqrt(2 * np.pi))
+        w *= ll; w += 1e-12; w /= w.sum()                  # Update
+
+        n_eff = 1.0 / np.sum(w ** 2)
+        n_eff_hist.append(n_eff)
+        if n_eff &lt; resample_thresh * n:
+            idx = resampler(w, rng)
+            xs, w = xs[idx], np.ones(n) / n
+            resample_count += 1
+            if rough_sigma &gt; 0:
+                xs += rng.normal(0, rough_sigma, size=n)
+
+        est.append(xs.dot(w))
+
+    return np.asarray(est), np.asarray(n_eff_hist), resample_count
+
+# Config 
+cfg = dict(
+    T=80, u=1.0,
+    sigma_motion=0.4, sigma_obs=1.2,
+    outlier_prob=0.2, outlier_scale=6.0,
+    particles=800, rough_sigma=0.1,
+    resample_thresh=0.5, resample_method="systematic",
+    seed=0,
+)
+
+x_true, z_obs, us = make_synthetic(
+    T=cfg["T"], u=cfg["u"],
+    sigma_motion=cfg["sigma_motion"], sigma_obs=cfg["sigma_obs"],
+    outlier_prob=cfg["outlier_prob"], outlier_scale=cfg["outlier_scale"],
+    seed=cfg["seed"],
+)
+est, n_eff_hist, resample_count = particle_filter(
+    zs=z_obs, us=us, n=cfg["particles"],
+    sigma_motion=cfg["sigma_motion"], sigma_obs=cfg["sigma_obs"],
+    rough_sigma=cfg["rough_sigma"],
+    resample_thresh=cfg["resample_thresh"],
+    resample_method=cfg["resample_method"],
+    seed=cfg["seed"],
+)
+
+rmse = float(np.sqrt(np.mean((est - x_true) ** 2)))
+print(f"RMSE={rmse:.3f}, resample_times={resample_count}, "
+      f"N_eff[min|median]={n_eff_hist.min():.1f}|{np.median(n_eff_hist):.1f}")
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
+ax1.plot(x_true, label="true", linewidth=2)
+ax1.plot(z_obs, ".", label="obs", alpha=0.6)
+ax1.plot(est, label="PF estimate", linewidth=2)
+ax1.legend(); ax1.grid(True, alpha=0.3); ax1.set_ylabel("position")
+ax2.plot(n_eff_hist, label="N_eff", color="tab:orange")
+ax2.axhline(cfg["resample_thresh"] * cfg["particles"], linestyle="--", color="gray", alpha=0.7)
+ax2.legend(); ax2.grid(True, alpha=0.3); ax2.set_ylabel("N_eff"); ax2.set_xlabel("time")
+plt.tight_layout(); plt.show()
+</code></pre>
+
+<ul>
+  <li><code>outlier_prob</code>/<code>outlier_scale</code>로 센서 튐을 추가하거나 제거</li>
+  <li><code>resample_method</code>을 <code>systematic</code> vs <code>multinomial</code>로 비교</li>
+  <li><code>rough_sigma</code>로 재샘플 후 입자의 다양성 유지 효과를 확인</li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-11-14T00:00:00+09:00">November 14, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Particle+Filter+%3A+Sequential+Monte+Carlo%20https%3A%2F%2Fjoon0390.github.io%2Fparticle-filter%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fparticle-filter%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/particle-filter/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Particle+Filter+%3A+Sequential+Monte+Carlo%20https%3A%2F%2Fjoon0390.github.io%2Fparticle-filter%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/filtering/" class="pagination--pager" title="Filtering &amp; State Space Model">이전</a>
+    
+    
+      <a href="/variational-inference/" class="pagination--pager" title="Variational Inference">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

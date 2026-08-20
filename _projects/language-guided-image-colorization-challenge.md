@@ -6,6 +6,9 @@ collection: projects
 layout: single
 order: 10
 period: "2025.07"
+header:
+  teaser: /assets/img/projects/language-guided-image-colorization-challenge/result.png
+teaser_alt: "흑백 이미지 색채화와 후보정 결과 비교"
 tags:
   - Image Colorization
   - Diffusion Model

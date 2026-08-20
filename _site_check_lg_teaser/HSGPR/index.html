@@ -1,0 +1,869 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 A. Solin et al. (2014)의 논문 Hilbert Space Methods for Reduced-Rank Gaussian Process Regression을 읽고 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression">
+<meta property="og:url" content="https://joon0390.github.io/HSGPR/">
+
+
+  <meta property="og:description" content="이 포스팅은 A. Solin et al. (2014)의 논문 Hilbert Space Methods for Reduced-Rank Gaussian Process Regression을 읽고 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-09-22T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/HSGPR/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression">
+    <meta itemprop="description" content="  이 포스팅은 A. Solin et al. (2014)의 논문 Hilbert Space Methods for Reduced-Rank Gaussian Process Regression을 읽고 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2025-09-22T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/HSGPR/" itemprop="url">[Paper Review] Hilbert Space Methods for Reduced-Rank Gaussian Process Regression
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a><ul><li><a href="#sparse-gp--inducing-points">Sparse GP &amp; Inducing Points</a></li></ul></li><li><a href="#key-ieda">Key Ieda</a><ul><li><a href="#고유함수란">고유함수란?</a><ul><li><a href="#선형대수에서의-고유벡터">선형대수에서의 고유벡터</a></li><li><a href="#연산자의-고유함수">연산자의 고유함수</a></li></ul></li></ul></li><li><a href="#method">Method</a><ul><li><a href="#1-laplacian-eigenfunction-decomposition">1. Laplacian Eigenfunction Decomposition</a></li><li><a href="#2-spectral-density와-고유값-연결">2. Spectral Density와 고유값 연결</a></li><li><a href="#3-low-rank-approximation">3. Low-Rank Approximation</a></li><li><a href="#4-posterior-inference">4. Posterior Inference</a></li><li><a href="#5-computational-complexity">5. Computational Complexity</a></li></ul></li><li><a href="#experiments">Experiments</a></li><li><a href="#conclusion">Conclusion</a></li><li><a href="#references">References</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 A. Solin et al. (2014)의 논문 <a href="https://arxiv.org/pdf/1401.5508">Hilbert Space Methods for Reduced-Rank Gaussian Process Regression</a>을 읽고 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p><a href="/gp/">Gaussian Process Regression</a>은 Nonparametric Bayesian Regression 기법으로, 불확실성 추정과 유연한 함수 근사가 가능하다는 장점 때문에 널리 사용됩니다. 
+하지만 GPR의 가장 큰 단점은 <strong>계산 복잡도</strong>입니다. 학습과 예측 모두에서 $O(n^3)$의 연산이 필요하여, 데이터 수 $n$이 커지면 실질적인 사용이 어려워집니다.</p>
+
+<p>이 문제를 해결하기 위해 Sparse GP 기법들이 제안되어왔으며, 그 중에서도 대표적으로 <strong>Inducing Points 기반 근사</strong>가 많이 사용됩니다.</p>
+
+<h3 id="sparse-gp--inducing-points">Sparse GP &amp; Inducing Points</h3>
+
+<ul>
+  <li><strong>Sparse GP</strong>: Gaussian Process의 $O(n^3)$ 연산을 줄이기 위해 저차원 근사를 사용하는 방법론의 총칭.</li>
+  <li><strong>Inducing Points</strong>: Sparse GP의 대표 기법으로, $m \ll n$개의 보조 변수(inducing variables)를 사용해 커널 행렬을 근사.<br />
+\(K_{nn} \approx K_{nm} K_{mm}^{-1} K_{mn}\)</li>
+  <li><strong>장점</strong>: 효율적이며, 대규모 데이터셋에도 적용 가능.</li>
+  <li><strong>한계</strong>: inducing points 선택에 따라 성능 차이가 크고, 근사 오차가 발생.</li>
+</ul>
+
+<hr />
+
+<h2 id="key-ieda">Key Ieda</h2>
+
+<p>핵심이 되는 아이디어는 다음과 같습니다.</p>
+<ul>
+  <li>GP의 공분산 커널 $k(x,x’)$를 라플라스 연산자의 고유함수(eigen function) Basis로 전개합니다.</li>
+  <li>무한 급수를 유한 개의 항으로 잘라서 근사하면, 자연스럽게 Low Rank Approximation이 이루어집니다.</li>
+</ul>
+
+<p>수식적으로,</p>
+
+\[k(x,x') \approx \sum_{j=1}^m\lambda_j\phi_j(x)\phi_j(x')\]
+
+<ul>
+  <li>$\phi_j$ 는 고유함수, $\lambda_j$는 고유함수에 대응하는 고유값</li>
+</ul>
+
+<p>즉, 커널을 직접 계산하는 대신, 미리 계산된 기저 함수를 이용하여 표현한다고 볼 수 있습니다.</p>
+
+<h3 id="고유함수란">고유함수란?</h3>
+
+<h4 id="선형대수에서의-고유벡터">선형대수에서의 고유벡터</h4>
+<p>행렬 $A$가 있을 때, $A\nu = \lambda \nu$ 를 만족하는 $\nu$를 고유벡터(eigenvector), $\lambda$를 고유값(eigenvalue)라고 부릅니다.<br />
+즉 특정한 벡터 $\nu$는 행렬 $A$를 곱해도 방향은 바뀌지 않고 크기만 $\lambda$ 배 달라집니다.</p>
+
+<h4 id="연산자의-고유함수">연산자의 고유함수</h4>
+<p>행렬 대신 <strong>연산자(ex. 미분, 적분, 라플라시안)</strong> 를 고려해봅시다.<br />
+예를 들어, 미분 연산자 $\tfrac{d}{dx}$를 함수 $f(x)$에 적용하면:
+\(\frac{d}{dx} f(x) = \lambda f(x)\)
+이 조건을 만족시키는 함수 $f(x)$를 <strong>고유함수</strong>라고 하고, $\lambda$을 고유값이라고 합니다.<br />
+예: $f(x) = e^{\lambda x}$ 는 미분 연산자의 고유함수입니다.</p>
+
+<hr />
+
+<h2 id="method">Method</h2>
+
+<p>핵심 아이디어는 <strong>커널을 Hilbert 공간의 고유함수 전개로 근사</strong>하는 것입니다.</p>
+
+<blockquote>
+  <p><strong>Hilbert Space란?</strong><br />
+단순히 함수들의 집합이 아니라<br />
+\(\langle f,g \rangle = \int_{\Omega} f(x)g(x)\,dx\)<br />
+같은 <strong>내적(inner product)</strong> 이 정의된 함수 공간을 말합니다.<br />
+내적이 있기 때문에 “직교(orthogonality)” 개념을 쓸 수 있고,<br />
+이 덕분에 <strong>고유함수들이 직교 기저(orthogonal basis)</strong> 를 이루게 됩니다.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="1-laplacian-eigenfunction-decomposition">1. Laplacian Eigenfunction Decomposition</h3>
+<p>도메인 $\Omega$ 위에서 라플라스 연산자의 고유문제를 풅니다:</p>
+
+\[-\Delta \phi_j(x) = \gamma_j \phi_j(x), \quad x \in \Omega \qquad (a)\]
+
+<ul>
+  <li>1차원에서 라플라스 연산자는 단순히 <strong>2차 미분</strong>: $\Delta f = f’’$.</li>
+  <li>예: $\phi(x) = \sin(\pi x)$
+    <ul>
+      <li>$\phi’‘(x) = -\pi^2 \sin(\pi x)$</li>
+      <li>따라서 $\Delta \phi(x) = -\pi^2 \phi(x)$</li>
+      <li>고유값은 $-\pi^2$ (음수)</li>
+      <li>식 (a)처럼 $-\Delta$를 쓰면 고유값이 <strong>양수 $\gamma=\pi^2$</strong> 로 바뀌어 주파수 제곱으로 해석할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>Dirichlet 경계조건 → <strong>사인 함수 기저</strong></li>
+  <li>Neumann 경계조건 → <strong>코사인 함수 기저</strong></li>
+</ul>
+
+<p>즉, <strong>도메인과 경계조건에 따라 Hilbert 공간 $L^2(\Omega)$ 위의 직교 기저 ${\phi_j}$가 결정</strong>됩니다.</p>
+
+<hr />
+
+<h3 id="2-spectral-density와-고유값-연결">2. Spectral Density와 고유값 연결</h3>
+<p><a href="https://en.wikipedia.org/wiki/Bochner's_theorem">Bochner 정리</a>에 따라 정상 커널 $k(x,x’)$는 스펙트럴 밀도 $S(\omega)$의 푸리에 변환으로 표현됩니다:
+\(k(\tau) = \int_{\mathbb{R}^d} e^{i\omega^\top \tau}\, S(\omega)\, d\omega, \quad \tau=x-x'.\)</p>
+
+<p>라플라스 고유값 $\gamma_j$는 $\omega_j=\sqrt{\gamma_j}$라는 “주파수”로 해석할 수 있습니다.<br />
+따라서 각 기저의 weight는
+\(\lambda_j \;\approx\; S(\sqrt{\gamma_j}) \cdot w_j\)
+로 결정됩니다.</p>
+<ul>
+  <li>$\lambda_j$: 고유함수에 붙는 가중치</li>
+  <li>$w_j$: 수치적분(quadrature) 보정값</li>
+</ul>
+
+<p>즉, <strong>기저는 라플라스가 정하고, 가중치는 커널 스펙트럼이 정하는 것</strong>입니다.</p>
+
+<hr />
+
+<h3 id="3-low-rank-approximation">3. Low-Rank Approximation</h3>
+<p>무한 전개를 상위 $m$개까지만 잘라 근사합니다:
+\(k(x,x') \approx \sum_{j=1}^m \lambda_j \phi_j(x)\phi_j(x').\)</p>
+
+<p>행렬 형태:
+\(K \approx \Phi \Lambda \Phi^\top, \qquad
+\Phi_{ij}=\phi_j(x_i), \quad
+\Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_m).\)</p>
+
+<p>즉, 무한 차원의 커널 연산자를 <strong>rank-$m$ 근사</strong>로 바꿔치기 한 것입니다.</p>
+
+<hr />
+
+<h3 id="4-posterior-inference">4. Posterior Inference</h3>
+<p>근사 커널을 사용하면 GP 추론은 feature-space에서 선형 모델로 바뀝니다:
+\(f(x) \approx \phi(x)^\top w, \quad w \sim \mathcal{N}(0,\Lambda).\)
+\(y = f(x) + \epsilon, \quad \epsilon \sim \mathcal{N}(0,\sigma_n^2 I).\)</p>
+
+<p>Posterior 분포는 정규분포이며,<br />
+$A = \Lambda + \tfrac{1}{\sigma_n^2}\Phi^\top \Phi$라 두면:</p>
+
+<ul>
+  <li>
+    <p><strong>Posterior mean</strong>
+\(\mu(x_*) = \phi(x_*)^\top \Lambda A^{-1}\,\tfrac{1}{\sigma_n^2}\Phi^\top y\)</p>
+  </li>
+  <li>
+    <p><strong>Posterior covariance</strong>
+\(\mathrm{cov}(f(x_*)) = \phi(x_*)^\top \Lambda \phi(x_*) \;-\; \phi(x_*)^\top \Lambda A^{-1}\Lambda \phi(x_*).\)</p>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="5-computational-complexity">5. Computational Complexity</h3>
+<ul>
+  <li>Exact GP: $O(n^3)$</li>
+  <li>Hilbert-space RR-GP: $O(nm^2 + m^3)$</li>
+</ul>
+
+<p>따라서 $m \ll n$일 때 큰 계산 효율을 얻을 수 있습니다.</p>
+
+<hr />
+
+<p>정리하면,<br />
+1) Hilbert 공간에서 라플라스 고유함수 기저를 구하고,<br />
+2) 커널 스펙트럼을 이용해 각 기저에 weight를 부여하며,<br />
+3) 무한 전개를 rank-$m$ 근사로 자르고,<br />
+4) feature-space에서 posterior를 계산함으로써,<br />
+<strong>Exact GP를 효율적으로 근사</strong>할 수 있습니다.</p>
+
+<hr />
+
+<h2 id="experiments">Experiments</h2>
+
+<p>논문/슬라이드에서는 제안한 Hilbert-space Reduced-Rank GP(RR-GP)를 다양한 상황에서 실험했습니다.</p>
+
+<ul>
+  <li><strong>1D Toy Example</strong>
+    <ul>
+      <li>주기 함수를 관측치에 피팅.</li>
+      <li>Exact GP, Sparse GP (SOR, DTC, FIC 등)와 비교.</li>
+      <li>RR-GP는 rank $m$이 커질수록 RMSE가 낮아지며, Evidence(Marginal Likelihood)도 Exact GP에 근접.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>2D 상관 구조 비교</strong>
+    <ul>
+      <li>제안한 Laplacian Hilbert 기저 근사와 Sparse Spectrum, Inducing Points 기반 근사를 비교.</li>
+      <li>Exact GP의 correlation contour(등고선)와 RR-GP 근사가 잘 일치함.</li>
+      <li>특히 Laplacian 기저 기반은 Inducing points 랜덤 배치보다 안정적인 근사 성능.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<ul>
+  <li><strong>실제 데이터셋</strong>
+    <ul>
+      <li><strong>Precipitation data (n=5776)</strong>
+        <ul>
+          <li>연간 강수량 데이터를 GP로 보간.</li>
+          <li>Full GP 대비 RR-GP가 훨씬 빠른 계산 속도를 보이며, 정확도 손실은 미미.</li>
+          <li>Sparse GP 방법들보다도 Marginal Likelihood와 RMSE가 더 안정적임.</li>
+        </ul>
+      </li>
+      <li><strong>Global surface temperature (n=11028)</strong>
+        <ul>
+          <li>전 지구 표면 온도 데이터에 대해 GP 회귀 수행.</li>
+          <li>Matérn 커널(ν = 1/2, 3/2, ∞)로 샘플링된 결과가 RR-GP 근사에서도 Exact GP와 유사하게 나타남.</li>
+          <li>대규모 데이터에서도 계산 효율과 근사 정확도를 동시에 확보.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<ul>
+  <li>Hilbert-space RR-GP는 <strong>Laplacian 고유함수 기저 + 커널 스펙트럼 기반 고유값</strong>을 사용해 커널을 근사.</li>
+  <li>이 방식은 <strong>데이터에 의존하지 않는 안정적 기저</strong>를 제공하며, Inducing point 선택의 불안정성을 피할 수 있음.</li>
+  <li>근사 정확도는 rank $m$을 늘릴수록 Exact GP에 수렴하고, Marginal Likelihood 기반 하이퍼파라미터 추정이 안정적으로 가능.</li>
+  <li>대규모 데이터셋에서도 Full GP 대비 큰 계산 효율 향상을 보이며, Sparse GP와 비교해도 더 안정적인 근사 결과를 제공.</li>
+</ul>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li>
+    <p><a href="https://arxiv.org/pdf/1401.5508"><em>Hilbert Space Methods for Reduced-Rank Gaussian Process Regression</em>.</a></p>
+  </li>
+  <li>
+    <p><a href="https://gpss.cc/gpa15/assets/sarkka.pdf">Workshop on Gaussian Process Approximation</a></p>
+  </li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-09-22T00:00:00+09:00">September 22, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+Hilbert+Space+Methods+for+Reduced-Rank+Gaussian+Process+Regression%20https%3A%2F%2Fjoon0390.github.io%2FHSGPR%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2FHSGPR%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/HSGPR/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+Hilbert+Space+Methods+for+Reduced-Rank+Gaussian+Process+Regression%20https%3A%2F%2Fjoon0390.github.io%2FHSGPR%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/graphcd/" class="pagination--pager" title="[Paper Review] GRAPH-BASED CHANGE-POINT DETECTION">이전</a>
+    
+    
+      <a href="/natural-gradient/" class="pagination--pager" title="Natural Gradient for Variational Inference">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

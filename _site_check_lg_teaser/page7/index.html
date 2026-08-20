@@ -1,0 +1,768 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Heekim’s Blog Statistics, ML, DL 페이지 7</title>
+<meta name="description" content="My Blog">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Heekim’s Blog">
+<meta property="og:url" content="https://joon0390.github.io/page7/">
+
+
+  <meta property="og:description" content="My Blog">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/page7/">
+
+
+  <link rel="prev" href="https://joon0390.github.io/page6/">
+
+
+  <link rel="next" href="https://joon0390.github.io/page8/">
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--home" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://joon0390.github.io/">
+        <img src="/assets/img/image.png" alt="Junhee Kim" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://joon0390.github.io/" itemprop="url">Junhee Kim</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>I’m studying <strong>Bayesian ML, DL</strong> in <a href="https://sites.google.com/view/bstatjo/lab?authuser=0">Bayes Inference LAB</a>, INHA University</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name" class="p-locality">Incheon, Korea</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:kim8881472@gmail.com" rel="nofollow noopener noreferrer me"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title"></h1>
+    
+    
+
+
+
+
+  <section class="home-gallery" aria-labelledby="posterior-gallery-title">
+    <div class="home-gallery__header">
+      <h2 id="posterior-gallery-title" class="archive__subtitle">Posterior Gallery</h2>
+    </div>
+
+    <div class="home-gallery__grid">
+      
+        <a class="home-gallery__item home-gallery__item--featured" href="/mcmc/">
+          <img src="/assets/img/MCMC/MH.png" alt="Metropolis-Hastings sampling visualization" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Sampling</span>
+            
+            <h3 class="home-gallery__title">MCMC Sampling in Bayesian Models</h3>
+            
+              <p class="home-gallery__text">정확한 posterior에 가까워지기 위해 샘플들이 어떻게 움직이는지 가장 고전적인 방식으로 보여줍니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/gp/">
+          <img src="/assets/img/gp/posterior.png" alt="Gaussian process posterior visualization" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Posterior</span>
+            
+            <h3 class="home-gallery__title">Gaussian Process(GP)</h3>
+            
+              <p class="home-gallery__text">관측이 들어오면 함수 uncertainty가 어떻게 접히는지 한 장의 posterior 그림으로 직관적으로 볼 수 있습니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/generalized-variational-inference/">
+          <img src="/assets/img/gvi/image.png" alt="Generalized variational inference diagram" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Inference</span>
+            
+            <h3 class="home-gallery__title">[Paper Review] Generalized Variational Inference</h3>
+            
+              <p class="home-gallery__text">loss, divergence, feasible set 세 축으로 posterior를 다시 설계하는 프레임워크를 정리한 글입니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/pymc/">
+          <img src="/assets/img/pymc/exp1.png" alt="PyMC experiment posterior figure" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Code Lab</span>
+            
+            <h3 class="home-gallery__title">PyMC를 이용한 베이지안 모델링</h3>
+            
+              <p class="home-gallery__text">A/B 테스트 예제로 prior부터 posterior, 의사결정까지 Bayesian workflow를 실전 코드와 함께 다룹니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/natural-gradient/">
+          <img src="/assets/img/natural_gradient/output3.png" alt="Natural gradient variational inference visualization" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Optimization</span>
+            
+            <h3 class="home-gallery__title">Natural Gradient for Variational Inference</h3>
+            
+              <p class="home-gallery__text">유클리드 gradient 대신 정보기하학을 반영한 업데이트가 VI에서 왜 중요한지 시각적으로 설명합니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/bocd/">
+          <img src="/assets/img/bocd/run_length.png" alt="Bayesian online change point detection run length figure" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Time Series</span>
+            
+            <h3 class="home-gallery__title">Bayesian Online Change Point Detection</h3>
+            
+              <p class="home-gallery__text">시계열에서 변화점의 posterior를 온라인으로 추적하는 방식과 run-length 해석을 보여줍니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/bkmr/">
+          <img src="/assets/img/bkmr/summary.png" alt="Bayesian kernel machine regression summary function plot" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Regression</span>
+            
+            <h3 class="home-gallery__title">Bayesian Kernel Machine Regression (BKMR)</h3>
+            
+              <p class="home-gallery__text">비선형성과 상호작용을 함께 다루는 베이지안 회귀에서 summary function이 어떤 해석을 주는지 보여줍니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/normalizing-flows/">
+          <img src="/assets/img/nf/change_process.png" alt="Normalizing flow transformation process" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Flow</span>
+            
+            <h3 class="home-gallery__title">[Paper Review] Normalizing Flows</h3>
+            
+              <p class="home-gallery__text">간단한 분포가 연속적인 가역변환을 거치며 복잡한 posterior family로 바뀌는 과정을 시각적으로 설명합니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/variational-inference/">
+          <img src="/assets/img/vi/vi.jpg" alt="Gaussian approximation illustration for variational inference" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Approximation</span>
+            
+            <h3 class="home-gallery__title">Variational Inference</h3>
+            
+              <p class="home-gallery__text">복잡한 posterior를 tractable한 분포로 근사한다는 VI의 핵심 아이디어를 가장 단순한 그림으로 요약합니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/occ/">
+          <img src="/assets/img/occ/08_ocsvm_basic_boundary.png" alt="One-class SVM decision boundary visualization" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Anomaly</span>
+            
+            <h3 class="home-gallery__title">One-Class Classification</h3>
+            
+              <p class="home-gallery__text">정상 데이터가 만드는 영역을 먼저 학습하고, 그 바깥의 샘플을 이상치로 판단하는 OCC의 핵심 아이디어를 정리한 글입니다.</p>
+            
+          </div>
+        </a>
+      
+        <a class="home-gallery__item" href="/dit/">
+          <img src="/assets/img/dit/dit.jpg" alt="DiT : Scalable Diffusion Models with Transformers" loading="lazy">
+          <div class="home-gallery__overlay">
+            
+              <span class="home-gallery__label">Diffusion</span>
+            
+            <h3 class="home-gallery__title">DiT : Scalable Diffusion Models with Transformers</h3>
+            
+              <p class="home-gallery__text">DiT (Diffusion Transformer)를 공부하며 통계학적인 관점에서 핵심 개념을 정리한 글입니다.</p>
+            
+          </div>
+        </a>
+      
+    </div>
+  </section>
+
+
+
+<h3 class="archive__subtitle">Recent Posts</h3>
+
+
+
+
+
+
+<!-- 페이지네이션이 있을 경우 위에서 필터링된 posts를 사용하되 페이징 처리는 별도 고려 필요 -->
+<!-- 하지만 홈 화면에서 페이징을 유지하면서 필터링하는 건 복잡하므로, 일단 전체 Study 글 중 최근 글만 보여주거나 페이징 없이 노출 -->
+<!-- 여기서는 필터링된 목록을 페이지네이션 없이 리스트로 보여주는 것이 안전함 -->
+
+<div class="entries-list">
+  
+
+
+
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+</div>
+
+<!-- 필터링된 목록에는 paginator가 적용되지 않으므로 paginator 제거 -->
+
+  </div>
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

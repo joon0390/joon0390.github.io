@@ -1,0 +1,798 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측 Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="수온, 용존산소, 사료량을 바탕으로 넙치 성장량을 예측하고 BDKMR로 기존 커널 모델보다 더 낮은 오차를 달성한 연구.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측">
+<meta property="og:url" content="https://joon0390.github.io/projects/bayesian-deep-kernel-flounder-growth/">
+
+
+  <meta property="og:description" content="수온, 용존산소, 사료량을 바탕으로 넙치 성장량을 예측하고 BDKMR로 기존 커널 모델보다 더 낮은 오차를 달성한 연구.">
+
+
+
+  <meta property="og:image" content="https://joon0390.github.io/assets/img/projects/bayesian-deep-kernel-flounder-growth/scatterplot_models.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2025-08-01T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/projects/bayesian-deep-kernel-flounder-growth/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar main--no-right-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측">
+    <meta itemprop="description" content="수온, 용존산소, 사료량을 바탕으로 넙치 성장량을 예측하고 BDKMR로 기존 커널 모델보다 더 낮은 오차를 달성한 연구.">
+    <meta itemprop="datePublished" content="2025-08-01T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/projects/bayesian-deep-kernel-flounder-growth/" itemprop="url">베이지안 딥커널 머신을 이용한 양식 넙치 성장 예측
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-08-01T00:00:00+09:00">August 1, 2025</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <style>
+  #main {
+    max-width: min(96vw, 1120px);
+  }
+
+  .layout--single .page {
+    width: 100% !important;
+    padding-inline-end: 0 !important;
+  }
+
+  .layout--single .page__inner-wrap {
+    width: 100%;
+  }
+
+  #flounder-project-layout {
+    display: block;
+  }
+
+  #flounder-project-main {
+    min-width: 0;
+    max-width: 64rem;
+  }
+
+  .flounder-panel {
+    border: 1px solid rgba(18, 57, 91, 0.12);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.72), transparent 40%),
+      linear-gradient(180deg, #f8fbfc 0%, #edf5f7 100%);
+    box-shadow: 0 18px 40px rgba(17, 57, 91, 0.08);
+    padding: 1.1rem;
+  }
+
+  .flounder-copy {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .flounder-visual {
+    margin: 1.75rem 0 2.2rem;
+  }
+
+  .flounder-visual + .flounder-visual {
+    margin-top: 1.5rem;
+  }
+
+  .flounder-visual__head {
+    margin-bottom: 0.9rem;
+  }
+
+  .flounder-visual__head h3 {
+    margin: 0 0 0.25rem;
+    color: #103754;
+    font-size: 1.1rem;
+  }
+
+  .flounder-visual__head p {
+    margin: 0;
+    color: #627888;
+    font-size: 0.95rem;
+  }
+
+  .flounder-pipeline-grid {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .flounder-pipeline-card {
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .flounder-pipeline-card h4 {
+    margin: 0 0 0.55rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-pipeline-card p,
+  .flounder-pipeline-card li {
+    margin: 0;
+    color: #4f6678;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .flounder-pipeline-card ul {
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  .flounder-pipeline-arrow {
+    display: none;
+  }
+
+  .flounder-summary-grid {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 0.95rem;
+  }
+
+  .flounder-summary-box {
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .flounder-summary-box h4 {
+    margin: 0 0 0.35rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-summary-box p {
+    margin: 0;
+    color: #4f6678;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .flounder-summary-box--mint {
+    background: #e3f7f0;
+  }
+
+  .flounder-summary-box--blue {
+    background: #e8f2fb;
+  }
+
+  .flounder-metric-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .flounder-metric-card {
+    border: 1px solid rgba(18, 57, 91, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .flounder-metric-card h4 {
+    margin: 0 0 0.9rem;
+    color: #103754;
+    font-size: 1rem;
+  }
+
+  .flounder-metric-row + .flounder-metric-row {
+    margin-top: 0.8rem;
+  }
+
+  .flounder-metric-row-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.35rem;
+    color: #103754;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .flounder-track {
+    height: 0.7rem;
+    border-radius: 999px;
+    background: #e7eef3;
+    overflow: hidden;
+  }
+
+  .flounder-bar {
+    height: 100%;
+    border-radius: 999px;
+  }
+
+  .flounder-bar--krr {
+    background: #bccdda;
+  }
+
+  .flounder-bar--bkmr {
+    background: #7da4c1;
+  }
+
+  .flounder-bar--equal {
+    background: #7fd6c6;
+  }
+
+  .flounder-bar--bdkmr {
+    background: #0f7c87;
+  }
+
+  .flounder-metric-foot {
+    margin-top: 0.9rem;
+    color: #627888;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 980px) {
+    .flounder-pipeline-grid {
+      grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr) 2rem minmax(0, 1fr);
+      align-items: stretch;
+    }
+
+    .flounder-pipeline-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #18839a;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .flounder-summary-grid,
+    .flounder-metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .flounder-panel {
+      padding: 0.9rem;
+    }
+  }
+</style>
+
+<div id="flounder-project-layout">
+<div id="flounder-project-main" class="flounder-copy">
+
+    <h2 id="section">프로젝트 요약</h2>
+
+    <ul>
+      <li>개요: 양식 넙치 성장량을 예측하기 위해 ANN 표현 학습과 Gaussian Process 기반 베이지안 커널 회귀를 결합한 연구</li>
+      <li>기간: 2024.12-2025.08</li>
+      <li>데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조의 수온, 용존산소, 사료량, 월별 체중 데이터</li>
+      <li>기술 스택: Bayesian Deep Kernel Machine Regression, Gaussian Process, ANN, Heteroscedastic Modeling, LOOCV</li>
+      <li>성과(성능): BDKMR 기준 MAE 0.1895, MSE 0.0629로 비교 모델 중 최저 오차 달성</li>
+    </ul>
+
+    <h2 id="section-1">문제 정의</h2>
+
+    <p>국내 양식 넙치(olive flounder)의 성장 예측을 위해, 가우시안 프로세스 회귀와 신경망 기반 표현 학습을 결합한 Bayesian Deep Kernel Machine Regression (BDKMR) 모델을 제안한 연구입니다. 완도 2개 양식장과 제주 3개 양식장, 총 7개 수조에서 2023년 3월부터 2024년 7월까지 수집한 종단 데이터를 바탕으로 수온, 용존산소, 개체당 사료량이 성장에 미치는 비선형 관계를 모델링했습니다.</p>
+
+    <figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/log_transformed_weight_by_time.png" alt="시간에 따른 양식 넙치 로그 체중 변화" />
+  <figcaption>지역과 수조에 따라 로그 체중 증가 속도와 변동 폭이 다르게 나타납니다. 이 차이가 단순 평균 모델보다 관측별 정밀도를 반영하는 베이지안 모델이 필요한 이유였습니다.</figcaption>
+</figure>
+
+    <h2 id="section-2">접근 방법</h2>
+
+    <section class="flounder-visual flounder-panel">
+  <div class="flounder-visual__head">
+    <h3>아키텍처 요약</h3>
+    <p>데이터 정렬, 신경망 기반 특징 학습, 베이지안 커널 회귀를 한 흐름으로 정리했습니다.</p>
+  </div>
+  <div class="flounder-pipeline-grid">
+    <div class="flounder-pipeline-card">
+      <h4>1. Aquaculture Data</h4>
+      <ul>
+        <li>완도 2개, 제주 3개 양식장</li>
+        <li>총 7개 수조, 2023.03-2024.07</li>
+        <li>수온, 용존산소, 개체당 사료량, 초기 로그 체중</li>
+      </ul>
+    </div>
+    <div class="flounder-pipeline-arrow" aria-hidden="true">→</div>
+    <div class="flounder-pipeline-card">
+      <h4>2. Feature Learning</h4>
+      <p>측정 주기가 다른 센서 데이터와 월별 체중 데이터를 동일한 성장 구간으로 정렬한 뒤, ANN 기반 feature map으로 비선형 구조를 학습합니다.</p>
+    </div>
+    <div class="flounder-pipeline-arrow" aria-hidden="true">→</div>
+    <div class="flounder-pipeline-card">
+      <h4>3. Bayesian Kernel Layer</h4>
+      <p>Gaussian process 기반 BDKMR로 예측과 불확실성을 함께 추정하고, 관측별 정밀도를 반영하기 위해 이분산 구조 <code>Var(y_i)=sigma^2/n_i</code> 를 사용합니다.</p>
+    </div>
+  </div>
+  <div class="flounder-summary-grid">
+    <div class="flounder-summary-box flounder-summary-box--mint">
+      <h4>반응 변수</h4>
+      <p>농가별 무작위 50마리 표본에서 계산한 월별 로그 평균 체중</p>
+    </div>
+    <div class="flounder-summary-box flounder-summary-box--blue">
+      <h4>추론 방식</h4>
+      <p>MAP estimation과 Laplace approximation을 사용해 계산 가능성과 베이지안 구조를 동시에 확보</p>
+    </div>
+  </div>
+</section>
+
+    <section class="flounder-visual flounder-panel">
+  <div class="flounder-visual__head">
+    <h3>EDA 및 성능 비교</h3>
+    <p>탐색적 데이터 분석(EDA)을 통해 변수 구조를 먼저 확인하고, 이후 논문에 보고된 LOOCV 성능을 비교했습니다.</p>
+  </div>
+  <div class="flounder-metric-grid">
+    <div class="flounder-metric-card">
+      <h4>MAE</h4>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>KRR</span><span>1.1141</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--krr" style="width:100%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BKMR</span><span>0.6977</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bkmr" style="width:62.6%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR(Equal)</span><span>0.2006</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--equal" style="width:18.0%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR</span><span>0.1895</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bdkmr" style="width:17.0%"></div></div>
+      </div>
+    </div>
+    <div class="flounder-metric-card">
+      <h4>MSE</h4>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>KRR</span><span>3.5665</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--krr" style="width:100%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BKMR</span><span>0.9447</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bkmr" style="width:26.5%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR(Equal)</span><span>0.0721</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--equal" style="width:2.0%"></div></div>
+      </div>
+      <div class="flounder-metric-row">
+        <div class="flounder-metric-row-head"><span>BDKMR</span><span>0.0629</span></div>
+        <div class="flounder-track"><div class="flounder-bar flounder-bar--bdkmr" style="width:1.8%"></div></div>
+      </div>
+      <p class="flounder-metric-foot">BDKMR은 BKMR 대비 MAE를 약 72.8%, MSE를 약 93.3% 줄였습니다.</p>
+    </div>
+  </div>
+</section>
+
+    <h2 id="section-3">접근 방법 세부</h2>
+
+    <ul>
+      <li>수온과 용존산소는 1분 단위 센서 데이터, 사료량은 일 단위 기록, 체중은 월 단위 측정으로 수집되었으며, 이를 동일한 성장 관측 구간에 맞춰 정렬해 분석용 데이터셋을 구성했습니다.</li>
+      <li>월별 체중 측정에서는 농가별로 무작위 50마리를 표본 추출해 로그 평균 체중을 반응변수로 사용했고, 개체 수와 측정 변동성을 반영하기 위해 \(Var(y_i) = \sigma^2 / n_i\) 형태의 이분산 구조를 적용했습니다.</li>
+      <li>BKMR의 불확실성 정량화 장점과 ANN의 표현 학습 능력을 결합한 BDKMR을 설계해, 환경 변수 간 복잡한 비선형 상호작용을 더 유연하게 학습하도록 구성했습니다.</li>
+      <li>추론은 MAP 추정과 Laplace approximation을 기반으로 수행해 베이지안 구조를 유지하면서도 실제 예측 문제에 적용 가능한 계산 효율을 확보했습니다.</li>
+    </ul>
+
+    <h2 id="eda">데이터와 EDA</h2>
+
+    <p>EDA에서는 먼저 양식장, 수조, 시간에 따른 성장 곡선이 같은 형태로 움직이는지 확인했습니다. 체중은 전반적으로 증가하지만 수조별 분포와 지역별 밀도는 동일하지 않았고, 환경 변수와 초기 체중 사이에도 단순 선형 관계로 보기 어려운 패턴이 나타났습니다. 이 때문에 고정된 커널 하나보다 ANN feature map을 거친 딥커널 구조를 사용하는 방향으로 모델링을 정했습니다.</p>
+
+    <ul>
+      <li>대상 데이터: 완도 2개 양식장, 제주 3개 양식장, 총 7개 수조</li>
+      <li>수집 기간: 2023년 3월부터 2024년 7월까지</li>
+      <li>입력 변수: 수온, 용존산소, 개체당 사료량, 초기 로그 체중</li>
+      <li>반응 변수: 월별 로그 평균 체중</li>
+      <li>비교 모델: KRR, BKMR, BDKMR(Equal), BDKMR</li>
+      <li>평가 지표: Leave-One-Out Cross-Validation (LOOCV), MAE, MSE</li>
+    </ul>
+
+    <figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/flatfish_pairplot.png" alt="양식 넙치 성장 데이터 변수 간 pairplot" />
+  <figcaption>입력 변수와 로그 평균 체중의 관계를 pairplot으로 확인해, 변수 간 상관 구조와 비선형적인 분포 차이를 먼저 점검했습니다.</figcaption>
+</figure>
+
+    <div class="project-figure-grid">
+  <figure class="project-figure">
+    <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/boxplot_by_tank.png" alt="수조별 로그 체중 분포 박스플롯" />
+    <figcaption>수조별 체중 분포는 위치와 변동 폭이 달라, 모든 관측을 같은 분산으로 보는 가정이 충분하지 않았습니다.</figcaption>
+  </figure>
+  <figure class="project-figure">
+    <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/density_plot_by_region.png" alt="지역별 로그 체중 밀도 분포" />
+    <figcaption>지역별 밀도 분포 차이를 통해 완도와 제주 데이터가 같은 성장 분포를 공유하지 않는다는 점을 확인했습니다.</figcaption>
+  </figure>
+</div>
+
+    <figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/log_mean_weight_vs_estimated_se.png" alt="로그 평균 체중과 추정 표준오차 관계" />
+  <figcaption>로그 평균 체중과 추정 표준오차의 관계를 확인해, 관측마다 다른 정밀도를 모델에 반영할 필요가 있음을 정리했습니다.</figcaption>
+</figure>
+
+    <h2 id="section-4">성과(성능)</h2>
+
+    <ul>
+      <li>제안한 BDKMR은 <code>MAE 0.1895</code>, <code>MSE 0.0629</code>를 기록해 비교 모델 중 가장 낮은 예측 오차를 보였습니다.</li>
+      <li>동분산 가정의 <code>BDKMR(Equal)</code>보다 이분산 구조를 반영한 BDKMR이 더 우수해, 관측별 정밀도 차이를 고려하는 것이 실제 양식 데이터 예측에 중요함을 확인했습니다.</li>
+      <li>기준 모델인 KRR은 <code>MAE 1.1141</code>, <code>MSE 3.5665</code>, BKMR은 <code>MAE 0.6977</code>, <code>MSE 0.9447</code>로 나타나, 딥커널 기반 표현 학습이 기존 커널 모델 대비 뚜렷한 성능 개선을 제공했습니다.</li>
+    </ul>
+
+    <figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/bayesian-deep-kernel-flounder-growth/scatterplot_models.png" alt="모델별 예측값과 실제값 산점도 비교" />
+  <figcaption>예측값과 실제값의 산점도를 비교하면 BDKMR 계열 모델이 기준선 주변에 더 안정적으로 모이며, 기존 KRR/BKMR 대비 오차가 줄어든 흐름을 확인할 수 있습니다.</figcaption>
+</figure>
+
+    <h2 id="section-5">사용 기술</h2>
+
+    <ul>
+      <li>Bayesian Deep Kernel Machine Regression</li>
+      <li>Gaussian Process Regression</li>
+      <li>Artificial Neural Networks</li>
+      <li>Heteroscedastic Modeling</li>
+      <li>Leave-One-Out Cross-Validation</li>
+    </ul>
+
+    <h2 id="section-6">포트폴리오 관점의 의미</h2>
+
+    <p>양식 데이터는 변수별 측정 주기가 다르고 환경 스트레스에 따라 변동성이 크게 달라지는 특성이 있습니다. 이 연구는 딥러닝의 표현 학습과 베이지안 커널 모델의 해석 가능성 및 불확실성 추정을 결합해, 급이 전략, 출하 시점, 환경 제어와 같은 실제 양식 운영 의사결정에 활용할 수 있는 성장 예측 프레임워크를 제시했다는 점에서 의미가 있습니다.</p>
+
+    <h2 id="section-7">느낀점</h2>
+
+    <p>이 프로젝트를 진행하면서 가장 크게 느낀 점은, 좋은 예측 모델을 만드는 일은 모델을 복잡하게 설계하는 것만으로 해결되지 않는다는 점이었습니다. 실제 양식 데이터는 측정 주기가 서로 다르고, 수조별 환경 차이와 관측 정밀도 차이도 커서, 데이터를 어떻게 정렬하고 해석하느냐가 성능에 직접적인 영향을 주었습니다.</p>
+
+    <p>특히 EDA를 통해 변수 간 관계가 단순 선형 구조가 아니라는 점과, 관측마다 분산 수준이 다르다는 점을 먼저 확인한 것이 이후 모델링 방향을 정하는 데 큰 도움이 되었습니다. 개인적으로는 딥러닝 기반 특징 학습과 베이지안 커널 회귀를 결합했을 때, 예측 정확도뿐 아니라 불확실성까지 함께 다룰 수 있다는 점이 가장 인상적이었고, 앞으로도 실제 데이터 문제에서는 이런 해석 가능한 확률적 접근이 중요하다고 느꼈습니다.</p>
+
+    <h2 id="section-8">논문 정보</h2>
+
+    <ul>
+      <li>Junhee Kim, Seung-Won Seo, Ho-Jin Jung, Hyun-Seok Jang, Han-Kyu Lim, Seongil Jo, “Predicting Flatfish Growth in Aquaculture Using Bayesian Deep Kernel Machines”, <em>Applied Sciences</em>, 2025.</li>
+      <li>DOI: <a href="https://doi.org/10.3390/app15179487">10.3390/app15179487</a></li>
+      <li>원문 PDF: <a href="/assets/papers/flounder-bdkmr-applsci-2025.pdf">Applied Sciences 2025 논문 PDF 열기</a></li>
+    </ul>
+
+  </div>
+</div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-08-01T00:00:00+09:00">August 1, 2025</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/projects/language-guided-image-colorization-challenge/" class="pagination--pager" title="언어정보 기반 흑백 이미지 색채화">이전</a>
+    
+    
+      <a href="/projects/seoul-fine-dust-prediction/" class="pagination--pager" title="서울시 미세먼지 예측">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

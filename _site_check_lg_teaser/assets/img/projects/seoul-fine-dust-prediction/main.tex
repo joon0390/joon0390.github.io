@@ -1,0 +1,870 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 서울시 미세먼지 예측 프로젝트 발표 자료
+% 최종 수정: 2025-08-18
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[serif, aspectratio=169]{beamer}
+% --- 패키지 로드 ---
+\usepackage{kotex} % 한글 지원
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+\usepackage{hyperref}
+\usepackage{latexsym,amsmath,amssymb,xcolor,multicol,booktabs}%,calligra}
+\usepackage{graphicx}
+\usepackage{caption} % for caption spacing
+% --- 발표 정보 설정 ---
+\author{김준희}
+\title{2025 여름 자료분석 자격시험}
+\subtitle{Air Pollution in Seoul from Kaggle}
+\institute{
+  INHA University\\
+}
+\date{\small \today}
+
+% --- Beamer 테마 (Overleaf에 HKUSTstyle.sty 업로드 필요) ---
+\usepackage{HKUSTstyle}
+
+% --- Beamer 템플릿 설정 ---
+\setbeamertemplate{section in toc}{\par\vspace{1em}\inserttocsection\par}
+\setbeamertemplate{subsection in toc}{\par\vspace{0.5em}\hspace{2em}\inserttocsubsection\par}
+\captionsetup{skip=5pt} % 캡션과 이미지 사이 간격 조절
+
+% 각 섹션 시작 시 목차 표시
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{목차}
+    \tableofcontents[currentsection, sectionstyle=show/shaded, subsectionstyle=show/shaded/hide]
+  \end{frame}
+}
+
+% --- 문서 시작 ---
+\begin{document}
+
+% --- 제목 페이지 ---
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% --- 전체 목차 페이지 ---
+\begin{frame}{발표 목차}
+  \tableofcontents
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{1. 자료분석 개요}
+%-----------------------------------------------------------------------------------
+\begin{frame}{목표 및 과정}
+\begin{block}{목표}
+2017-2018년 서울시 일평균 대기오염 데이터에 기반, 2019년의 PM10 및 PM2.5 농도를 1, 2, 3일 후까지 예측하는 최적의 모델을 탐색, 제시
+\end{block}
+\vspace{0.3cm}
+    \begin{figure}
+      \includegraphics[width=0.9\textwidth]{preprocess/objective.png}
+      \caption{\scriptsize자료분석의 목표}
+    \end{figure}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{2. 데이터 준비 및 피쳐 엔지니어링}
+%-----------------------------------------------------------------------------------
+\begin{frame}{데이터 확인}
+    \begin{columns}[T] % [T] 옵션은 각 열의 상단을 기준으로 정렬합니다.
+        % --- 첫 번째 열 ---
+        \begin{column}{0.33\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{preprocess/mii.png}
+                \caption{\scriptsize오염물질 데이터}
+                \label{fig:mii}
+            \end{figure}
+        \end{column}
+        % --- 두 번째 열 ---
+        \begin{column}{0.33\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{preprocess/msi.png}
+                \caption{\scriptsize측정소 데이터}
+                \label{fig:msi}
+            \end{figure}
+        \end{column}
+        % --- 세 번째 열 ---
+        \begin{column}{0.33\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{preprocess/mi.png}
+                \caption{\scriptsize측정값 데이터}
+                \label{fig:mi}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{데이터 통합 및 재구성}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{preprocess/merged1.png}
+        \caption{\scriptsize
+            3개의 원본 데이터를 통합 후, 각 측정소별 시계열 형태로 재구성한 결과}
+        \label{fig:data_merge_flow}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{PM10 vs PM2.5 계절별 최고/최저 농도 비교}
+    \vspace{-0.3cm}
+    \begin{columns}[T] % 열의 상단을 기준으로 정렬
+
+        % --- 왼쪽 열 (PM10 지도) ---
+        \begin{column}{0.5\textwidth}
+            \vfill % 수직 중앙 정렬을 위한 공간 채우기 (위)
+            \begin{figure}
+                \includegraphics[
+                    width=1.2\linewidth,
+                    height=5.0cm, % 이미지의 최대 높이를 지정
+                    keepaspectratio % 이미지 비율 유지
+                ]{preprocess/pm10_high_low.png}
+                \caption{\scriptsize PM10 계절별 최고/최저 자료}
+                \label{fig:pm10_map}
+            \end{figure}
+            \vfill % 수직 중앙 정렬을 위한 공간 채우기 (아래)
+        \end{column}
+        
+        % --- 오른쪽 열 (PM2.5 지도) ---
+        \begin{column}{0.5\textwidth}
+            \vfill % 수직 중앙 정렬 (위)
+            \begin{figure}
+                \includegraphics[
+                    width=1.2\linewidth,
+                    height=5.0cm, % 양쪽의 최대 높이를 동일하게 설정
+                    keepaspectratio
+                ]{preprocess/pm2_5_high_low.png}
+               \caption{\scriptsize PM2.5 계절별 최고/최저 자료}
+                \label{fig:pm25_map}
+            \end{figure}
+            \vfill % 수직 중앙 정렬 (아래)
+        \end{column}
+    \end{columns}
+    
+    \vspace{-0.3cm}
+    \begin{itemize}\scriptsize
+        \item PM10과 PM2.5 모두 \textbf{여름}과 \textbf{겨울}에 높은 농도를 기록하는 유사한 패턴
+    
+        \item 또한 일부 최저농도의 값들이 음수로 측정되어 있어 처리가 필요
+    \end{itemize}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{데이터 오류 처리: 보간 (Interpolation)}
+    \begin{block}{\small 처리 과정}
+        \begin{enumerate}\scriptsize
+            \item\textbf{오류 탐지}:
+            물리적으로 불가능한 음수인(-) 농도 값을 탐지
+            \vspace{0.5cm}
+            \item\textbf{결측치 변환}:
+            탐지된 오류 값을 비어있는 값(NaN)으로 변환
+            \vspace{0.5cm}
+            \item\textbf{Cubic 보간}:
+            주변의 정상 값들을 이용하여 3차 곡선을 생성하고, 비어있는 지점의 값을 추정하여 삽입
+            \vspace{0.5cm}
+            \item\textbf{최종 보정}:
+            보간 과정에서 발생할 수 있는 음수 값을 0으로 최종 처리하여 보간의 목적을 달성
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{3. 탐색적 데이터 분석 (EDA)}
+%-----------------------------------------------------------------------------------
+
+\begin{frame}{PM10, PM2.5의 분포}
+    \vspace{-0.2cm}
+    \begin{columns}[T] % [T] 옵션은 각 열의 상단을 기준으로 정렬합니다.
+
+        % --- 왼쪽 열 (그래프) ---
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{eda/target_dist.png}
+                \caption{\scriptsize 타겟 변수의 분포}
+                \label{fig:placeholder}
+            \end{figure}
+        \end{column}
+
+        % --- 오른쪽 열 (텍스트 설명) ---
+        \begin{column}{0.4\textwidth}
+            \begin{block}{\scriptsize 분석 결과 및 제언}
+                \begin{itemize}\scriptsize
+                    \item \textbf{분포 확인}: PM10과 PM2.5 모두 낮은 값에 데이터가 집중되어 있고, 오른쪽으로 긴 꼬리를 갖는 분포를 보임
+                    \vspace{0.3cm}
+                    \item \textbf{문제점}: 이러한 분포는 일부 극단적으로 높은 값이 모델에 과도한 영향을 미침 
+                    \vspace{0.3cm}
+                    \item \textbf{해결 방안}: 모델의 안정성과 성능을 위해, 데이터의 치우침을 완화하는 \textbf{로그 변환}을 고려
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{로그 변환 후 PM10, PM2.5의 분포}
+    \vspace{-0.2cm}
+    \begin{columns}[T] % [T] 옵션은 각 열의 상단을 기준으로 정렬합니다.
+
+        % --- 왼쪽 열 (그래프) ---
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{eda/log_transformed_target_dist.png}
+                \caption{\scriptsize 로그 변환 후 타겟 변수의 분포}
+                \label{fig:log_dist}
+            \end{figure}
+        \end{column}
+
+        % --- 오른쪽 열 (텍스트 설명) ---
+        \begin{column}{0.4\textwidth}
+            \begin{block}{\small 로그 변환 효과}
+                \begin{itemize}\scriptsize
+                    \item\textbf{대칭성 증가}: \\
+                    오른쪽으로 길게 치우쳤던 분포가 중앙으로 모여 \textbf{정규분포와 유사한} 대칭적인 형태로 변환됨
+                    \vspace{0.2cm}
+                    \item\textbf{이상치 영향 완화}: \\
+                    극단적으로 컸던 값들이 다른 값들과의 격차가 줄어들어, 모델 학습 시 \textbf{이상치의 과도한 영향력을 줄일 수 있음.}
+                    \vspace{0.2cm}
+                    \item\textbf{안정화된 타겟변수}: \\
+                    "로그 변환된 타겟 변수"를 새로운 컬럼으로 추가하여, 분산이 안정화된 새로운 타겟변수 생성.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{타겟 변수의 자기상관 분석 (로그 변환 후)}
+    
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{eda/acf.png}
+                \caption{\scriptsize ACF \& PACF Plots}
+                \label{fig:autocorrelation}
+            \end{figure}
+        \end{column}
+
+        \begin{column}{0.4\textwidth}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{ACF}:\\
+                상관계수가 천천히 감소하는 것은 데이터에 강한 \textbf{추세(Trend)가 존재}하며, 비정상성(Non-stationary)임을 의미
+                \vspace{0.3cm}
+                \item \textbf{PACF}:\\
+                Lag 1 이후 상관계수가 급격히 감소하는 것은 현재 데이터가 \textbf{바로 직전(1일 전) 데이터와 가장 강한 직접적 관련}이 있음을 시사. (AR 특성)
+            \end{itemize}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item \scriptsize ACF의 패턴을 통해 데이터의 추세를 제거하고 정상성(Stationary)을 확보하고자 \textbf{1차 차분(d=1)을 적용}
+        \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{1차 차분 후 자기상관 분석}
+
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{eda/acf_after.png}
+                \caption{\scriptsize 1차 차분을 적용한 데이터의 ACF \& PACF}
+                \label{fig:diff_acf_pacf}
+            \end{figure}
+        \end{column}
+
+        \begin{column}{0.4\textwidth}
+            \scriptsize
+            \begin{itemize}
+                \item 1차 차분을 통해 데이터의 \textbf{추세가 제거}되고 안정성이 확보됨.
+                \vspace{0.3cm}
+                \item \textbf{ACF}가 특정 시점 이후 절단되어 \textbf{MA(q)항}의 차수를 결정할 수 있음 (q$:=$1)
+                \vspace{0.3cm}
+                \item \textbf{PACF} 역시 특정 시점 이후 절단되어 \textbf{AR(p)항}의 차수를 결정할 수 있음. (p$:=$1)
+            \end{itemize}
+            \vspace{0.5cm}
+            \begin{itemize}
+                \item  \scriptsize ACF와 PACF가 모두 절단되어 \textbf{ARIMA(2, 1, 2)} 모델이 적합함을 의미
+            \end{itemize}
+        \end{column}
+        
+    \end{columns}
+\end{frame}
+
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{PM10과 PM2.5의 전체 월별, 계절별, 요일별 평균 (로그변환)}
+    \vspace{-0.2cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{eda/pm10_pattern.png}
+        \label{fig:pm10_pattern}
+    \end{figure}
+    \vspace{-0.4cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{eda/pm2_5_pattern.png}
+        \label{fig:pm25_pattern}
+    \end{figure}
+    \vspace{-0.6cm}
+    \begin{itemize}\scriptsize
+        \item 두 오염물질의 전체 월별, 계절별, 요일별 변화 \textbf{패턴은 거의 동일한 형태}.
+        \begin{itemize}\scriptsize
+            \item 미묘한 차이지만 \textbf{PM10\_log}은 \textbf{봄철}에, \textbf{PM2\_log}는 \textbf{겨울철}에 가장 높음
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{년도$\cdot$월별 PM10 \& PM2.5 평균 농도}
+    % --- 월별 PM 농도 꺾은선 그래프 ---
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{eda/monthly_change.png}
+        \caption {\scriptsize 월별 PM\_log 농도 꺾은선 그래프}
+        \label{fig:placeholder}
+    \end{figure}
+    
+    \vspace{-0.5cm}
+    
+    % --- 그래프 핵심 내용 요약 ---
+    \begin{itemize}
+        \item \scriptsize 월별 평균 농도는 \textbf{겨울과 봄에 높고 여름에 낮음}
+        \item \scriptsize 12월부터 5월까지 농도가 높게 나타나며, 대기 순환이 활발한 \textbf{여름(8월)에 가장 낮음}
+        \item \scriptsize 가을철부터 농도가 다시 상승하기 시작하여 겨울,봄에 정점을 찍는 패턴이 반복
+    \end{itemize}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{년도$\cdot$계절별 PM10 \& PM2.5 평균 농도}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\linewidth]{eda/seasonly_change.png}
+        \caption{\scriptsize 계절별 PM\_log 농도 평균 막대그래프}
+        \label{fig:seasonal_bar}
+    \end{figure}
+    \vspace{-0.5cm}
+    
+    % --- 그래프 핵심 내용 요약 ---
+    \begin{itemize}
+        \item \scriptsize PM10\_log는 봄과 겨울에 평균 농도가 높음
+        \item \scriptsize PM2.5\_log도 봄과 겨울철에 평균 농도가 가장 높음 -> 이는 봄철의 황사와 겨울철 대기역전과 난방의 영향에 기인
+        \item \scriptsize 두 오염물질 모두 강수와 활발한 대기 순환의 영향으로 \textbf{여름철}에 가장 낮음.
+    \end{itemize}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{순환형 시간 변수 변환}
+    \begin{itemize}\scriptsize
+        \item 월별, 계절별 데이터 분석 결과, 미세먼지 농도는 1년을 주기로 반복되는 구조
+        \item 이러한 패턴을 잘 반영하고자, 월(Month), 계절(Season), 요일(Day of Week)과 같은 시간 변수를 \textbf{Sin/Cos 삼각함수를 이용해 변환}
+    \end{itemize}
+     
+    \vspace{0.2cm}
+
+    \begin{columns}[T] % 상단 정렬
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{eda/monthly_change.png} % 월별 패턴 그래프 이미지
+                \caption{\scriptsize 월별 농도에서 보이는 순환 패턴}
+            \end{figure}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth} 
+            \begin{figure}
+                \includegraphics[width=0.6\linewidth]{eda/sincos_transform.png} % Sin/Cos 변환 결과 이미지
+                \caption{\scriptsize 월(Month) 변수를 2D 좌표로 변환}
+                \label{fig:sincos_transform}
+            \end{figure}
+        \end{column} 
+    \end{columns}
+\end{frame}
+
+%----------------------------------------------------------------------------------
+\begin{frame}{추가 데이터: 기온 데이터}
+    \begin{block}{\small '기온' 변수 추가}
+        \begin{itemize}
+            \item \scriptsize 기상청 기상자료개방포털(https://data.kma.go.kr/climate)에서 서울시의 일별 기온 데이터를 추가
+        \end{itemize}
+    \end{block}
+    \vspace{-0.5cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.6\linewidth]{eda/with_temp.png}
+        \caption{\scriptsize PM10, PM2.5 Concentration with Daily Temperature in Seoul}
+        \label{fig:placeholder}
+    \end{figure}
+    \vspace{-0.5cm}
+    \begin{itemize}
+        \item \scriptsize 기온이 높아지는 여름철에는 미세먼지 농도가 낮아지고, 기온이 낮아지는 겨울철에는 미세먼지 농도가 높아지는 음의 상관관계
+    \end{itemize}    
+\end{frame}
+
+%----------------------------------------------------------------------------------
+\begin{frame}{추가 데이터: 지하철역 근접성}
+    \begin{block}{\small '가장 가까운 역까지의 거리' 및 '1km 내 역 개수' 변수 추가}
+    \scriptsize
+        국가철도공단 데이터를 활용하여 측정소 주변의 도심화 수준을 나타내는 두 가지 공간 특성 변수를 생성
+        \begin{itemize}
+            \item \textbf{가장 가까운 지하철역까지의 거리}: 각 측정소에서 가장 가까운 지하철역까지의 직선 거리.
+            \item \textbf{1km 내 지하철역 개수}: 각 측정소의 반경 1km 내에 포함되는 모든 지하철역의 개수.
+        \end{itemize}
+    \end{block}
+    
+    \vspace{-0.2cm}
+
+    \begin{columns}[T]
+        % --- 왼쪽: 지도 시각화 ---
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.5\linewidth]{eda/nearby_station.png} % 이미지 파일 경로
+                \caption{\scriptsize 용산구 측정소 1km 반경 내 인접 지하철역}
+                \label{fig:nearby_station_map}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 변수 추가 이유 및 기대효과 ---
+        \begin{column}{0.4\textwidth}
+            \begin{itemize}\scriptsize
+                \item \textbf{가설 설정}: 지하철역 주변은 유동인구와 교통량이 많아 대기오염 물질 배출이 더 활발할 것이라 가정
+                \vspace{0.2cm}
+                \item \textbf{간접 지표}: 따라서 '역까지의 거리'와 '역의 개수'는 측정소 주변의 \textbf{교통량 및 도심화 수준을 나타내는 좋은 지표}가 될 수 있다고 가설을 설정
+            \end{itemize}
+
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{지하철역 근접성 변수 확인}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \vspace{-4cm}
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{eda/subway_feature_vs_pm.png}
+                \caption{\scriptsize 지하쳘 근접성 변수와 오염물질 간의 산점도}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 해석 ---
+        \begin{column}{0.4\textwidth}
+            \begin{block}{\small 분석 결과}
+                 \begin{itemize}\scriptsize
+                    \item \textbf{가장 가까운 지하철역까지의 거리}:\\
+                    지하철역과의 거리가 멀어질수록 오염 농도가 낮아지는 등의 \textbf{뚜렷한 음의 상관관계는 나타나지 않음.} 전반적인 추세는 미미
+                    \vspace{0.3cm}
+                    \item \textbf{3km 내 지하철역 개수}:\\
+                    마찬가지로, 주변 지하철역 개수에 따른 뚜렷한 패턴은 없었음.
+
+                
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{오염물질 간의 상관계수}
+    \vspace{-0.5cm}
+    \begin{columns}[T]
+        % --- 왼쪽 열: 원본 데이터 상관계수 ---
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=1.2\linewidth]{eda/corr.png}
+                \label{fig:corr_original}
+            \end{figure}
+        \end{column}
+        
+        \begin{column}{0.4\textwidth}
+        \vspace{1cm}
+            \begin{itemize}\scriptsize
+                \item PM10\_log과 PM2.5\_log 두 변수는 0.82의 매우 높은 양의 상관관계를 보임.
+                \item 다른 오염물질과의 관계: 
+                    \begin{itemize}\scriptsize
+                        \item PM10\_log과 CO는 비교적 높은 0.42
+                        \item PM10\_log과 temperature는 -0.27
+                    \end{itemize}
+                \item 지하철과 관련된 변수는 모든 변수와 0에 가까움
+            \end{itemize}           
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{공간적 자기상관성 분석: Moran's I}
+    \begin{block}{\small Global Moran's I}
+        $$
+        I = \frac{N}{\sum_{i=1}^{N}\sum_{j=1}^{N} w_{ij}} \frac{\sum_{i=1}^{N}\sum_{j=1}^{N} w_{ij}(x_i - \bar{x})(x_j - \bar{x})}{\sum_{i=1}^{N}(x_i - \bar{x})^2}
+        $$
+    \end{block}
+        
+    \begin{columns}[T]
+        % --- 왼쪽 열 ---
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}\scriptsize
+                \item $N$: 총 측정소의 개수
+                \item $x_i$: 측정소 $i$의 값
+                \item $\bar{x}$: 전체 측정소의 평균 값
+            \end{itemize}
+        \end{column}
+        % --- 오른쪽 열 ---
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}\scriptsize
+                \item $w_{ij}$: 측정소 $i$와 $j$ 간의 공간적 관계를 나타내는 \textbf{공간 가중치}. (ex. if adjacent 1 else 0)
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    
+    \vspace{0.3cm}
+    
+    \begin{itemize}
+        \item \scriptsize Moran's I는 기본적으로 \textbf{인접한 지역 간의 값이 서로 유사한지}를 측정함. $(x_i - \bar{x})(x_j - \bar{x})$ 부분은 두 지역의 값이 전체 평균보다 둘 다 높거나 둘 다 낮은지를 확인하며, 이 값을 공간 가중치($w_{ij}$)로 조절하여 전체적인 군집 패턴을 계산함
+        \item PM2.5\_log의 평균농도 값은 \textbf{0.2320(p-val : 0.0120)}, PM10\_log의 값은 \textbf{0.0290(p-val : 0.2270)}으로 PM2.5\_log가 통계적으로 유의미한 약한 양의 자기상관이 존재
+    \end{itemize}    
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+
+\begin{frame}{PM2.5 공간 자기상관성 분석 (Moran Scatter Plot)}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{eda/change_of_moransI.png}
+                \caption{\scriptsize 전체 기간 평균 PM2.5 농도에 대한 산점도}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 해석 ---
+        \begin{column}{0.4\textwidth}
+            \begin{itemize}\scriptsize
+                \item Moran's I 통계량이 겨울과 봄에 높아지며, 여름과 가을에 낮아지는 패턴
+                \vspace{0.3cm}
+                \item 이는 미세먼지 농도의 \textbf{공간적 분포 특성}이 고정되어 있지 않고, 계절별 \textbf{기상 조건}에 따라 동적으로 변화함을 의미
+                \vspace{0.3cm}
+                \item \textbf{겨울,봄철}: 대기 정체로 인해 오염물질이 발생 지역 주변에 머물며 \textbf{강한 공간 군집} 형성 $\rightarrow$ 높은 Moran's I
+                \vspace{0.3cm}
+                \item \textbf{여름,가을철}: 활발한 대기 순환 및 강수로 오염물질이 도시 전역으로 희석되어 \textbf{무작위 패턴}에 가까워짐 $\rightarrow$ 낮은 Moran's I
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{계절별 상세 분석: PM10 vs PM2.5}
+    \begin{columns}[T]
+        % --- 1열: Moran's I ---
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{eda/seasonly_moransI_pm10.png}
+            \caption*{\scriptsize PM10}
+            
+            \vspace{-0.5cm}
+            
+            \includegraphics[width=\linewidth]{eda/seasonly_moransI_pm2_5.png}
+            \caption*{\scriptsize PM2.5}
+        \end{column}
+        
+        % --- 2열: p-value ---
+        \begin{column}{0.35\textwidth}
+            \centering
+
+            \includegraphics[width=\linewidth]{eda/seasonly_moransI_pval_pm10.png}
+            \caption*{\scriptsize PM10}
+            
+            \vspace{-0.5cm}
+            
+            \includegraphics[width=\linewidth]{eda/seasonly_moransI_pval_pm2_5.png}
+            \caption*{\scriptsize PM2.5}
+        \end{column}
+        
+        % --- 3열: 설명 ---
+        \begin{column}{0.3\textwidth}
+            \begin{itemize}\scriptsize
+                \item 
+                두 미세먼지 모두 봄, 겨울에 Moran's I가 높고 p-value가 낮아지는 (통계적으로 유의미해지는) 경향을 보임.
+                \vspace{0.5cm}
+                \item 
+                PM2.5가 PM10보다 전반적으로 더 높은 Moran's I 값을 가지며, p-value 또한 더 낮게 유지되어 \textbf{더 강하고 안정적인 공간 패턴}을 가짐.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{시공간 파생변수 추가}
+    \begin{block}{\small EDA 결과를 변수로 변환}
+        \scriptsize
+        EDA에서 발견한 미세먼지의 동적인 시공간 패턴을 모델이 학습할 수 있도록, '공간 지연(Spatial Lag)' 변수와 '계절 상호작용(Seasonal Interaction)' 변수를 생성
+    \end{block}
+    \vspace{0.5cm}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\scriptsize \textbf{1. 공간 지연(Spatial Lag) 변수}}
+                \begin{itemize}\scriptsize
+                    \item 각 측정소의 특정 시점에서, 사전에 정의된 '이웃' 측정소들의 평균 농도를 계산한 값
+                    \item "주변 관측소에서의 미세먼지 농도는 현재 이렇다"라는 가장 직접적인 공간적 맥락
+                    \item \textbf{생성 변수}: \texttt{PM10\_spatial\_lag}, \texttt{PM2.5\_spatial\_lag}
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{\scriptsize \textbf{2. 계절 상호작용(Seasonal Interaction) 변수}}
+                \begin{itemize}\scriptsize
+                    \item '공간 지연' 변수를 계절에 따라 두 개의 변수로 분리한 것
+                    \item 공간적 군집이 겨울, 봄에 강해지는 EDA 결과를 모델에 반영하였음. 이를 통해 모델은 계절에 따라 공간 정보의 중요도를 다르게 학습하게 됨.
+                    \item \textbf{생성 변수}: \texttt{PM10\_sl\_ws}, \texttt{PM10\_sl\_sf}, \texttt{PM2.5\_sl\_ws}, \texttt{PM2.5\_sl\_sf}
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{4. PM2.5 모델 탐색 및 선정}
+%-----------------------------------------------------------------------------------
+\begin{frame}{모델 후보}
+    \begin{enumerate}
+        \item SARIMA
+        \item SARIMAX
+        \item LightGBM
+        \item DLinear 
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{베이스라인 모델 : SARIMA}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \begin{column}{0.7\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{result/sarima_2_5.png}
+                \caption{\scriptsize SARIMA 모델의 1일 후 예측 결과 (2019년)}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 모델 정보 및 성능 ---
+        \begin{column}{0.3\textwidth}
+            \begin{block}{\small 모델 정보}
+                \scriptsize
+                파라미터 탐색 결과, \textbf{SARIMA(2,1,0)(1,1,1)[7]} 
+                이는 1차 차분 및 계절성 차분을 거친 데이터에 AR(2), 계절성 AR(1), 계절성 MA(1) 항을 적용한 모델임.
+            \end{block}
+            
+            \begin{block}{\small 예측 성능}
+                \scriptsize
+                \begin{center}
+                \begin{tabular}{lrr}
+                \toprule
+                \textbf{Horizon} & \textbf{MAE} & \textbf{RMSE} \\
+                \midrule
+                1-Day Ahead & 7.98 & 11.94 \\
+                2-Day Ahead & 10.26 & 15.69 \\
+                3-Day Ahead & 10.53 & 16.46 \\
+                \bottomrule
+                \end{tabular}
+                \end{center}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+
+\begin{frame}{More Variable: SARIMAX}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \begin{column}{0.7\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{result/sarimax_2_5_.png}
+                \caption{\scriptsize SARIMAX 모델의 1일 후 예측 결과 (2019년)}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 모델 정보 및 성능 ---
+        \begin{column}{0.3\textwidth}
+            \begin{block}{\small 모델 정보}
+                \scriptsize
+                 외부 변수가 일부 계절성을 설명함에 따라, 계절성 AR항이 제외되어 \textbf{SARIMAX(2,1,0)(0,1,1)[7]} 
+            \end{block}
+            
+            \begin{block}{\small 예측 성능}
+                \scriptsize
+                \begin{center}
+                \begin{tabular}{lrr}
+                \toprule
+                \textbf{Horizon} & \textbf{MAE} & \textbf{RMSE} \\
+                \midrule
+                1-Day Ahead & 7.15 & 10.44 \\
+                2-Day Ahead & 9.33 & 14.12 \\
+                3-Day Ahead & 9.87 & 15.45 \\
+                \bottomrule
+                \end{tabular}
+                \end{center}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+% [추가된 슬라이드 시작]
+%-----------------------------------------------------------------------------------
+\begin{frame}{Non-linear Model: LightGBM}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \begin{column}{0.7\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{result/lightgbm_2_5.png}
+                \caption{\scriptsize LightGBM 모델의 1일 후 예측 결과 (2019년)}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 모델 정보 및 성능 ---
+        \begin{column}{0.3\textwidth}
+            \begin{block}{\small 모델 정보}
+                \begin{itemize}\scriptsize
+                    \item 선형 모델이 놓칠 수 있는 복잡한 비선형 관계 및 변수 간 상호작용을 학습하기 위함
+                    \item Spatial Lag, Seasonal Interaction 등의 다양한 변수를 활용
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\small 예측 성능}
+                \scriptsize
+                \begin{center}
+                \begin{tabular}{lrr}
+                \toprule
+                \textbf{Horizon} & \textbf{MAE} & \textbf{RMSE} \\
+                \midrule
+                1-Day Ahead & 9.72 & 13.93 \\
+                2-Day Ahead & 12.61 & 17.79 \\
+                3-Day Ahead & 14.04 & 19.76 \\
+                \bottomrule
+                \end{tabular}
+                \end{center}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\begin{frame}{Deep Learning Model: DLinear}
+    \begin{columns}[T]
+        % --- 왼쪽: 시각화 ---
+        \begin{column}{0.7\textwidth}
+            \begin{figure}
+                \includegraphics[width=\linewidth]{result/dlinear_2_5.png}
+                \caption{\scriptsize DLinear 모델의 1일 후 예측 결과 (2019년)}
+            \end{figure}
+        \end{column}
+        
+        % --- 오른쪽: 모델 정보 및 성능 ---
+        \begin{column}{0.3\textwidth}
+            \begin{block}{\small 모델 정보}
+                \begin{itemize}\scriptsize
+                    \item 시계열을 장기적인 추세(Trend)와 나머지 성분(Remainder)으로 분해하여
+                    \item 각각을 단순한 선형 레이어로 예측한 뒤 결합하는 방식
+                \end{itemize}
+            \end{block}
+            
+            \begin{block}{\small 예측 성능}
+                \scriptsize
+                \begin{center}
+                \begin{tabular}{lrr}
+                \toprule
+                \textbf{Horizon} & \textbf{MAE} & \textbf{RMSE} \\
+                \midrule
+                1-Day Ahead & 7.78 & 11.59 \\
+                2-Day Ahead & 10.12 & 15.35 \\
+                3-Day Ahead & 10.36 & 16.12 \\
+                \bottomrule
+                \end{tabular}
+                \end{center}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+%-----------------------------------------------------------------------------------
+\begin{frame}{PM2.5 모델 성능 비교}
+    \begin{block}{\small PM2.5 예측 결과 요약 (1-Day Ahead Forecast)}
+        \begin{center}
+        \scriptsize
+        \begin{tabular}{lrr}
+        \toprule
+        \textbf{Model} & \textbf{MAE} & \textbf{RMSE} \\
+        \midrule
+        SARIMA (Baseline) & 7.98 & 11.94 \\
+        SARIMAX & \textbf{7.15} & \textbf{10.44} \\
+        LightGBM & 9.72 & 13.93 \\
+        DLinear & 7.78 & 11.59 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+    \end{block}
+    
+    \begin{block}{\small PM2.5 예측 결과 분석}
+        \begin{itemize}
+            \item \scriptsize EDA를 통해 추가한 외부 변수를 활용한 \textbf{SARIMAX} 모델이 단변량 SARIMA 베이스라인보다 뚜렷한 성능 향상을 보임.
+            \item \scriptsize 딥러닝 기반의 DLinear 모델 역시 안정적인 성능을 보였으나, 통계 모델인 SARIMAX를 능가하지는 못함.
+            \item \scriptsize 이 데이터셋에서는 복잡한 비선형 관계를 학습하는 LightGBM보다, 시계열 패턴과 외부 변수의 선형적 관계를 명확히 모델링하는 SARIMAX가 PM2.5 예측에 더 효과적이었음.
+          
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{5. PM10 결과}
+%-----------------------------------------------------------------------------------
+\begin{frame}{PM10 모델 성능 비교}
+    \begin{block}{\small PM10 예측 결과 요약 (1-Day Ahead Forecast)}
+        \begin{center}
+        \scriptsize
+        \begin{tabular}{lrr}
+        \toprule
+        \textbf{Model} & \textbf{MAE} & \textbf{RMSE} \\
+        \midrule
+        SARIMA (Baseline) & 11.98 & 17.36 \\
+        \textbf{SARIMAX} & \textbf{10.92} & \textbf{16.65} \\
+        LightGBM & 14.44 & 20.61 \\
+        DLinear & 11.44 & 16.84 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+    \end{block}
+    
+    \begin{block}{\small PM10 예측 결과 분석}
+        \begin{itemize}
+            \item \scriptsize PM10 예측에서도도 PM2.5와 동일하게, 외부 변수를 활용한 \textbf{SARIMAX} 모델이 가장 우수한 성능을 보였음.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+%-----------------------------------------------------------------------------------
+\section{6. 결론}
+%-----------------------------------------------------------------------------------
+\begin{frame}{최종 결론 및 종합 비교}
+    \begin{block}{\small 최종 모델 성능 종합 비교 (1-Day Ahead Forecast)}
+        \begin{center}
+        \scriptsize
+        \begin{tabular}{lrrrr}
+        \toprule
+        \textbf{Model} & \textbf{PM2.5 MAE} & \textbf{PM2.5 RMSE} & \textbf{PM10 MAE} & \textbf{PM10 RMSE} \\
+        \midrule
+        SARIMA (Baseline) & 7.98 & 11.94 & 11.98 & 17.36 \\
+        \textbf{SARIMAX} & \textbf{7.15} & \textbf{10.44} & \textbf{10.92} & \textbf{16.65} \\
+        LightGBM & 9.72 & 13.93 & 14.44 & 20.61 \\
+        DLinear & 7.78 & 11.59 & 11.44 & 16.84 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+    \end{block}
+    
+    \begin{block}{결론}
+        \begin{itemize}
+            \item \scriptsize PM2.5와 PM10 예측 모두에서, 시공간적 외부 변수를 활용한 \textbf{SARIMAX 모델}이 가장 우수한 성능을 보였음.
+            \item \scriptsize 이는 서울시 미세먼지 예측에 있어, 시계열 자체의 패턴뿐만 아니라 온도, 공간적 특성 등 \textbf{외부 요인을 함께 고려하는 것이 매우 중요함}을 시사함.
+
+        \end{itemize}
+    \end{block}
+
+\end{frame}
+
+\end{document}

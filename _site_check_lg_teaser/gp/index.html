@@ -1,0 +1,941 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Gaussian Process(GP) Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Gaussian Process에 대한 개념을 소개하는 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Gaussian Process(GP)">
+<meta property="og:url" content="https://joon0390.github.io/gp/">
+
+
+  <meta property="og:description" content="이 포스팅은 Gaussian Process에 대한 개념을 소개하는 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-05-10T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/gp/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Gaussian Process(GP)">
+    <meta itemprop="description" content="  이 포스팅은 Gaussian Process에 대한 개념을 소개하는 글입니다.">
+    <meta itemprop="datePublished" content="2025-05-10T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/gp/" itemprop="url">Gaussian Process(GP)
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#gaussian-process">Gaussian Process</a><ul><li><a href="#example-gp-prior">Example: GP prior</a></li></ul></li><li><a href="#contents-of-gp">Contents of GP</a><ul><li><a href="#1-mean-function">1. Mean function</a></li><li><a href="#2-covarianceor-kernel-function">2. Covariance(or Kernel) function</a></li></ul></li><li><a href="#gaussian-process-regressiongpr">Gaussian Process Regression(GPR)</a><ul><li><a href="#joint-distribution-of-observed-and-test-outputs">Joint Distribution of Observed and Test Outputs</a></li><li><a href="#posterior-predictive-distribution">Posterior Predictive Distribution</a><ul><li><a href="#interpretation-of-predictive-variance">Interpretation of Predictive Variance</a></li><li><a href="#conditional-distribution-of-mvn">*Conditional Distribution of MVN</a></li></ul></li></ul></li><li><a href="#visualization">Visualization</a><ul><li><a href="#code">code</a></li></ul></li></ul></li><li><a href="#conclusion">Conclusion</a><ul><li><a href="#reference">Reference</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Gaussian Process에 대한 개념을 소개하는 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p><strong>Gaussian Process</strong> 는 함수 공간에 정의되며 시간이나 공간과 같은 연속적인 인덱스를 갖는 Stochastic Process(확률 과정)이며, 다음의 정의를 따릅니다.</p>
+
+\[f(x) \sim \mathcal{GP}(m(x), k(x,x'))\]
+
+<ul>
+  <li>$m(x)$ : 평균함수</li>
+  <li>$k(x,x’)$ : 공분산 또는 커널 함수</li>
+</ul>
+
+<hr />
+
+<h2 id="gaussian-process">Gaussian Process</h2>
+
+<p>위에서 보인 GP의 정의는 다음을 의미합니다:</p>
+
+<blockquote>
+  <p>임의의 유한한 입력 집합 ${x_1, x_2, \dots, x_n}$에 대해,<br />
+벡터 $\mathbf{f} = [f(x_1), f(x_2), \dots, f(x_n)]^\top$는 다음과 같은 <strong>다변량 정규분포</strong>를 따른다:</p>
+</blockquote>
+
+\[\mathbf{f} \sim \mathcal{N}(\mathbf{m}, K)\]
+
+<ul>
+  <li>$\mathbf{m} = [m(x_1), \dots, m(x_n)]^\top$</li>
+  <li>$K_{ij} = k(x_i, x_j)$로 정의된 $n \times n$ 공분산 행렬</li>
+</ul>
+
+<hr />
+
+<h3 id="example-gp-prior">Example: GP prior</h3>
+
+\[\begin{bmatrix}
+f(x_1) \\
+f(x_2) \\
+f(x_3)
+\end{bmatrix}
+\sim \mathcal{N}
+\left(
+\begin{bmatrix}
+m(x_1) \\
+m(x_2) \\
+m(x_3)
+\end{bmatrix},
+\begin{bmatrix}
+k(x_1,x_1) &amp; k(x_1,x_2) &amp; k(x_1,x_3) \\
+k(x_2,x_1) &amp; k(x_2,x_2) &amp; k(x_2,x_3) \\
+k(x_3,x_1) &amp; k(x_3,x_2) &amp; k(x_3,x_3)
+\end{bmatrix}
+\right)\]
+
+<p>이러한 정의로 인해 GP는 함수 $f(x)$를 <strong>무한 차원의 정규분포로 간주할 수 있는 확률적 프레임워크</strong>를 제공합니다.</p>
+
+<hr />
+
+<h2 id="contents-of-gp">Contents of GP</h2>
+
+<h3 id="1-mean-function">1. Mean function</h3>
+<p>평균 함수는 각 입력 $x$에 대한 기댓값을 나타냅니다. 실제로는 centering을 통해 평균이 0인 GP를 주로 사용합니다.</p>
+
+<h3 id="2-covarianceor-kernel-function">2. Covariance(or Kernel) function</h3>
+<p>공분산 함수는 두 입력 $x$와 $x’$사이의 유사도를 측정합니다. 자주 사요오디는 커널함수로는 RBF(Radial Basis Function) 커널이 있으며 다음과 같이 정의됩니다.</p>
+
+<p>\(k(x, x’) = \sigma_f^2 \exp\left(-\frac{(x - x’)^2}{2\ell^2}\right)\)</p>
+<ul>
+  <li>$\sigma_f^2$: 출력의 분산</li>
+  <li>$\ell$: 길이 척도 파라미터</li>
+</ul>
+
+<p>이 커널은 입력 데이터 간의 거리가 가까울 수록 높은 유사도를 부여하여, 예측 함수의 부드러움을 조절합니다.</p>
+
+<hr />
+
+<h2 id="gaussian-process-regressiongpr">Gaussian Process Regression(GPR)</h2>
+
+<p>GP는 회귀 문제에 적용될 수 있습니다.<br />
+이는 함수 $f(x)$에 대한 prior를 GP로 설정하고, 관측 데이터를 통해 posterior를 추론하는 방식으로 이루어집니다.</p>
+
+<hr />
+
+<h3 id="joint-distribution-of-observed-and-test-outputs">Joint Distribution of Observed and Test Outputs</h3>
+
+<p>입력 $\mathbf{X} = [x_1, \dots, x_n]^\top$에 대한 관측값 $\mathbf{y}$와,<br />
+새로운 입력 $x_<em>$에 대한 함수값 $f(x_</em>)$의 조인트 분포는 다음과 같은 <strong>다변량 정규분포</strong>로 표현됩니다:</p>
+
+\[\begin{bmatrix}
+\mathbf{y} \\
+f(x_*)
+\end{bmatrix}
+\sim
+\mathcal{N}
+\left(
+\begin{bmatrix}
+\mathbf{m} \\
+m(x_*)
+\end{bmatrix},
+\begin{bmatrix}
+K + \sigma_n^2 I &amp; \mathbf{k}_* \\
+\mathbf{k}_*^\top &amp; k(x_*, x_*)
+\end{bmatrix}
+\right)\]
+
+<ul>
+  <li>$K \in \mathbb{R}^{n \times n}$: 훈련 입력 간 커널 행렬</li>
+  <li>$\mathbf{k}<em>* \in \mathbb{R}^n$: 테스트 입력 $x</em>*$와 훈련 샘플 간 커널 벡터</li>
+  <li>$\sigma_n^2$: 관측 노이즈의 분산</li>
+</ul>
+
+<hr />
+
+<h3 id="posterior-predictive-distribution">Posterior Predictive Distribution</h3>
+
+<p>이 joint distribution으로부터, 조건부 정규분포의 공식을 이용해 $f(x_*) \mid \mathbf{X}, \mathbf{y}$의 분포는 다음과 같이 유도됩니다:</p>
+
+\[f(x_*) \mid \mathbf{X}, \mathbf{y} \sim \mathcal{N}(\mu(x_*), \sigma^2(x_*))\]
+
+<ul>
+  <li>예측 평균:</li>
+</ul>
+
+\[\mu(x_*) = m(x_*) + \mathbf{k}_*^\top (K + \sigma_n^2 I)^{-1} (\mathbf{y} - \mathbf{m})\]
+
+<ul>
+  <li>예측 분산:</li>
+</ul>
+
+\[\sigma^2(x_*) = k(x_*, x_*) - \mathbf{k}_*^\top (K + \sigma_n^2 I)^{-1} \mathbf{k}_*\]
+
+<p><strong>Note</strong>: 위 식은 노이즈가 존재하는 현실적인 회귀 문제를 다루며, centering을 통해 $\mathbf{m} = \mathbf{0}$인 경우가 대부분입니다.</p>
+
+<h4 id="interpretation-of-predictive-variance">Interpretation of Predictive Variance</h4>
+
+<p>예측 분산 $\sigma^2(x_<em>)$는 테스트 입력 $x_</em>$에 대한 <strong>불확실성</strong>을 정량화합니다:</p>
+
+<ul>
+  <li>$\sigma^2(x_*)$가 <strong>작다</strong> → 훈련 샘플들과 가까운 위치 → 신뢰 높은 예측</li>
+  <li>$\sigma^2(x_*)$가 <strong>크다</strong> → 훈련 샘플이 없는 위치 → 높은 불확실성</li>
+</ul>
+
+<p>이러한 정보는 예측 신용 구간(credible interval) 설정에 직접적으로 사용됩니다.</p>
+
+<hr />
+
+<h4 id="conditional-distribution-of-mvn">*Conditional Distribution of MVN</h4>
+
+<p>다변량 정규분포의 조건부 분포는 다음 공식을 따릅니다:</p>
+
+\[\begin{bmatrix}
+\mathbf{a} \\
+\mathbf{b}
+\end{bmatrix}
+\sim \mathcal{N}
+\left(
+\begin{bmatrix}
+\mu_a \\
+\mu_b
+\end{bmatrix},
+\begin{bmatrix}
+\Sigma_{aa} &amp; \Sigma_{ab} \\
+\Sigma_{ba} &amp; \Sigma_{bb}
+\end{bmatrix}
+\right)
+\quad \Rightarrow \quad
+\mathbf{b} \mid \mathbf{a} \sim \mathcal{N}(\mu_{b|a}, \Sigma_{b|a})\]
+
+<ul>
+  <li>조건부 평균:</li>
+</ul>
+
+\[\mu_{b|a} = \mu_b + \Sigma_{ba} \Sigma_{aa}^{-1} (\mathbf{a} - \mu_a)\]
+
+<ul>
+  <li>조건부 분산:</li>
+</ul>
+
+\[\Sigma_{b|a} = \Sigma_{bb} - \Sigma_{ba} \Sigma_{aa}^{-1} \Sigma_{ab}\]
+
+<p><strong>이 공식을 그대로 GP의 예측 식 유도에 활용한 것입니다.</strong></p>
+
+<hr />
+
+<h2 id="visualization">Visualization</h2>
+
+<p>아래 Plot는 Gaussian Process 회귀에서 posterior predictive distribution을 시각화한 것입니다:</p>
+
+<figure style="text-align: center; margin: 2em 0;">
+    <img src="/assets/img/gp/posterior.png" alt="Posterior Prediction" width="1000" />
+    <figcaption style="text-align: center;">
+        Posterior predictive distribution 시각화
+    </figcaption>
+</figure>
+
+<ul>
+  <li>검정 점선:
+GP posterior의 예측 평균 $\mu(x_*)$입니다.
+관측값을 부드럽게 통과하며, 가장 “가능성 높은 함수”를 나타냅니다.
+&lt;/br&gt;</li>
+  <li>회색 음영 영역:
+예측 신용 구간 95% 수준
+\(\mu(x_) \pm 1.96 \cdot \sigma(x_)\)
+→ 이 영역은 모델이 얼마나 불확실한지를 나타냅니다.
+→ 관측 데이터 근처에서는 좁고, 관측이 없는 영역에서는 넓어집니다.
+&lt;/br&gt;</li>
+  <li>붉은 점들:
+훈련 데이터 $(x_i, y_i)$.
+GP는 이 점들에 정확히 일치하도록 학습되며, 이 점들 주변에서 예측 분산이 거의 0에 수렴합니다.
+&lt;/br&gt;</li>
+  <li>파란 실선들:
+GP posterior에서 샘플링한 함수들.
+이들은 모두 같은 posterior 분포로부터 나온 것이며,
+관측점 근처에서는 서로 일치하다가 멀어질수록 다양하게 퍼지는 모습을 보입니다.</li>
+</ul>
+
+<blockquote>
+  <ol>
+    <li>GP는 단일 예측만 제공하지 않고, 함수의 <strong>분포 전체</strong>를 제공합니다.</li>
+    <li>이로 인해 “어디서 예측이 자신 있는지”, “어디서 불확실한지”를 한눈에 파악할 수 있습니다.</li>
+    <li>특히 회색 음영은 <strong>$\sigma^2(x_*)$ (예측 분산)</strong> 이 직관적으로 표현된 것이며,
+이는 GP의 핵심 개념 중 하나입니다.
+—
+      <h4 id="code">code</h4>
+      <p>시각화에 사용한 코드는 다음과 같습니다.</p>
+    </li>
+  </ol>
+</blockquote>
+
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. RBF 커널 함수 정의
+def rbf_kernel(x1, x2, length_scale=1.0, sigma_f=1.0):
+    sqdist = np.sum(x1**2, 1).reshape(-1, 1) + np.sum(x2**2, 1) - 2 * np.dot(x1, x2.T)
+    return sigma_f**2 * np.exp(-0.5 / length_scale**2 * sqdist)
+
+# 2. Posterior 계산 함수
+def compute_gp_posterior(X_train, y_train, X_star, length_scale=1.0, sigma_f=1.0, sigma_n=1e-6):
+    K = rbf_kernel(X_train, X_train, length_scale, sigma_f) + sigma_n**2 * np.eye(len(X_train))
+    K_s = rbf_kernel(X_train, X_star, length_scale, sigma_f)
+    K_ss = rbf_kernel(X_star, X_star, length_scale, sigma_f)
+    
+    K_inv = np.linalg.inv(K)
+    mu_s = K_s.T @ K_inv @ y_train
+    cov_s = K_ss - K_s.T @ K_inv @ K_s
+    return mu_s.ravel(), cov_s
+
+# 3. 데이터
+X_train = np.array([[-4.0], [-2.0], [0.0], [2.0], [4.0]])
+y_train = np.sin(X_train)
+
+X_star = np.linspace(-5, 5, 100).reshape(-1, 1)
+
+# 4. Posterior 계산
+mu_post, cov_post = compute_gp_posterior(X_train, y_train, X_star)
+
+# Poserior에서 샘플링
+np.random.seed(42)
+samples_post = np.random.multivariate_normal(mean=mu_post, cov=cov_post, size=5)
+
+# 5. 시각화
+plt.figure(figsize=(10, 6))
+for i in range(5):
+    plt.plot(X_star, samples_post[i], lw=2, color="C0")
+
+# 평균 함수
+plt.plot(X_star, mu_post, 'k--', lw=2) 
+
+# 관측 데이터 포인트
+plt.scatter(X_train, y_train, c='red', zorder=5) 
+
+# 예측 분산을 반영한 95% 신용구간
+plt.fill_between(
+    X_star.ravel(),
+    mu_post - 1.96 * np.sqrt(np.diag(cov_post)),
+    mu_post + 1.96 * np.sqrt(np.diag(cov_post)),
+    alpha=0.2,
+    color="gray"
+)
+
+plt.title("GP Posterior: Predictions with Uncertainty", fontsize=14)
+plt.xlabel("$x$", fontsize=12)
+plt.ylabel("$f(x)$", fontsize=12)
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+</code></pre>
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Gaussian Process는 함수 자체를 확률적 객체로 다루는 베이지안적 접근으로,<br />
+작은 데이터에서도 강력한 예측 성능과 불확실성 정량화를 제공합니다.</p>
+
+<p>핵심 요약:</p>
+<ul>
+  <li>GP는 모든 입력 쌍에 대해 공분산 구조를 갖는 함수 prior</li>
+  <li>회귀 문제에서 joint Gaussian → conditional Gaussian을 통해 posterior 예측</li>
+  <li>커널 선택이 실전에서 중요한 역할을 함</li>
+</ul>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="https://distill.pub/2019/visual-exploration-gaussian-processes/">visual-exploration-gaussian-processes</a></li>
+  <li><a href="https://thegradient.pub/gaussian-process-not-quite-for-dummies/">gaussian-process-not-quite-for-dummies</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-05-10T00:00:00+09:00">May 10, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Gaussian+Process%28GP%29%20https%3A%2F%2Fjoon0390.github.io%2Fgp%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fgp%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/gp/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Gaussian+Process%28GP%29%20https%3A%2F%2Fjoon0390.github.io%2Fgp%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/rocket/" class="pagination--pager" title="[Paper Review] ROCKET: Exceptionally fast and accurate time series classification using random convolutional kernels">이전</a>
+    
+    
+      <a href="/BLR/" class="pagination--pager" title="Bayesian Linear Regression">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

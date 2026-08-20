@@ -1,0 +1,923 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Bayesian Online Change Point Detection Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Bayesian Online Changepoint Detection에 대한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Bayesian Online Change Point Detection">
+<meta property="og:url" content="https://joon0390.github.io/bocd/">
+
+
+  <meta property="og:description" content="이 포스팅은 Bayesian Online Changepoint Detection에 대한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-09-14T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/bocd/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Bayesian Online Change Point Detection">
+    <meta itemprop="description" content="  이 포스팅은 Bayesian Online Changepoint Detection에 대한 글입니다.">
+    <meta itemprop="datePublished" content="2025-09-14T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/bocd/" itemprop="url">Bayesian Online Change Point Detection
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a><ul><li><a href="#변화점-탐지란">변화점 탐지란?</a><ul><li><a href="#1-offline-changepoint-detection">1. Offline Changepoint Detection</a></li><li><a href="#2-online-changepoint-detection">2. Online Changepoint Detection</a></li></ul></li></ul></li><li><a href="#why-bayesian">Why Bayesian?</a></li><li><a href="#main-idea-of-bocd">Main Idea of BOCD</a><ul><li><a href="#run-length">Run Length</a></li><li><a href="#hazard-function-위험-함수">Hazard Function (위험 함수)</a><ul><li><a href="#예시-기하분포-기반-hazard-function">예시: 기하분포 기반 Hazard Function</a></li></ul></li><li><a href="#posterior-recursion-사후분포-재귀식">Posterior Recursion (사후분포 재귀식)</a><ul><li><a href="#1-변화점이-발생한-경우-run-length--0">1. 변화점이 발생한 경우 (run length = 0)</a></li><li><a href="#2-변화점이-발생하지-않은-경우-run-length-증가">2. 변화점이 발생하지 않은 경우 (run length 증가)</a></li><li><a href="#3-정규화-normalization">3. 정규화 (Normalization)</a></li></ul></li><li><a href="#exmaple-gaussian-gaussian-model">Exmaple: Gaussian-Gaussian Model</a><ul><li><a href="#사전분포-prior">사전분포 (Prior)</a></li><li><a href="#사후분포-posterior">사후분포 (Posterior)</a></li><li><a href="#예측-분포-predictive-distribution">예측 분포 (Predictive Distribution)</a></li></ul></li></ul></li><li><a href="#code">Code</a><ul><li><a href="#references">References</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 Bayesian Online Changepoint Detection에 대한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<h3 id="변화점-탐지란">변화점 탐지란?</h3>
+
+<p>변화점 탐지(Changepoinrt Detection)은 시계열 데이터에서 <strong>통계적 성질이 변화하는 지점</strong>을 찾아내는 문제입니다. 예를 들어, 평균이나 분산이 급격하게 변화하거나, 데이터의 생성 프로세스가 달라지는 순간을 “변화점” 이라고 합니다.</p>
+
+<figure class="align-center">
+  <img src="/assets/img/bocd/changepoint.jpg" alt="Changepoint Example" />
+  <figcaption>
+    출처: <a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/space-time-pattern-mining/how-change-point-detection-works.htm" target="_blank">
+    ESRI ArcGIS Pro</a>
+  </figcaption>
+</figure>
+
+<blockquote>
+  <p>이 데이터에서는 평균이 급격하게 변화하는 모습을 볼 수 있네요</p>
+</blockquote>
+
+<p>변화점 탐지는 크게 두 가지로 나누어 볼 수 있습니다.</p>
+
+<h4 id="1-offline-changepoint-detection">1. Offline Changepoint Detection</h4>
+<ul>
+  <li>전체 데이터가 확보되었을 떄, 사후적으로 변화점을 찾는 방식</li>
+  <li><em>참고</em> : <em><a href="https://arxiv.org/pdf/1801.00718">C.Truong, Selective review of offline change point detection methods</a></em></li>
+</ul>
+
+<h4 id="2-online-changepoint-detection">2. Online Changepoint Detection</h4>
+<ul>
+  <li>
+    <p>데이터가 순차적으로 들어오는 상황에서 새로운 관측치가 들어오자마자 실시간으로 변화점을 추정하는 방식</p>
+  </li>
+  <li>
+    <p><em>참고</em> : <em><a href="https://discovery.researcher.life/topic/online-changepoint-detection/24023668?page=1&amp;topic_name=Online%20Changepoint%20Detection">Online Change-point Detection Research Articles</a></em></p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="why-bayesian">Why Bayesian?</h2>
+
+<p>온라인 변화점 탐지(Online CPD)의 핵심은 <strong>새로운 데이터가 들어올 때마다</strong> “지금 변화가 일어났는가?”를 판단하는 것입니다.<br />
+즉, 관측치가 한 점씩 순차적으로 추가될 때, 우리는 매번 <strong>변화점인지의 여부</strong>를 추론해야 합니다.</p>
+
+<p>이 상황에서 Bayesian 접근이 특히 잘 맞는 이유는 다음과 같습니다:</p>
+
+\[P(\theta \mid x_{1:t}) \propto P(x_t \mid \theta) \cdot P(\theta \mid x_{1:t-1})\]
+
+<p>즉, 새로운 데이터 $x_t$가 들어올 때마다 이전 시점의 사후분포 $P(\theta \mid x_{1:t-1})$는<br />
+그 자체로 다음 단계의 사전분포(prior)가 되어, 매 시점마다 자연스럽게 갱신됩니다.</p>
+
+<p>이처럼 <strong>사후분포를 곧바로 다음 단계의 사전분포로 이어 붙이는 구조</strong>가 바로<br />
+Bayesian 추론의 핵심 메커니즘이며, 실시간으로 변화 가능성을 갱신해야 하는 온라인 변화점 탐지 문제와<br />
+아주 잘 들어맞습니다.</p>
+
+<hr />
+
+<h2 id="main-idea-of-bocd">Main Idea of BOCD</h2>
+
+<p>Bayesian Online Changepoint Detection (Adams &amp; MacKay, 2007)는 위와 같은 베이지안 프레임워크를 온라인 변화점 탐지 문제에 적용한 대표적인 방법입니다.</p>
+
+<h3 id="run-length">Run Length</h3>
+
+<p>핵심은 Run-Length 라는 개념입니다.</p>
+
+<figure class="align-center">
+  <img src="/assets/img/bocd/run_length.png" alt="Changepoint Example" />
+  <figcaption>
+    출처: <a href="https://gregorygundersen.com/blog/2019/08/13/bocd/" target="_blank">
+    gregorygundersen.com</a>
+  </figcaption>
+</figure>
+
+<p>위 그림에서 $b$축이 Run Length를 의미합니다. 2개의 빨간 점선이 변화점인 상황에서 2회 증가하다 감소하는 것을 볼 수 있습니다.</p>
+
+<p>정리하면 다음과 같습니다.</p>
+
+<ul>
+  <li>
+    <p>$r_t$ : 현재 시점 $t$에서 <strong>마지막 변화점 이후의 데이터의 길이</strong></p>
+  </li>
+  <li>만약 변화점이 방금 일어났다면 $r_t = 0 $</li>
+  <li>변화점이 없고 동일한 생성 프로세스가 이어진다면, $r_t$는 계속 증가</li>
+</ul>
+
+<p>이제 BOCD는 매 시점마다 Run Length의 분포 $P(r_t \mid x_{1:t})$를 추정하여, 새로운 데이터가 들어올 때 변화점일 확률을 계산하게 됩니다.</p>
+
+<hr />
+
+<h3 id="hazard-function-위험-함수">Hazard Function (위험 함수)</h3>
+
+<p>변화가 발생할 확률은 <strong>Hazard Function $H(r)$</strong> 으로 정의됩니다.<br />
+이는 “run length가 $r$일 때, 다음 시점에 변화점이 발생할 확률”을 나타냅니다:</p>
+
+\[P(r_t = 0 \mid r_{t-1} = r) = H(r)\]
+
+<p>반대로 변화점이 발생하지 않고 run length가 하나 증가할 확률은:</p>
+
+\[P(r_t = r+1 \mid r_{t-1} = r) = 1 - H(r)\]
+
+<hr />
+
+<h4 id="예시-기하분포-기반-hazard-function">예시: 기하분포 기반 Hazard Function</h4>
+
+<p>가장 단순하게 위험함수를 설정하는 것은 평균 구간 길이가 $\lambda$라고 가정하는 것입니다.<br />
+이때 Hazard Function은 상수로:</p>
+
+\[H(r) = \frac{1}{\lambda}\]
+
+<ul>
+  <li>$\lambda = 100$ 이라면, 평균적으로 100 포인트마다 변화가 일어난다고 보는 것</li>
+  <li>따라서 어떤 시점이든 약 1% 확률로 변화가 발생한다고 가정하는 셈입니다.</li>
+</ul>
+
+<hr />
+
+<h3 id="posterior-recursion-사후분포-재귀식">Posterior Recursion (사후분포 재귀식)</h3>
+
+<p>BOCPD는 각 시점 $t$에서 run length 분포 $P(r_t \mid x_{1:t})$를 유지합니다.<br />
+새로운 데이터 $x_t$가 들어올 때마다, 다음 두 가지 경우로 나눠서 확률을 갱신합니다.</p>
+
+<hr />
+
+<h4 id="1-변화점이-발생한-경우-run-length--0">1. 변화점이 발생한 경우 (run length = 0)</h4>
+
+<p>마지막 변화점이 방금 발생했다면,
+\(P(r_t = 0, x_{1:t}) = \sum_{r_{t-1}} P(r_{t-1}, x_{1:t-1}) \cdot H(r_{t-1}) \cdot P(x_t \mid \text{new segment})\)</p>
+
+<p>여기서 $H(r_{t-1})$는 run length가 $r_{t-1}$일 때 변화점이 발생할 확률입니다.</p>
+
+<hr />
+
+<h4 id="2-변화점이-발생하지-않은-경우-run-length-증가">2. 변화점이 발생하지 않은 경우 (run length 증가)</h4>
+
+<p>변화점이 발생하지 않았다면 run length가 하나 늘어나게 됩니다:
+\(P(r_t = r_{t-1}+1, x_{1:t}) = P(r_{t-1}, x_{1:t-1}) \cdot (1 - H(r_{t-1})) \cdot P(x_t \mid r_{t-1})\)</p>
+
+<p>즉, 직전 run length에서 “변화 없음”이 선택된 경우의 확률을 그대로 이어받아 업데이트합니다.</p>
+
+<hr />
+
+<h4 id="3-정규화-normalization">3. 정규화 (Normalization)</h4>
+
+<p>위 두 경우를 모두 계산한 뒤, 전체 확률이 1이 되도록 정규화합니다:</p>
+
+\[P(r_t \mid x_{1:t}) = \frac{P(r_t, x_{1:t})}{\sum_{r_t} P(r_t, x_{1:t})}\]
+
+<hr />
+
+<p>이 재귀식 덕분에 BOCPD는 매 시점마다 <strong>변화점 확률과 run length 분포를 효율적으로 갱신</strong>할 수 있습니다.<br />
+즉, 데이터를 처음부터 끝까지 다시 계산하지 않고, 이전 단계 결과만으로 빠르게 업데이트가 가능합니다.</p>
+
+<hr />
+
+<h3 id="exmaple-gaussian-gaussian-model">Exmaple: Gaussian-Gaussian Model</h3>
+
+<p>BOCPD에서 관측 데이터 $x_t$가 정규분포로부터 생성된다고 가정해보겠습니다.</p>
+
+\[x_t \sim \mathcal{N}(\mu, \sigma^2), \quad \sigma^2 \text{는 알려져 있음}\]
+
+<p>여기서 변화점이 발생하면 평균 $\mu$가 새로운 값으로 리셋된다고 가정합니다.</p>
+
+<hr />
+
+<h4 id="사전분포-prior">사전분포 (Prior)</h4>
+
+<p>평균 $\mu$에 대해 정규분포를 사전분포로 둡니다:</p>
+
+\[\mu \sim \mathcal{N}(\mu_0, \tau_0^2)\]
+
+<hr />
+
+<h4 id="사후분포-posterior">사후분포 (Posterior)</h4>
+
+<p>새로운 데이터 $x_t$가 들어오면,<br />
+사후분포 역시 정규분포 형태(Conjugate prior)로 유지될 수 있습니다:</p>
+
+\[\mu \mid x_{1:t} \sim \mathcal{N}(\mu_t, \tau_t^2)\]
+
+<p>업데이트 규칙은 알려진 <a href="https://en.wikipedia.org/wiki/Conjugate_prior">Conjugate Normal</a>형태에 의해 다음과 같습니다:</p>
+
+\[\tau_t^2 = \left( \frac{1}{\tau_{t-1}^2} + \frac{1}{\sigma^2} \right)^{-1}, 
+\quad
+\mu_t = \tau_t^2 \left( \frac{\mu_{t-1}}{\tau_{t-1}^2} + \frac{x_t}{\sigma^2} \right)\]
+
+<p>즉, 새로운 데이터가 들어올 때마다 평균에 대한 불확실성을 줄여가며 업데이트합니다.</p>
+
+<hr />
+
+<h4 id="예측-분포-predictive-distribution">예측 분포 (Predictive Distribution)</h4>
+
+<p>BOCPD는 다음 데이터 $x_{t+1}$이 나올 확률도 필요합니다.<br />
+이는 Student-t 분포로 계산되며, 재귀 업데이트 과정에서 사용됩니다:</p>
+
+\[p(x_{t+1} \mid x_{1:t}) = \text{Student-t}(\mu_t, \sigma^2 + \tau_t^2, \nu_t)\]
+
+<hr />
+
+<p>이 Gaussian-Gaussian 예시는 BOCPD의 작동 원리를 보여주는 가장 기본적인 케이스입니다.<br />
+실제 구현에서는 이 예측분포를 사용해 <strong>변화점 발생 확률</strong>을 계산하고,<br />
+앞서 설명한 <strong>Posterior Recursion</strong>에 대입하여 run length 분포를 갱신하게 됩니다.</p>
+
+<h2 id="code">Code</h2>
+
+<p>아래 코드는 Gaussian-Gaussian 모델을 기반으로 한 BOCPD의 핵심 아이디어를 구현한 간단 예시입니다.</p>
+
+<pre><code class="language-python">import numpy as np
+from scipy.stats import norm
+
+# --------------------------
+# Hazard function (상수형)
+# --------------------------
+def constant_hazard(lam, r):
+    return 1.0 / lam * np.ones(r.shape)
+
+# --------------------------
+# BOCPD 실행
+# --------------------------
+def bocpd(data, hazard_func, lam=100, mu0=0, tau0=1, sigma=1):
+    T = len(data)
+    R = np.zeros((T+1, T+1))   # run length posterior
+    R[0,0] = 1
+    
+    # 사전분포 파라미터
+    mu_t   = np.array([mu0])
+    tau_t2 = np.array([tau0**2])
+    
+    for t in range(1, T+1):
+        x = data[t-1]
+        
+        # 예측 분포
+        pred_prob = norm.pdf(x, mu_t, np.sqrt(sigma**2 + tau_t2))
+        
+        # 성장 단계 (run length 증가)
+        growth_probs = R[t-1, :t] * (1 - hazard_func(lam, np.arange(t))) * pred_prob
+        R[t,1:t+1] = growth_probs
+        
+        # 변화 단계 (run length = 0)
+        cp_prob = np.sum(R[t-1, :t] * hazard_func(lam, np.arange(t)) * pred_prob)
+        R[t,0] = cp_prob
+        
+        # 정규화
+        R[t,:t+1] /= np.sum(R[t,:t+1])
+        
+        # 파라미터 업데이트 (conjugate Gaussian)
+        tau_t2 = 1.0 / (1.0/tau_t2 + 1.0/sigma**2)
+        mu_t   = tau_t2 * (mu_t/tau_t2 + x/sigma**2)
+        
+    return R
+
+# --------------------------
+# 실행 예시
+# --------------------------
+np.random.seed(42)
+data = np.concatenate([
+    np.random.normal(0, 1, 50),
+    np.random.normal(5, 1, 50)
+])
+
+R = bocpd(data, constant_hazard, lam=50)
+
+import matplotlib.pyplot as plt
+plt.imshow(np.log(R+1e-6).T, aspect='auto', origin='lower')
+plt.colorbar(label="log P(run length)")
+plt.xlabel("time")
+plt.ylabel("run length")
+plt.title("BOCPD run length posterior")
+plt.show()
+</code></pre>
+
+<p>위 결과 그림에서, run length posterior가 특정 지점에서 갑자기 0으로 리셋되는 패턴이 보이면,
+그 지점이 곧 변화점(changepoint) 으로 탐지된 것으로 볼 수 있습니다.</p>
+
+<p>잘 알려진 <a href="https://cran.r-project.org/web/packages/ocp/vignettes/introduction.html">R 패키지 ocp</a>를 통해 데이터에 쉽게 적용도 가능합니다.</p>
+
+<hr />
+
+<h3 id="references">References</h3>
+
+<ul>
+  <li>
+    <p>Adams, R. P., &amp; MacKay, D. J. C. (2007). <a href="https://arxiv.org/abs/0710.3742"><em>Bayesian Online Changepoint Detection</em>.</a></p>
+  </li>
+  <li>
+    <p>Fearnhead, P., &amp; Liu, Z. (2007). <a href="https://academic.oup.com/jrsssb/article-abstract/69/4/589/7109428?redirectedFrom=fulltext"><em>On-line Inference for Multiple Changepoint Problems</em>.</a></p>
+  </li>
+</ul>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-09-14T00:00:00+09:00">September 14, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Bayesian+Online+Change+Point+Detection%20https%3A%2F%2Fjoon0390.github.io%2Fbocd%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fbocd%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/bocd/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Bayesian+Online+Change+Point+Detection%20https%3A%2F%2Fjoon0390.github.io%2Fbocd%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pymc/" class="pagination--pager" title="PyMC를 이용한 베이지안 모델링">이전</a>
+    
+    
+      <a href="/graphcd/" class="pagination--pager" title="[Paper Review] GRAPH-BASED CHANGE-POINT DETECTION">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

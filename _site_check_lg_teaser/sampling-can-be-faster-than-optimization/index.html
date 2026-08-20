@@ -1,0 +1,812 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>[Paper Review] Sampling Can Be Faster Than Optimization Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 Ma, Chen, Jin, Flammarion, Jordan (2019) 의 논문 Sampling Can Be Faster Than Optimization 을 읽고 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="[Paper Review] Sampling Can Be Faster Than Optimization">
+<meta property="og:url" content="https://joon0390.github.io/sampling-can-be-faster-than-optimization/">
+
+
+  <meta property="og:description" content="이 포스팅은 Ma, Chen, Jin, Flammarion, Jordan (2019) 의 논문 Sampling Can Be Faster Than Optimization 을 읽고 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-02-10T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/sampling-can-be-faster-than-optimization/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="[Paper Review] Sampling Can Be Faster Than Optimization">
+    <meta itemprop="description" content="  이 포스팅은 Ma, Chen, Jin, Flammarion, Jordan (2019) 의 논문Sampling Can Be Faster Than Optimization 을 읽고 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2026-02-10T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/sampling-can-be-faster-than-optimization/" itemprop="url">[Paper Review] Sampling Can Be Faster Than Optimization
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#1-bigger-picture-two-tools-for-inference">1. Bigger Picture: Two Tools for Inference</a></li><li><a href="#2-setup-local-nonconvexity">2. Setup: Local Nonconvexity</a></li><li><a href="#3-methods-compared-gd-vs-langevin">3. Methods Compared: GD vs Langevin</a></li><li><a href="#4-key-result-1-polynomial-time-sampling">4. Key Result 1: Polynomial-Time Sampling</a></li><li><a href="#5-key-result-2-exponential-lower-bound-for-optimization">5. Key Result 2: Exponential Lower Bound for Optimization</a></li><li><a href="#6-can-annealed-sampling-bypass-optimization">6. Can Annealed Sampling Bypass Optimization?</a></li><li><a href="#7-gaussian-mixture-model-case-study">7. Gaussian Mixture Model Case Study</a></li><li><a href="#8-key-takeaways">8. Key Takeaways</a></li><li><a href="#9-limitations-and-practical-interpretation">9. Limitations and Practical Interpretation</a></li><li><a href="#10-conclusion">10. Conclusion</a></li><li><a href="#reference">Reference</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 <strong>Ma, Chen, Jin, Flammarion, Jordan (2019)</strong> 의 논문<br />
+<a href="https://arxiv.org/pdf/1811.08413"><em>Sampling Can Be Faster Than Optimization</em></a> 을 읽고 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="1-bigger-picture-two-tools-for-inference">1. Bigger Picture: Two Tools for Inference</h2>
+
+<p>머신러닝에서 파라미터를 추정할 때 우리는 보통 두 가지 접근을 씁니다.</p>
+
+<ul>
+  <li><strong>최적화(optimization)</strong>: 손실을 최소화하는 한 점(point estimate)을 찾음</li>
+  <li><strong>샘플링(sampling)</strong>: 분포 전체(불확실성 포함)를 근사함</li>
+</ul>
+
+<p>실무에서는 대개 “먼저 최적화로 빠르게 답을 찾고, 필요하면 샘플링으로 불확실성을 본다”는 흐름이 자연스럽습니다.<br />
+그래서 암묵적으로 다음 통념이 자리 잡았습니다.</p>
+
+<blockquote>
+  <p>“최적화는 빠르고, 샘플링은 정확하지만 느리다.”</p>
+</blockquote>
+
+<p>문제는 이 통념이 주로 <strong>볼록(convex) / 로그볼록(log-concave)</strong> 세계에서 정립되었다는 점입니다.<br />
+이 논문은 한 단계 더 일반적인 상황, 즉 <strong>국소적으로만 비볼록인 문제</strong>로 질문을 확장합니다.</p>
+
+<blockquote>
+  <p>“Local nonconvexity에서는 여전히 최적화가 샘플링보다 본질적으로 빠른가?”</p>
+</blockquote>
+
+<p>논문의 핵심 답은 의외입니다. 특정 문제 클래스에서는 <strong>샘플링은 차원 $d$</strong> 에 대해 다항 시간 복잡도를 가지지만, 최적화는 <strong>지수 시간 lower bound</strong>를 가질 수 있습니다.</p>
+
+<hr />
+
+<h2 id="2-setup-local-nonconvexity">2. Setup: Local Nonconvexity</h2>
+
+<p>논문은 목적함수 $U:\mathbb{R}^d \to \mathbb{R}$ 에 대해 아래를 가정합니다.</p>
+
+<ol>
+  <li>$U$ 는 $L$-smooth (gradient Lipschitz)</li>
+  <li>반지름 $R$ 바깥에서는 $m$-strongly convex</li>
+  <li>$\nabla U(0)=0$ (기술적 가정)</li>
+</ol>
+
+<p>즉, 큰 영역에서는 잘 behaved하고, <strong>안쪽 bounded region에서만 비볼록성</strong>이 존재하는 구조입니다.</p>
+
+<p>타깃 분포는</p>
+
+\[p^*(x)\propto e^{-U(x)}\]
+
+<p>이고, 조건수는 $\kappa=L/m$ 로 둡니다.</p>
+
+<hr />
+
+<h2 id="3-methods-compared-gd-vs-langevin">3. Methods Compared: GD vs Langevin</h2>
+
+<p>가장 단순화해서 보면 업데이트는 다음과 같습니다.</p>
+
+<ul>
+  <li>Gradient Descent:
+\(x_{k+1}=x_k-h_k\nabla U(x_k)\)</li>
+  <li>ULA:
+\(x_{k+1}=x_k-h_k\nabla U(x_k)+\xi_k,\quad \xi_k\sim\mathcal{N}(0,2h_k I)\)</li>
+  <li>MALA: ULA proposal + Metropolis accept/reject</li>
+</ul>
+
+<p>핵심은 ULA가 GD와 거의 같은 형태인데, 잡음을 넣어 전역 구조를 탐색한다는 점입니다.</p>
+
+<hr />
+
+<h2 id="4-key-result-1-polynomial-time-sampling">4. Key Result 1: Polynomial-Time Sampling</h2>
+
+<p>논문의 Theorem 1(ULA/MALA mixing time upper bound)을 요약하면,
+\(\tau_{\text{ULA}}(\varepsilon)=\tilde{O}\!\left(e^{32LR^2}\kappa^2\frac{d}{\varepsilon^2}\right),\)
+\(\tau_{\text{MALA}}(\varepsilon)=\tilde{O}\!\left(e^{40LR^2}\kappa^{3/2}d^{1/2}(d\log\kappa+\log(1/\varepsilon))^{3/2}\right).\)</p>
+
+<p>$LR^2=O(\log d)$이면, 차원 $d$에 대해 <strong>다항 시간</strong>으로 제어됩니다.</p>
+
+<p>논문의 이론 전개는</p>
+<ul>
+  <li>연속시간 확산과정의 KL 감소율 분석</li>
+  <li>log-Sobolev constant 하한 도출</li>
+  <li>이산화(ULA/MALA) 오차 제어
+순서로 진행됩니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="5-key-result-2-exponential-lower-bound-for-optimization">5. Key Result 2: Exponential Lower Bound for Optimization</h2>
+
+<p>Theorem 2는 더 강합니다.</p>
+
+\[K=\Omega\!\left(\left(\frac{LR^2}{\varepsilon}\right)^{d/2}\right)\]
+
+<p>즉, 함수값/고계도함수 질의를 허용하는 매우 넓은 알고리즘 클래스에서도,<br />
+$\varepsilon$-최적해를 찾는 데 필요한 반복 수가 차원에 대해 지수적으로 커질 수 있습니다.</p>
+
+<p>직관은 “볼 안에 지수 개의 작은 basin을 packing할 수 있다”는 구성입니다.<br />
+최적화는 “어느 basin이 진짜 global optimum인지”를 맞혀야 하므로 조합 폭발이 생깁니다.</p>
+
+<hr />
+
+<h2 id="6-can-annealed-sampling-bypass-optimization">6. Can Annealed Sampling Bypass Optimization?</h2>
+
+<p>논문은 $q_\beta^*(x)\propto e^{-\beta U(x)}$ 를 크게 sharpen해서<br />
+최적점 근처를 샘플링하는 아이디어(시뮬레이티드 어닐링 계열)도 함께 점검합니다.</p>
+
+<p>결과적으로, 높은 확률로 $\varepsilon$-정확도를 얻으려면<br />
+$\beta=\tilde{\Omega}(d/\varepsilon)$가 필요해져서 전체 계산량은 다시 지수 스케일이 됩니다.</p>
+
+<p>즉, 이 설정에서는 “샘플링을 최적화 대용으로 쓰는 것”까지는 쉽지 않다는 메시지입니다.</p>
+
+<hr />
+
+<h2 id="7-gaussian-mixture-model-case-study">7. Gaussian Mixture Model Case Study</h2>
+
+<p>논문은 GMM mean 추정에서 ULA/MALA와 EM을 비교합니다.</p>
+
+<ul>
+  <li>조건 $MR^2=O(\log d)$ 하에서 ULA/MALA는 이론적으로 다항 복잡도</li>
+  <li>반면 EM은 초기화가 나쁘면 고차원에서 급격히 어려워짐</li>
+</ul>
+
+<p>실험(Figure 2)에서도 차원이 커질수록</p>
+<ul>
+  <li>ULA는 비교적 완만하게 증가</li>
+  <li>EM은 필요한 gradient query가 급증
+하는 경향을 보여줍니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="8-key-takeaways">8. Key Takeaways</h2>
+
+<ol>
+  <li>
+    <p>이 논문은 “샘플링 vs 최적화”를 정확히 비교하기 위해<br />
+<strong>동일한 local nonconvex class</strong> 위에서 복잡도 경계를 맞춰 제시합니다.</p>
+  </li>
+  <li>
+    <p>샘플링 복잡도는 확률질량의 “전역 구조”에 더 민감하고,<br />
+최적화 복잡도는 “국소 basin 탐색”의 조합 복잡도에 민감하다는 대비가 명확합니다.</p>
+  </li>
+  <li>
+    <p>“샘플링이 항상 느리다”는 통념은 convex 세계에서는 맞지만,<br />
+nonconvex 세계에서는 반례가 충분히 생길 수 있음을 보여줍니다.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="9-limitations-and-practical-interpretation">9. Limitations and Practical Interpretation</h2>
+
+<ul>
+  <li>결과는 <strong>worst-case 복잡도 경계</strong>입니다. 모든 실제 문제에서 샘플링이 빠르다는 뜻은 아닙니다.</li>
+  <li>상수항 $e^{O(LR^2)}$ 가 크면 이론적 다항성이 실무 시간으로 바로 이어지지 않을 수 있습니다.</li>
+  <li>MCMC는 mixing/diagnostics가 필수라 구현 난이도는 여전히 있습니다.</li>
+</ul>
+
+<hr />
+
+<h2 id="10-conclusion">10. Conclusion</h2>
+
+<p>이 논문의 가장 중요한 메시지는 아래 한 줄입니다.</p>
+
+<blockquote>
+  <p>비볼록 문제에서는, “최적화가 샘플링보다 무조건 빠르다”는 일반 명제가 성립하지 않는다.</p>
+</blockquote>
+
+<p>특히 mixture-like landscape처럼 basin이 많은 구조에서는<br />
+샘플링이 전역 구조를 따라 다항 시간으로 움직일 수 있고,<br />
+최적화는 basin 식별 자체가 지수적으로 어려울 수 있다는 점이 인상적입니다.</p>
+
+<hr />
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li>Ma, Y.-A., Chen, Y., Jin, C., Flammarion, N., &amp; Jordan, M. I. (2019).<br />
+<em>Sampling Can Be Faster Than Optimization</em>. arXiv:1811.08413.<br />
+https://arxiv.org/abs/1811.08413</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2026-02-10T00:00:00+09:00">February 10, 2026</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=%5BPaper+Review%5D+Sampling+Can+Be+Faster+Than+Optimization%20https%3A%2F%2Fjoon0390.github.io%2Fsampling-can-be-faster-than-optimization%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fsampling-can-be-faster-than-optimization%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/sampling-can-be-faster-than-optimization/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=%5BPaper+Review%5D+Sampling+Can+Be+Faster+Than+Optimization%20https%3A%2F%2Fjoon0390.github.io%2Fsampling-can-be-faster-than-optimization%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/gibbs-posteriors/" class="pagination--pager" title="Gibbs Posteriors">이전</a>
+    
+    
+      <a href="/abc-posterior/" class="pagination--pager" title="Approximate Bayesian Computation Posterior">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

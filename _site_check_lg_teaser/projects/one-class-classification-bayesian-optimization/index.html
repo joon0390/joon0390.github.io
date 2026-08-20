@@ -1,0 +1,509 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>베이지안 최적화를 이용한 One-Class Classification Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="불균형 데이터에서 정상/이상 패턴을 구분하기 위해 OC-SVM과 Deep SVDD의 하이퍼파라미터를 Grid Search, Random Search, Bayesian Optimization으로 비교한 이상 탐지 연구.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="베이지안 최적화를 이용한 One-Class Classification">
+<meta property="og:url" content="https://joon0390.github.io/projects/one-class-classification-bayesian-optimization/">
+
+
+  <meta property="og:description" content="불균형 데이터에서 정상/이상 패턴을 구분하기 위해 OC-SVM과 Deep SVDD의 하이퍼파라미터를 Grid Search, Random Search, Bayesian Optimization으로 비교한 이상 탐지 연구.">
+
+
+
+  <meta property="og:image" content="https://joon0390.github.io/assets/img/projects/one-class-classification-bayesian-optimization/OC-SVM.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-30T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/projects/one-class-classification-bayesian-optimization/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar main--no-right-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="베이지안 최적화를 이용한 One-Class Classification">
+    <meta itemprop="description" content="불균형 데이터에서 정상/이상 패턴을 구분하기 위해 OC-SVM과 Deep SVDD의 하이퍼파라미터를 Grid Search, Random Search, Bayesian Optimization으로 비교한 이상 탐지 연구.">
+    <meta itemprop="datePublished" content="2026-04-30T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/projects/one-class-classification-bayesian-optimization/" itemprop="url">베이지안 최적화를 이용한 One-Class Classification
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-30T00:00:00+09:00">April 30, 2026</time>
+      </span>
+    
+
+    
+
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <h2 id="프로젝트-요약">프로젝트 요약</h2>
+
+<ul>
+  <li>개요: 정상 데이터가 대부분이고 이상 데이터가 적은 상황에서 One-Class Classification 모델의 하이퍼파라미터 탐색 방법을 비교한 프로젝트</li>
+  <li>기간: 2024.06-2026.04</li>
+  <li>데이터: synthetic dataset, 포병 군사훈련 산불 위험 데이터, Extended Cohn-Kanade(CK+) 감정 데이터</li>
+  <li>기술 스택: Python, OC-SVM, Deep SVDD, Bayesian Optimization, Gaussian Process, Grid Search, Random Search</li>
+  <li>성과(성능): synthetic dataset 실험에서 Bayesian Optimization이 대부분의 불균형 비율에서 F1과 AUC 기준 가장 안정적인 성능을 보임</li>
+</ul>
+
+<h2 id="문제-정의">문제 정의</h2>
+
+<p>One-Class Classification(OCC)은 정상 데이터는 충분하지만 이상 데이터는 적거나 불완전한 상황에서 중요한 이상 탐지 방법입니다. 실제 현장에서는 정상 상태 데이터만 많이 쌓이고, 고장, 위험, 비정상 행동 같은 이상 사례는 적게 관측되는 경우가 많습니다. 이때 일반적인 지도학습 분류기를 그대로 쓰면 클래스 불균형과 이상 데이터 부족 때문에 안정적인 모델을 만들기 어렵습니다.</p>
+
+<p>이 프로젝트는 OCC 모델 자체보다 <code>하이퍼파라미터를 어떻게 찾을 것인가</code>에 초점을 둔 연구입니다. 특히 OC-SVM과 Deep SVDD는 모델 구조가 비교적 명확하더라도 <code>nu</code>, <code>gamma</code>, 네트워크 설정, 학습 조건 같은 하이퍼파라미터에 따라 성능 차이가 크게 나타날 수 있습니다. 따라서 Grid Search, Random Search, Bayesian Optimization을 비교해 어떤 탐색 전략이 불균형 이상 탐지 문제에서 더 효과적인지 확인했습니다.</p>
+
+<figure class="project-figure project-figure--narrow">
+  <img src="/assets/img/projects/one-class-classification-bayesian-optimization/class_imbalance.png" alt="정상 데이터가 다수이고 이상 데이터가 소수인 클래스 불균형 예시" />
+  <figcaption>One-Class Classification에서 다루는 클래스 불균형 상황</figcaption>
+</figure>
+
+<h2 id="데이터와-eda">데이터와 EDA</h2>
+
+<p>실험은 synthetic dataset과 실제 데이터 응용을 함께 고려했습니다. synthetic dataset에서는 정상:이상 비율을 <code>95:5</code>, <code>90:10</code>, <code>80:20</code>, <code>70:30</code>, <code>60:40</code>으로 바꾸며 불균형 정도가 달라질 때 탐색 방법별 성능이 어떻게 변하는지 확인했습니다. train/test 비율은 <code>8:2</code>로 유지했습니다.</p>
+
+<p>실제 응용 데이터로는 포병 군사훈련 상황에서의 산불 위험 데이터와 Extended Cohn-Kanade(CK+) 감정 데이터를 다뤘습니다. 두 데이터는 도메인은 다르지만, 정상 패턴과 드문 이상 패턴을 구분해야 한다는 점에서 OCC 문제로 해석할 수 있습니다.</p>
+
+<p>EDA에서는 단순히 클래스 비율만 보는 것이 아니라, 이상 데이터가 정상 데이터 주변에 섞여 있는지, 특정 변수 공간에서 분리 가능한 구조가 있는지, 불균형 비율이 커질수록 recall과 precision 사이의 균형이 어떻게 흔들리는지를 확인하는 것이 중요했습니다.</p>
+
+<h2 id="접근-방법">접근 방법</h2>
+
+<p>비교 대상은 세 가지 하이퍼파라미터 탐색 전략입니다.</p>
+
+<ol>
+  <li><code>Grid Search</code>: 미리 정한 후보 격자를 모두 탐색하는 방식</li>
+  <li><code>Random Search</code>: 후보 공간에서 무작위로 조합을 선택해 탐색하는 방식</li>
+  <li><code>Bayesian Optimization</code>: Gaussian Process 기반 surrogate model로 성능 함수를 근사하고, 다음 탐색 지점을 순차적으로 선택하는 방식</li>
+</ol>
+
+<p>Grid Search는 해석이 쉽지만 후보 공간이 조금만 커져도 계산량이 빠르게 증가합니다. Random Search는 넓은 공간을 가볍게 훑을 수 있지만, 이전 실험 결과를 다음 탐색에 충분히 활용하지 못합니다. 반면 Bayesian Optimization은 이전 평가 결과를 바탕으로 성능이 좋을 가능성이 높은 영역과 아직 불확실한 영역을 균형 있게 탐색할 수 있습니다.</p>
+
+<p>모델 관점에서는 OC-SVM과 Deep SVDD를 중심으로 비교했습니다. OC-SVM은 정상 데이터가 놓이는 경계를 kernel 기반으로 학습하고, Deep SVDD는 딥러닝 표현 공간에서 정상 데이터를 하나의 중심 주변으로 모으는 방식입니다. 두 방법 모두 정상 패턴의 경계를 어떻게 잡느냐가 핵심이며, 이 경계는 하이퍼파라미터 설정에 매우 민감합니다.</p>
+
+<figure class="project-figure project-figure--medium">
+  <img src="/assets/img/projects/one-class-classification-bayesian-optimization/OC-SVM.png" alt="OC-SVM이 정상 데이터 영역의 경계를 학습하고 바깥쪽 샘플을 이상으로 판단하는 개념도" />
+  <figcaption>OC-SVM 기반 정상 영역 경계 학습 개념</figcaption>
+</figure>
+
+<h2 id="성과성능">성과(성능)</h2>
+
+<p>synthetic dataset에서는 Bayesian Optimization이 F1과 AUC 기준으로 일관되게 강한 결과를 보였습니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>정상:이상 비율</th>
+      <th style="text-align: right">F1 Grid</th>
+      <th style="text-align: right">F1 Random</th>
+      <th style="text-align: right">F1 BO</th>
+      <th style="text-align: right">AUC Grid</th>
+      <th style="text-align: right">AUC Random</th>
+      <th style="text-align: right">AUC BO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>95:5</td>
+      <td style="text-align: right">0.7076</td>
+      <td style="text-align: right">0.6814</td>
+      <td style="text-align: right"><strong>0.7510</strong></td>
+      <td style="text-align: right">0.8567</td>
+      <td style="text-align: right">0.8514</td>
+      <td style="text-align: right"><strong>0.8620</strong></td>
+    </tr>
+    <tr>
+      <td>90:10</td>
+      <td style="text-align: right">0.7656</td>
+      <td style="text-align: right">0.7488</td>
+      <td style="text-align: right"><strong>0.7923</strong></td>
+      <td style="text-align: right">0.8536</td>
+      <td style="text-align: right">0.8482</td>
+      <td style="text-align: right"><strong>0.8588</strong></td>
+    </tr>
+    <tr>
+      <td>80:20</td>
+      <td style="text-align: right">0.8425</td>
+      <td style="text-align: right">0.8302</td>
+      <td style="text-align: right"><strong>0.8562</strong></td>
+      <td style="text-align: right">0.8795</td>
+      <td style="text-align: right">0.8746</td>
+      <td style="text-align: right"><strong>0.8821</strong></td>
+    </tr>
+    <tr>
+      <td>70:30</td>
+      <td style="text-align: right">0.8580</td>
+      <td style="text-align: right">0.8499</td>
+      <td style="text-align: right"><strong>0.8713</strong></td>
+      <td style="text-align: right">0.8735</td>
+      <td style="text-align: right">0.8694</td>
+      <td style="text-align: right"><strong>0.8807</strong></td>
+    </tr>
+    <tr>
+      <td>60:40</td>
+      <td style="text-align: right">0.8689</td>
+      <td style="text-align: right">0.8614</td>
+      <td style="text-align: right"><strong>0.8793</strong></td>
+      <td style="text-align: right">0.8754</td>
+      <td style="text-align: right">0.8698</td>
+      <td style="text-align: right"><strong>0.8832</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>특히 정상:이상 비율이 <code>95:5</code>처럼 더 불균형한 경우에도 Bayesian Optimization은 F1과 AUC에서 좋은 성능을 유지했습니다. 이는 이상 데이터가 적은 환경에서 단순한 격자 탐색이나 무작위 탐색보다, 이전 실험 정보를 활용하는 순차적 최적화가 더 효율적으로 작동할 수 있음을 보여줍니다.</p>
+
+<p>다만 recall만 보면 일부 비율에서는 Grid Search나 Random Search가 더 높게 나타나는 경우도 있었습니다. 따라서 최종 판단은 recall 하나가 아니라 F1, AUC, 클래스 불균형 상황에서의 오탐/미탐 비용을 함께 고려해야 합니다.</p>
+
+<h2 id="느낀점">느낀점</h2>
+
+<p>이 프로젝트를 진행하면서 가장 크게 느낀 점은, 이상 탐지에서는 모델 선택만큼이나 하이퍼파라미터 탐색 전략이 중요하다는 점이었습니다. 특히 OCC처럼 이상 데이터가 적은 문제에서는 작은 설정 차이로도 decision boundary가 크게 바뀌고, 그 결과 recall이나 F1이 눈에 띄게 흔들릴 수 있었습니다.</p>
+
+<p>또한 Bayesian Optimization은 단순히 성능이 좋은 자동 튜닝 도구라기보다, 비싼 실험을 줄이면서도 의미 있는 후보를 순차적으로 찾아가는 방식이라는 점이 인상적이었습니다. Grid Search처럼 모든 조합을 기계적으로 확인하지 않아도 되고, Random Search처럼 이전 결과를 버리지도 않기 때문에, 제한된 실험 예산 안에서 더 합리적인 선택을 할 수 있었습니다.</p>
+
+<p>개인적으로는 이 프로젝트를 통해 이상 탐지 문제를 평가할 때 accuracy보다 F1, AUC, recall의 의미를 더 조심스럽게 봐야 한다는 점을 배웠습니다. 이상 데이터가 적을수록 모델이 무엇을 놓치고 무엇을 과하게 잡아내는지가 중요해지기 때문에, 성능표를 해석할 때도 도메인에서의 비용 구조를 함께 생각해야 한다고 느꼈습니다.</p>
+
+<h2 id="참고자료">참고자료</h2>
+
+<ul>
+  <li>GitHub: <a href="https://github.com/joon0390/One-Class-Classification-Using-Bayesian-Optimization">joon0390/One-Class-Classification-Using-Bayesian-Optimization</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2026-04-30T00:00:00+09:00">April 30, 2026</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/projects/cbrn-personal-contamination-detection/" class="pagination--pager" title="화생방 개인 오염 감지 모듈: 환경인지형 감지 최적화 인공지능 모델">이전</a>
+    
+    
+      <a href="/projects/domain-informed-molecular-toxicity-gpc/" class="pagination--pager" title="도메인 지식을 반영한 합성 커널 가우시안 프로세스 분류기를 이용한 분자 독성 예측과 원리 기반 불확실성 정량화">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

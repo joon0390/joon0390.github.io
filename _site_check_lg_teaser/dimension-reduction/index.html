@@ -1,0 +1,1039 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>Variety of Methods for Dimensionality Reduction Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 여러가지 차원축소(Dimensionality Reduction)기법들에 대해 소개하고 간단한 시각화를 해보는 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="Variety of Methods for Dimensionality Reduction">
+<meta property="og:url" content="https://joon0390.github.io/dimension-reduction/">
+
+
+  <meta property="og:description" content="이 포스팅은 여러가지 차원축소(Dimensionality Reduction)기법들에 대해 소개하고 간단한 시각화를 해보는 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-09-23T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/dimension-reduction/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Variety of Methods for Dimensionality Reduction">
+    <meta itemprop="description" content="  이 포스팅은 여러가지 차원축소(Dimensionality Reduction)기법들에 대해 소개하고 간단한 시각화를 해보는 글입니다.">
+    <meta itemprop="datePublished" content="2025-09-23T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/dimension-reduction/" itemprop="url">Variety of Methods for Dimensionality Reduction
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#dataset--experimental-setup">Dataset &amp; Experimental Setup</a></li><li><a href="#pca-principal-component-analysis">PCA (Principal Component Analysis)</a></li><li><a href="#probabilistic-pca-ppca">Probabilistic PCA (PPCA)</a></li><li><a href="#gplvm-gaussian-process-latent-variable-model">GPLVM (Gaussian Process Latent Variable Model)</a></li><li><a href="#lda-linear-discriminant-analysis">LDA (Linear Discriminant Analysis)</a></li><li><a href="#kernel-pca">Kernel PCA</a></li><li><a href="#lle-locally-linear-embedding">LLE (Locally Linear Embedding)</a></li><li><a href="#isomap">Isomap</a></li><li><a href="#t-sne-t-distributed-stochastic-neighbor-embedding">t-SNE (t-Distributed Stochastic Neighbor Embedding)</a></li><li><a href="#umap-uniform-manifold-approximation-and-projection">UMAP (Uniform Manifold Approximation and Projection)</a></li><li><a href="#comparison-table">Comparison Table</a></li><li><a href="#conclusion">Conclusion</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 여러가지 차원축소(Dimensionality Reduction)기법들에 대해 소개하고 간단한 시각화를 해보는 글입니다.</p>
+</blockquote>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>차원 축소는 고차원 데이터를 저차원으로 표현하여 <strong>시각화</strong>,<br />
+<strong>노이즈 제거</strong>, <strong>계산 효율화</strong> 등을 가능하게 하는 아주 중요한 기법입니다.</p>
+
+<p>우리는 다음과 같은 흐름으로 기법들을 살펴보려고 합니다.</p>
+
+<ol>
+  <li><strong>선형 기법</strong>: PCA</li>
+  <li><strong>확률적/베이지안 확장</strong>: PPCA, GPLVM</li>
+  <li><strong>지도 차원 축소</strong>: LDA</li>
+  <li><strong>비선형 확장</strong>: Kernel PCA</li>
+  <li><strong>매니폴드 학습</strong>: LLE, Isomap</li>
+  <li><strong>최신 시각화 기법</strong>: t-SNE, UMAP</li>
+</ol>
+
+<hr />
+
+<h2 id="dataset--experimental-setup">Dataset &amp; Experimental Setup</h2>
+
+<p>모든 그림은 <code>sklearn.datasets.load_digits</code> 데이터셋 으로 생성했습니다.</p>
+<ul>
+  <li>샘플 수 <code>N = 1797</code>, 클래스 수 <code>C = 10 (0–9)</code></li>
+  <li>원본 특징 차원 <code>D = 64</code> (8×8 회색조 이미지 벡터화)</li>
+  <li><code>StandardScaler</code>로 표준화</li>
+  <li>비지도 기법은 학습에 레이블 미사용, 단 <strong>색상은 레이블로 표시</strong></li>
+  <li>지도 기법(LDA)만 학습에 레이블 사용</li>
+</ul>
+
+<blockquote>
+  <p>plot 하기 위한 함수와 라이브러리를 로드해줍니다.</p>
+</blockquote>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">import os
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+from sklearn.decomposition import PCA, KernelPCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.manifold import Isomap, LocallyLinearEmbedding, TSNE
+from sklearn.preprocessing import StandardScaler
+import umap
+
+def plot_embedding(X_embedded, y, title, filename):
+    plt.figure(figsize=(6, 5))
+    scatter = plt.scatter(X_embedded[:, 0], X_embedded[:, 1], c=y, cmap="tab10", s=10, alpha=0.7)
+    plt.colorbar(scatter, ticks=range(10))
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(f"assets/img/{filename}", dpi=300)
+    plt.close()
+</code></pre>
+
+<hr />
+
+<h2 id="pca-principal-component-analysis">PCA (Principal Component Analysis)</h2>
+
+<p>모든 차원 축소 기법의 출발점은 <strong>PCA</strong>입니다.<br />
+데이터의 분산을 가장 크게 설명하는 직교 방향을 찾아 투영합니다.</p>
+
+\[S = \frac{1}{N}\tilde X^\top \tilde X, \quad 
+\tilde X = X - \mathbf{1}\mu^\top\]
+
+<p>고유분해 $S = V\Lambda V^\top$ 를 통해 상위 $k$개 벡터 $V_k$를 선택하고, 투영은 $Z = \tilde X V_k$.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+plot_embedding(X_pca, y, "PCA", "pca_example.png")
+</code></pre>
+<p><img src="/assets/img/dim_reduction/pca_example.png" alt="PCA Example" /></p>
+
+<p><a href="https://arxiv.org/pdf/1404.1100">PCA Tutorial</a></p>
+
+<hr />
+
+<h2 id="probabilistic-pca-ppca">Probabilistic PCA (PPCA)</h2>
+
+<p>PCA를 확률적 생성 모델로 해석할 수 있습니다.</p>
+
+\[x = Wz + \mu + \epsilon,\quad z\sim\mathcal N(0,I),\ \epsilon\sim\mathcal N(0,\sigma^2 I)\]
+
+<p>이는 PCA를 베이지안 방법으로 확장할 기반을 마련합니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">ppca = PCA(n_components=2, svd_solver="full")
+X_ppca = ppca.fit_transform(X)
+plot_embedding(X_ppca, y, "Probabilistic PCA", "ppca.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/ppca.png" alt="PPCA Example" /></p>
+
+<p><a href="https://www.cs.columbia.edu/~blei/seminar/2020-representation/readings/TippingBishop1999.pdf">Tipping &amp; Bishop, 1999</a></p>
+
+<hr />
+
+<h2 id="gplvm-gaussian-process-latent-variable-model">GPLVM (Gaussian Process Latent Variable Model)</h2>
+
+<p>PPCA는 선형 구조를 가정하지만, <strong>GPLVM</strong>은 잠재변수 $Z$와 관측 데이터 $Y$ 사이의 관계를 <strong>가우시안 프로세스(GP)</strong> 로 모델링합니다.</p>
+
+\[Y \sim \mathcal{GP}(0, K(Z,Z))\]
+
+<p>이는 불확실성 추론까지 가능하게 하여, 단순 차원 축소를 넘어 <strong>베이지안 representation learning</strong>의 출발점이 됩니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">latent_dim = 2
+kernel = GPy.kern.RBF(input_dim=latent_dim, ARD=True)
+
+m = GPy.models.GPLVM(X, input_dim=latent_dim, kernel=kernel)
+m.optimize(messages=True, max_iters=200)
+
+Z = m.X.mean.values
+
+
+plt.figure(figsize=(6, 5))
+scatter = plt.scatter(Z[:, 0], Z[:, 1], c=y, cmap="tab10", s=10, alpha=0.7)
+plt.colorbar(scatter, ticks=range(10))
+plt.title("GPLVM (GPy)")
+plt.tight_layout()
+plt.savefig("assets/img/gplvm.png", dpi=300)
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/gplvm.png" alt="GPLVM Example" /></p>
+
+<p><a href="https://proceedings.neurips.cc/paper/2003/file/9657c1fffd38824e5ab0472e022e577e-Paper.pdf">Lawrence, 2004</a></p>
+
+<hr />
+
+<h2 id="lda-linear-discriminant-analysis">LDA (Linear Discriminant Analysis)</h2>
+
+<p>앞선 PCA 계열은 모두 <strong>비지도 학습</strong> 기법입니다.<br />
+하지만 분류(classification) 문제에서는 레이블 정보를 적극적으로 활용하는 것이 더 효과적일 수 있습니다.</p>
+
+<p>LDA는 클래스 간 분산($S_B$)을 극대화하고 클래스 내 분산($S_W$)을 최소화하는 투영을 찾습니다.</p>
+
+\[W^* = \arg\max_W \frac{|W^T S_B W|}{|W^T S_W W|}\]
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">lda = LDA(n_components=2)
+X_lda = lda.fit_transform(X, y)
+plot_embedding(X_lda, y, "LDA", "lda.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/lda.png" alt="LDA Example" /></p>
+
+<hr />
+
+<h2 id="kernel-pca">Kernel PCA</h2>
+
+<p>이제 선형 방법을 넘어 비선형 구조를 학습해야 할 때가 옵니다.<br />
+Kernel PCA는 커널 트릭을 이용해 입력을 고차원 feature space로 사상한 뒤 PCA를 수행합니다.</p>
+
+\[K_{ij} = k(x_i, x_j) = \exp(-\gamma \lVert x_i - x_j \rVert^2)\]
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">kpca = KernelPCA(n_components=2, kernel="rbf", gamma=0.03)
+X_kpca = kpca.fit_transform(X)
+plot_embedding(X_kpca, y, "Kernel PCA (RBF)", "kernel_pca.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/kernel_pca.png" alt="Kernel PCA Example" /></p>
+
+<p><a href="https://link.springer.com/chapter/10.1007/BFb0020217">Schölkopf et al., 1998</a></p>
+
+<hr />
+
+<h2 id="lle-locally-linear-embedding">LLE (Locally Linear Embedding)</h2>
+
+<p>Kernel PCA는 전체적인 비선형 구조를 반영하지만, <strong>국소적 구조(local structure)</strong> 를 보존하는 데는 한계가 있습니다.<br />
+LLE는 각 데이터가 <strong>이웃점의 선형 조합</strong>으로 표현된다는 가정하에 저차원 좌표를 찾습니다.</p>
+
+\[x_i \approx \sum_{j \in N(i)} w_{ij} x_j\]
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">lle = LocallyLinearEmbedding(n_neighbors=30, n_components=2, method="standard")
+X_lle = lle.fit_transform(X)
+plot_embedding(X_lle, y, "LLE", "lle.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/lle.png" alt="LLE Example" /></p>
+
+<p><a href="https://www.cs.columbia.edu/~jebara/6772/papers/lleintro.pdf">Roweis &amp; Saul, 2000</a></p>
+
+<hr />
+
+<h2 id="isomap">Isomap</h2>
+
+<p>LLE가 국소 구조를 강조한다면, <strong>Isomap</strong>은 <strong>전역적 곡면 구조</strong>를 학습합니다.<br />
+$k$-NN 그래프에서 지오데식 거리(매니폴드 위 최단 경로)를 계산하고, 이를 이용해 임베딩합니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">isomap = Isomap(n_neighbors=30, n_components=2)
+X_isomap = isomap.fit_transform(X)
+plot_embedding(X_isomap, y, "Isomap", "isomap.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/isomap.png" alt="Isomap Example" /></p>
+
+<p><a href="https://wearables.cc.gatech.edu/paper_of_week/isomap.pdf">Tenenbaum et al., 2000</a></p>
+
+<hr />
+
+<h2 id="t-sne-t-distributed-stochastic-neighbor-embedding">t-SNE (t-Distributed Stochastic Neighbor Embedding)</h2>
+
+<p>매니폴드 학습 계열은 구조를 잘 보존하지만, <strong>시각화에 최적화된 기법</strong>은 아닙니다.<br />
+t-SNE는 고차원 이웃 확률분포 $P$와 저차원 확률분포 $Q$의 KL divergence를 최소화하여,<br />
+국소적 군집 구조를 시각화하는 데 탁월합니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">tsne = TSNE(n_components=2, perplexity=30, random_state=42, init="pca", learning_rate="auto")
+X_tsne = tsne.fit_transform(X)
+plot_embedding(X_tsne, y, "t-SNE", "tsne.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/tsne.png" alt="t-SNE Example" /></p>
+
+<p><a href="https://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf">van der Maaten &amp; Hinton, 2008</a></p>
+
+<hr />
+
+<h2 id="umap-uniform-manifold-approximation-and-projection">UMAP (Uniform Manifold Approximation and Projection)</h2>
+
+<p>마지막으로, t-SNE의 단점을 보완한 최신 기법 <strong>UMAP</strong>입니다.<br />
+t-SNE 대비 빠르고, 더 큰 데이터셋에도 적용 가능하며,<br />
+국소(local)와 전역(global) 구조를 균형 있게 보존합니다.</p>
+
+<div class="code-header">
+    <button class="copy-code-button" title="Copy code to clipboard">
+      <img class="copy-code-image" src="/assets/img/copy.png" />
+    </button>
+  </div>
+
+<pre><code class="language-python">umap_model = umap.UMAP(n_components=2, random_state=42)
+X_umap = umap_model.fit_transform(X)
+plot_embedding(X_umap, y, "UMAP", "umap.png")
+</code></pre>
+
+<p><img src="/assets/img/dim_reduction/umap.png" alt="UMAP Example" /></p>
+
+<p><a href="https://arxiv.org/pdf/1802.03426">McInnes et al., 2018</a></p>
+
+<hr />
+
+<h2 id="comparison-table">Comparison Table</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>방법</th>
+      <th>선형성</th>
+      <th>확률적</th>
+      <th>불확실성 추론</th>
+      <th>비선형</th>
+      <th>지도학습</th>
+      <th>대표 응용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PCA</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>데이터 압축, 시각화</td>
+    </tr>
+    <tr>
+      <td>PPCA</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>일부</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>Bayesian 해석</td>
+    </tr>
+    <tr>
+      <td>GPLVM</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>고급 representation</td>
+    </tr>
+    <tr>
+      <td>LDA</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>분류용 차원 축소</td>
+    </tr>
+    <tr>
+      <td>Kernel PCA</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>비선형 구조</td>
+    </tr>
+    <tr>
+      <td>LLE</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>국소 매니폴드 학습</td>
+    </tr>
+    <tr>
+      <td>Isomap</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>곡면 구조 복원</td>
+    </tr>
+    <tr>
+      <td>t-SNE</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>데이터 시각화</td>
+    </tr>
+    <tr>
+      <td>UMAP</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>❌</td>
+      <td>✅</td>
+      <td>❌</td>
+      <td>대규모 임베딩</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>차원 축소 기법은 단순한 시각화 도구를 넘어,<br />
+<strong>데이터의 본질적 구조를 파악하고 효율적인 학습을 가능케 하는 핵심 기법</strong>입니다.</p>
+
+<ul>
+  <li><strong>선형 → 확률적/베이지안</strong>: PCA → PPCA → GPLVM</li>
+  <li><strong>지도 차원 축소</strong>: LDA</li>
+  <li><strong>비선형 확장</strong>: Kernel PCA → LLE → Isomap</li>
+  <li><strong>최신 시각화</strong>: t-SNE, UMAP</li>
+</ul>
+
+<p>데이터의 성격(선형/비선형, 지도/비지도, 소규모/대규모)에 따라<br />
+적절한 방법을 선택하는 것이 중요합니다.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2025-09-23T00:00:00+09:00">September 23, 2025</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=Variety+of+Methods+for+Dimensionality+Reduction%20https%3A%2F%2Fjoon0390.github.io%2Fdimension-reduction%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fdimension-reduction%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/dimension-reduction/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Variety+of+Methods+for+Dimensionality+Reduction%20https%3A%2F%2Fjoon0390.github.io%2Fdimension-reduction%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/natural-gradient/" class="pagination--pager" title="Natural Gradient for Variational Inference">이전</a>
+    
+    
+      <a href="/moe/" class="pagination--pager" title="Mixture of Experts (MoE)">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/dit/" rel="permalink">DiT : Scalable Diffusion Models with Transformers
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 DiT (Diffusion Transformer)를 공부하며
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

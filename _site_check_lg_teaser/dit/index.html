@@ -1,0 +1,936 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.1 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="ko-KR" class="no-js">
+  <head>
+    <meta charset="utf-8">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      packages: {'[+]': ['ams']}
+    },
+    options: {
+      ignoreHtmlClass: 'tex2jax_ignore',
+      processHtmlClass: 'tex2jax_process'
+    }
+  };
+</script>
+
+<script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<!-- begin _includes/seo.html --><title>DiT : Scalable Diffusion Models with Transformers Statistics, ML, DL Heekim’s Blog</title>
+<meta name="description" content="이 포스팅은 DiT (Diffusion Transformer)를 공부하며 통계학적인 관점에서 핵심 개념을 정리한 글입니다.">
+
+
+  <meta name="author" content="Junhee Kim">
+  
+  <meta property="article:author" content="Junhee Kim">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Heekim's Blog">
+<meta property="og:title" content="DiT : Scalable Diffusion Models with Transformers">
+<meta property="og:url" content="https://joon0390.github.io/dit/">
+
+
+  <meta property="og:description" content="이 포스팅은 DiT (Diffusion Transformer)를 공부하며 통계학적인 관점에서 핵심 개념을 정리한 글입니다.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-10T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://joon0390.github.io/dit/">
+
+
+
+
+
+
+
+  <meta name="google-site-verification" content="google6d58fbb1765c37ab" />
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  window.enable_copy_code_button = true;
+</script>
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <style>
+/* Revert to theme's default sidebar width (no overrides) */
+
+/* Wrap long sidebar nav titles instead of truncating */
+.page__sidebar .nav__list a,
+.page__sidebar .nav__list span,
+.page__sidebar .nav__sub-title,
+.sidebar .nav__list a,
+.sidebar .nav__list span,
+.sidebar .nav__sub-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Tighter line-height for multi-line items */
+.page__sidebar .nav__list .nav__items li,
+.sidebar .nav__list .nav__items li {
+  line-height: 1.4;
+}
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/img/gaussian.png" alt=" "></a>
+        
+        <a class="site-title" href="/">
+           
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                
+                href="/about/"
+                
+                
+              >About Me</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/posts/"
+                
+                
+              >Study</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/category-archive/"
+                
+                
+              >Category</a>
+              
+            </li><li class="masthead__menu-item">
+              <a
+                
+                href="/projects/"
+                
+                
+              >Projects</a>
+              
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+
+
+
+
+<div id="main" role="main" class="main--no-left-sidebar">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="DiT : Scalable Diffusion Models with Transformers">
+    <meta itemprop="description" content="  이 포스팅은 DiT (Diffusion Transformer)를 공부하며통계학적인 관점에서 핵심 개념을 정리한 글입니다.">
+    <meta itemprop="datePublished" content="2026-04-10T00:00:00+09:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://joon0390.github.io/dit/" itemprop="url">DiT : Scalable Diffusion Models with Transformers
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-/assets/img/gaussian.png"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#1-introduction">1. Introduction</a><ul><li><a href="#dit를-어떻게-보면-좋을까">DiT를 어떻게 보면 좋을까?</a></li><li><a href="#이-글에서-볼-내용">이 글에서 볼 내용</a></li></ul></li><li><a href="#2-diffusion-model-기본-구조">2. Diffusion Model 기본 구조</a><ul><li><a href="#21-forward-process">2.1 Forward Process</a></li></ul></li><li><a href="#3-ddpm-vs-ddim">3. DDPM vs DDIM</a></li><li><a href="#4-dit-diffusion-transformer">4. DiT (Diffusion Transformer)</a><ul><li><a href="#42-구조-개요">4.2 구조 개요</a></li><li><a href="#43-self-attention">4.3 Self-Attention</a></li><li><a href="#44-왜-transformer인가">4.4 왜 Transformer인가?</a></li></ul></li><li><a href="#5-dit-vs-u-net">5. DiT vs U-Net</a></li><li><a href="#6-전체-흐름-정리">6. 전체 흐름 정리</a><ul><li><a href="#구성-요소-정리">구성 요소 정리</a></li></ul></li><li><a href="#7-개인-정리-insight">7. 개인 정리 (Insight)</a><ul><li><a href="#1-diffusion은-구조적으로-단순합니다">1. diffusion은 구조적으로 단순합니다</a></li><li><a href="#2-핵심은-함수-근사입니다">2. 핵심은 함수 근사입니다</a></li><li><a href="#3-transformer는-이-문제에-잘-맞습니다">3. Transformer는 이 문제에 잘 맞습니다</a></li></ul></li><li><a href="#8-마무리">8. 마무리</a></li><li><a href="#reference">Reference</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>이 포스팅은 DiT (Diffusion Transformer)를 공부하며<br />
+통계학적인 관점에서 핵심 개념을 정리한 글입니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="1-introduction">1. Introduction</h1>
+
+<p>최근 디퓨전 모델은 이미지 생성 분야에서 중요한 역할을 하는 생성 모델로 자리 잡았습니다.<br />
+특히 <a href="https://arxiv.org/pdf/2006.11239">DDPM (Ho et al., 2020)</a> 이후,<br />
+노이즈를 점진적으로 제거하는 방식의 생성 모델이 높은 성능을 보이며 빠르게 발전했습니다.</p>
+
+<p>이후 <a href="https://arxiv.org/pdf/2010.02502">DDIM (Song et al., 2021)</a>은<br />
+샘플링 방식을 개선하여 더 빠른 생성이 가능하도록 하였으며,</p>
+
+<p><a href="https://arxiv.org/pdf/2112.10752">Latent Diffusion Models (Rombach et al., 2022)</a>는<br />
+이미지를 압축된 latent 공간에서 처리함으로써 계산 효율을 크게 개선하였고,<br />
+스테이블 디퓨전과 같은 실제 서비스 모델의 기반이 되었습니다.</p>
+
+<p>이러한 흐름 속에서 등장한 <a href="https://arxiv.org/pdf/2212.09748">DiT (Peebles &amp; Xie, 2023)</a>는<br />
+기존 diffusion 모델의 구조를 크게 바꾸기보다는,<br />
+<strong>backbone을 CNN(U-Net)에서 Transformer로 확장한 모델</strong>입니다.</p>
+
+<hr />
+
+<h2 id="dit를-어떻게-보면-좋을까">DiT를 어떻게 보면 좋을까?</h2>
+
+<p>DiT는 완전히 새로운 diffusion 모델이라기보다는,<br />
+다음과 같이 이해하는 것이 자연스럽습니다.</p>
+
+<ul>
+  <li>diffusion의 기본 구조는 그대로 유지됩니다</li>
+  <li>학습 방식 (noise prediction)도 동일합니다</li>
+  <li>단지 이를 구현하는 모델을 Transformer로 변경합니다</li>
+</ul>
+
+<p>즉,</p>
+
+\[\text{DiT} = \text{Diffusion Model} + \text{Transformer}\]
+
+<p>라고 볼 수 있습니다.</p>
+
+<hr />
+
+<h2 id="이-글에서-볼-내용">이 글에서 볼 내용</h2>
+
+<p>이 글에서는 DiT를 이해하기 위해 다음 흐름으로 정리하였습니다.</p>
+
+<ul>
+  <li>diffusion model의 기본 구조</li>
+  <li>DDPM과 DDIM의 차이</li>
+  <li>DiT가 기존 구조에서 무엇을 바꿨는지</li>
+</ul>
+
+<hr />
+
+<h1 id="2-diffusion-model-기본-구조">2. Diffusion Model 기본 구조</h1>
+
+<p>Diffusion model은 데이터를 점진적으로 노이즈화한 뒤,<br />
+이를 다시 복원하는 방식의 생성 모델입니다.</p>
+
+<p><img src="/assets/img/dit/image_1.png" alt="Diffusion process" /></p>
+
+<p><em>Figure 1. Diffusion model의 forward(노이즈 추가)와 reverse(복원) 과정</em></p>
+
+<p>위 그림(Figure 1)과 같이 diffusion 모델은 데이터를 점진적으로 노이즈화한 뒤,<br />
+이를 다시 복원하는 구조를 가집니다.</p>
+
+<hr />
+
+<h2 id="21-forward-process">2.1 Forward Process</h2>
+
+\[x_t = \sqrt{\bar\alpha_t} x_0 + \sqrt{1-\bar\alpha_t} \epsilon\]
+
+<p>이 식은 시간 $ t $에서의 데이터 $ x_t $가<br />
+원본 데이터 $ x_0 $와 Gaussian noise의 조합으로 표현된다는 것을 의미합니다.</p>
+
+<ul>
+  <li>$ x_0 $: 원본 데이터</li>
+  <li>$ \epsilon \sim \mathcal{N}(0, I) $: Gaussian noise</li>
+  <li>$ \bar{\alpha}<em>t = \prod</em>{s=1}^{t}(1 - \beta_s) $: 누적 계수</li>
+</ul>
+
+<p>즉,</p>
+
+<ul>
+  <li>원본 데이터에 점점 더 많은 노이즈가 섞이게 되고</li>
+  <li>시간이 지날수록 데이터는 점점 무작위 노이즈에 가까워집니다</li>
+</ul>
+
+<hr />
+
+<h1 id="3-ddpm-vs-ddim">3. DDPM vs DDIM</h1>
+
+<p>Diffusion 모델에서는<br />
+<strong>학습과 샘플링을 구분해서 이해하는 것이 중요합니다.</strong></p>
+
+<p><img src="/assets/img/dit/ddpm_ddim.jpg" alt="DDPM vs DDIM" /></p>
+
+<p><em>Figure 2. DDPM의 stochastic sampling과 DDIM의 deterministic trajectory 비교</em></p>
+
+<p>Figure 2에서 볼 수 있듯이, DDPM은 stochastic한 경로를 따르는 반면<br />
+DDIM은 deterministic한 trajectory를 사용합니다.</p>
+
+<hr />
+
+<h1 id="4-dit-diffusion-transformer">4. DiT (Diffusion Transformer)</h1>
+
+<p>이제 핵심인 DiT를 살펴보겠습니다.</p>
+
+<hr />
+
+<h2 id="42-구조-개요">4.2 구조 개요</h2>
+
+<p>DiT는 다음과 같은 과정을 거칩니다.</p>
+
+<ol>
+  <li>이미지 → patch로 분할</li>
+  <li>patch → token으로 변환</li>
+  <li>Transformer 적용</li>
+  <li>noise prediction 출력</li>
+</ol>
+
+<p><img src="/assets/img/dit/dit.jpg" alt="DiT architecture" /></p>
+
+<p><em>Figure 3. DiT 구조: 이미지 → patch → Transformer → noise prediction</em></p>
+
+<p>Figure 3과 같이 DiT는 이미지를 patch 단위로 분할한 뒤,<br />
+Transformer를 통해 전역 정보를 학습합니다.</p>
+
+<hr />
+
+<h2 id="43-self-attention">4.3 Self-Attention</h2>
+
+\[\text{Attention}(Q, K, V)
+=
+\text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right)V\]
+
+<p>이 구조 덕분에</p>
+
+<ul>
+  <li>이미지 전체 정보를 동시에 고려할 수 있으며</li>
+  <li>장거리 의존성을 효과적으로 학습할 수 있습니다</li>
+</ul>
+
+<p><img src="/assets/img/dit/self_attention.jpg" alt="Self Attention" /></p>
+
+<p><em>Figure 4. Self-attention을 통해 patch 간 관계를 학습하는 방식</em></p>
+
+<p>Figure 4와 같이 self-attention은 각 patch 간의 관계를 가중치 형태로 학습합니다.</p>
+
+<hr />
+
+<h2 id="44-왜-transformer인가">4.4 왜 Transformer인가?</h2>
+
+<p>기존 CNN과 비교하면 다음과 같습니다.</p>
+
+<ul>
+  <li>CNN → 지역 정보에 강함</li>
+  <li>Transformer → 전체 구조 이해에 강함</li>
+</ul>
+
+<p>특히,</p>
+
+<ul>
+  <li>모델을 크게 확장할수록 성능이 잘 증가하며</li>
+  <li>text conditioning과의 궁합이 좋습니다</li>
+</ul>
+
+<hr />
+
+<h1 id="5-dit-vs-u-net">5. DiT vs U-Net</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>U-Net</th>
+      <th>DiT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>구조</td>
+      <td>CNN</td>
+      <td>Transformer</td>
+    </tr>
+    <tr>
+      <td>정보 처리</td>
+      <td>local</td>
+      <td>global</td>
+    </tr>
+    <tr>
+      <td>확장성</td>
+      <td>제한적</td>
+      <td>우수</td>
+    </tr>
+    <tr>
+      <td>계산 비용</td>
+      <td>비교적 낮음</td>
+      <td>높음</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h1 id="6-전체-흐름-정리">6. 전체 흐름 정리</h1>
+
+<p>Diffusion 모델의 핵심 구조는 다음과 같습니다.</p>
+
+\[x_t = \sqrt{\bar\alpha_t} x_0 + \sqrt{1-\bar\alpha_t}\epsilon\]
+
+<p>모델은 다음을 학습합니다.</p>
+
+\[\epsilon_\theta(x_t, t)\]
+
+<hr />
+
+<h2 id="구성-요소-정리">구성 요소 정리</h2>
+
+<ul>
+  <li><strong>DDPM</strong>: 기본 diffusion 구조 + stochastic sampling</li>
+  <li><strong>DDIM</strong>: 같은 모델, 더 빠른 sampling</li>
+  <li><strong>DiT</strong>: Transformer 기반 noise predictor</li>
+</ul>
+
+<hr />
+
+<p>즉,</p>
+
+<ul>
+  <li>DDPM → 어떻게 학습하고 생성할 것인가</li>
+  <li>DDIM → 어떻게 빠르게 생성할 것인가</li>
+  <li>DiT → 어떤 모델로 학습할 것인가</li>
+</ul>
+
+<hr />
+
+<h1 id="7-개인-정리-insight">7. 개인 정리 (Insight)</h1>
+
+<p>DiT를 공부하면서 다음과 같은 점이 중요하다고 느꼈습니다.</p>
+
+<hr />
+
+<h2 id="1-diffusion은-구조적으로-단순합니다">1. diffusion은 구조적으로 단순합니다</h2>
+
+<ul>
+  <li>결국 noise를 맞추는 문제입니다</li>
+  <li>하지만 매우 강력한 생성 모델입니다</li>
+</ul>
+
+<hr />
+
+<h2 id="2-핵심은-함수-근사입니다">2. 핵심은 함수 근사입니다</h2>
+
+\[\epsilon_\theta(x_t, t)\]
+
+<p>이 함수가 얼마나 복잡한 분포를 잘 근사하는지가 중요합니다.</p>
+
+<hr />
+
+<h2 id="3-transformer는-이-문제에-잘-맞습니다">3. Transformer는 이 문제에 잘 맞습니다</h2>
+
+<ul>
+  <li>global dependency</li>
+  <li>scaling 성능</li>
+  <li>조건부 생성과의 궁합</li>
+</ul>
+
+<hr />
+
+<p>즉 DiT의 핵심은</p>
+
+<blockquote>
+  <p>diffusion 구조의 변화가 아니라 함수 클래스의 변화입니다.</p>
+</blockquote>
+
+<hr />
+
+<h1 id="8-마무리">8. 마무리</h1>
+
+<p>DiT는 diffusion model의 새로운 이론이라기보다는,<br />
+기존 구조 위에서 Transformer를 적용한 모델입니다.</p>
+
+<p>하지만 이 변화는 단순한 구조 변경을 넘어,</p>
+
+<ul>
+  <li>성능 향상</li>
+  <li>확장성 증가</li>
+  <li>새로운 연구 방향</li>
+</ul>
+
+<p>을 제시했다는 점에서 의미가 있습니다.</p>
+
+<hr />
+
+<h1 id="reference">Reference</h1>
+
+<ul>
+  <li>Ho, J., Jain, A., &amp; Abbeel, P. (2020). <em>Denoising Diffusion Probabilistic Models</em></li>
+  <li>Song, J., Meng, C., &amp; Ermon, S. (2021). <em>Denoising Diffusion Implicit Models</em></li>
+  <li>Rombach, R. et al. (2022). <em>Latent Diffusion Models</em></li>
+  <li>Peebles, W., &amp; Xie, S. (2023). <em>Scalable Diffusion Models with Transformers</em></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2026-04-10T00:00:00+09:00">April 10, 2026</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  <h4 class="page__share-title">공유하기</h4>
+
+  <a href="https://x.com/intent/tweet?text=DiT+%3A+Scalable+Diffusion+Models+with+Transformers%20https%3A%2F%2Fjoon0390.github.io%2Fdit%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fjoon0390.github.io%2Fdit%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://joon0390.github.io/dit/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=DiT+%3A+Scalable+Diffusion+Models+with+Transformers%20https%3A%2F%2Fjoon0390.github.io%2Fdit%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/predictive-variational-inference/" class="pagination--pager" title="[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution">이전</a>
+    
+    
+      <a href="/occ/" class="pagination--pager" title="One-Class Classification">다음</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+      
+        <p>
+          Comments are configured with provider: <strong>utterances</strong>,
+          but are disabled in non-production environments.
+        </p>
+      
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">참고</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/occ/" rel="permalink">One-Class Classification
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 One-Class Classification(OCC) 를 공부하며 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/predictive-variational-inference/" rel="permalink">[Paper Review] Predictive variational inference: Learn the predictively optimal posterior distribution
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Lai, Linero, Yao 의 2024년 arXiv 논문
+“Predictive variational inference: Learn the predictively optimal posterior distribution”
+를 읽고 정리한 글입니다. 이 글에서 참고...</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/abc-posterior/" rel="permalink">Approximate Bayesian Computation Posterior
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 likelihood를 직접 계산하기 어려운 상황에서 사용되는 Approximate Bayesian Computation (ABC) 와, 그 결과 얻어지는 ABC posterior의 의미를 정리합니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork" >
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+      <a href="/sampling-can-be-faster-than-optimization/" rel="permalink">[Paper Review] Sampling Can Be Faster Than Optimization
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  이 포스팅은 Ma, Chen, Jin, Flammarion, Jordan (2019) 의 논문
+Sampling Can Be Faster Than Optimization 을 읽고 정리한 글입니다.
+
+</p>
+  </article>
+</div>
+
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+
+        <!-- <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div> -->
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/joon0390" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.linkedin.com/in/junhee-kim-08695a352/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+        
+      
+    
+
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 <a href="https://joon0390.github.io">Heekim's Blog</a>. </div>
+
+<script src="/assets/scripts/copyCode.js"></script>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'joon0390/joon0390.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>
