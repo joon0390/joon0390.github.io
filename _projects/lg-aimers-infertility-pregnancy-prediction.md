@@ -1,5 +1,3 @@
-![1787209931137](image/lg-aimers-infertility-pregnancy-prediction/1787209931137.png)
-
 ---
 title: "LG Aimers 6기: 난임 환자 임신 성공 확률 예측"
 excerpt: "난임 환자 시술 데이터를 기반으로 임신 성공 확률을 예측하고, 확률 calibration과 분류 성능을 함께 요구하는 복합 지표에 맞춰 CatBoost와 LightGBM 기반 파이프라인을 설계한 의료 AI 프로젝트."
