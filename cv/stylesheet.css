@@ -561,6 +561,99 @@ img {
   color: var(--cv-text-soft);
 }
 
+.live-music {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--cv-border);
+}
+
+.live-music__copy {
+  padding: 0.5rem;
+}
+
+.live-music__videos {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.15rem 0 0.45rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cv-accent-soft) transparent;
+}
+
+.concert-preview {
+  flex: 0 0 auto;
+  width: 6.7rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.8rem;
+  background: #171411;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+.concert-preview video {
+  display: block;
+  width: 100%;
+  height: 11.9rem;
+  background: #171411;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.concert-preview:hover,
+.concert-preview:focus-visible {
+  outline: 3px solid rgba(143, 95, 57, 0.35);
+  outline-offset: 2px;
+}
+
+.video-modal {
+  max-width: 94vw;
+  max-height: 92vh;
+  padding: 2.7rem 0.75rem 0.75rem;
+  border: 0;
+  border-radius: 1rem;
+  background: #171411;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.video-modal::backdrop {
+  background: rgba(20, 16, 13, 0.82);
+  backdrop-filter: blur(5px);
+}
+
+.video-modal__player {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(90vw, 1200px);
+  max-height: 82vh;
+  background: #000;
+  object-fit: contain;
+}
+
+.video-modal__close {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.45rem;
+  line-height: 1;
+  place-items: center;
+  cursor: pointer;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero,
   .metric-card,
@@ -614,6 +707,10 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .live-music {
+    grid-template-columns: 1fr;
+  }
+
   .research-card--featured {
     grid-column: auto;
     grid-template-columns: 1fr;
@@ -663,5 +760,13 @@ img {
   .outside-work__gallery {
     max-width: 360px;
     margin: 0 auto;
+  }
+
+  .concert-preview {
+    width: 5.8rem;
+  }
+
+  .concert-preview video {
+    height: 10.3rem;
   }
 }

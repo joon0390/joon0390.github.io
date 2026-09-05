@@ -375,8 +375,75 @@
               </p>
             </div>
           </div>
+
+          <div class="live-music">
+            <div class="live-music__copy">
+              <p class="outside-work__label">Live Music</p>
+              <h3 class="outside-work__title">Concerts and festivals</h3>
+              <p class="outside-work__text">
+                I enjoy live music and make time for concerts whenever I can.
+              </p>
+            </div>
+
+            <div class="live-music__videos">
+              <button class="concert-preview" type="button" data-video-src="/assets/video/black_skirt.mp4" aria-label="Play concert clip 1">
+                <video muted playsinline preload="metadata" aria-hidden="true">
+                  <source src="/assets/video/black_skirt.mp4#t=0.1" type="video/mp4" />
+                </video>
+              </button>
+              <button class="concert-preview" type="button" data-video-src="/assets/video/hyukoh.mp4" aria-label="Play concert clip 2">
+                <video muted playsinline preload="metadata" aria-hidden="true">
+                  <source src="/assets/video/hyukoh.mp4#t=0.1" type="video/mp4" />
+                </video>
+              </button>
+              <button class="concert-preview" type="button" data-video-src="/assets/video/pentaport_thornapple.mp4" aria-label="Play concert clip 3">
+                <video muted playsinline preload="metadata" aria-hidden="true">
+                  <source src="/assets/video/pentaport_thornapple.mp4#t=0.1" type="video/mp4" />
+                </video>
+              </button>
+              <button class="concert-preview" type="button" data-video-src="/assets/video/pentaport_bonjeingan.mp4" aria-label="Play concert clip 4">
+                <video muted playsinline preload="metadata" aria-hidden="true">
+                  <source src="/assets/video/pentaport_bonjeingan.mp4#t=0.1" type="video/mp4" />
+                </video>
+              </button>
+              <button class="concert-preview" type="button" data-video-src="/assets/video/pentaport_sultan_of_the_disco.mp4" aria-label="Play concert clip 5">
+                <video muted playsinline preload="metadata" aria-hidden="true">
+                  <source src="/assets/video/pentaport_sultan_of_the_disco.mp4#t=0.1" type="video/mp4" />
+                </video>
+              </button>
+            </div>
+          </div>
+
+          <dialog class="video-modal" id="concert-video-modal" aria-label="Concert video player">
+            <button class="video-modal__close" type="button" aria-label="Close video">&times;</button>
+            <video class="video-modal__player" controls playsinline></video>
+          </dialog>
         </section>
       </main>
     </div>
+
+    <script>
+      const concertModal = document.getElementById("concert-video-modal");
+      const concertPlayer = concertModal.querySelector(".video-modal__player");
+      const concertClose = concertModal.querySelector(".video-modal__close");
+
+      document.querySelectorAll(".concert-preview").forEach((preview) => {
+        preview.addEventListener("click", () => {
+          concertPlayer.src = preview.dataset.videoSrc;
+          concertModal.showModal();
+          concertPlayer.play().catch(() => {});
+        });
+      });
+
+      concertClose.addEventListener("click", () => concertModal.close());
+      concertModal.addEventListener("click", (event) => {
+        if (event.target === concertModal) concertModal.close();
+      });
+      concertModal.addEventListener("close", () => {
+        concertPlayer.pause();
+        concertPlayer.removeAttribute("src");
+        concertPlayer.load();
+      });
+    </script>
   </body>
 </html>
