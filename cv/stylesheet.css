@@ -508,6 +508,59 @@ img {
   color: #36514f;
 }
 
+.outside-work {
+  display: grid;
+  grid-template-columns: minmax(360px, 520px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.outside-work__gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.outside-work__figure {
+  position: relative;
+  margin: 0;
+}
+
+.outside-work__image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center;
+  border-radius: var(--cv-radius-md);
+}
+
+.outside-work__copy {
+  padding: 0.5rem;
+}
+
+.outside-work__label {
+  margin: 0;
+  color: var(--cv-text-muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.outside-work__title {
+  margin: 0.4rem 0 0;
+  font-family: "Fraunces", serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.outside-work__text {
+  margin: 0.7rem 0 0;
+  color: var(--cv-text-soft);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero,
   .metric-card,
@@ -556,7 +609,8 @@ img {
 
   .research-grid,
   .award-grid,
-  .skill-groups {
+  .skill-groups,
+  .outside-work {
     grid-template-columns: 1fr;
   }
 
@@ -600,5 +654,14 @@ img {
 
   .section-heading__eyebrow {
     margin-bottom: -0.25rem;
+  }
+
+  .outside-work__image {
+    aspect-ratio: 3 / 4;
+  }
+
+  .outside-work__gallery {
+    max-width: 360px;
+    margin: 0 auto;
   }
 }
