@@ -19,8 +19,8 @@ classes:
     <p class="about-hero__actions">
       <a href="/projects/" class="btn btn--primary">프로젝트 보기</a>
       <a href="/cv/" class="btn btn--inverse">이력서 보기</a>
-      <a href="/cv/data/CV_Full_v.pdf" class="btn btn--inverse" download="Junhee_Kim_CV_Full.pdf">CV 다운로드</a>
-      <a href="/cv/data/Portfolio.pdf" class="btn btn--inverse">포트폴리오 보기</a>
+      <a href="/cv/data/cv_eng_0905.pdf" class="btn btn--inverse" download="Junhee_Kim_CV.pdf">CV 다운로드</a>
+      <a href="/cv/data/portfolio_0905.pdf" class="btn btn--inverse">포트폴리오 보기</a>
     </p>
   </div>
 </div>

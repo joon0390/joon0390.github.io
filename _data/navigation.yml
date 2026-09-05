@@ -21,7 +21,7 @@
 # --- 현재 설정 (상단 메뉴) ---
 main:
   - title: "About Me"
-    url: /about/
+    url: /cv/
   - title: "Study"
     url: /posts/
   - title: "Category"
