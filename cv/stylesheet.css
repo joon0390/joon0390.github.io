@@ -528,12 +528,28 @@ img {
   margin: 0;
 }
 
+.baseball-preview {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--cv-radius-md);
+  background: transparent;
+  cursor: zoom-in;
+}
+
 .outside-work__image {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center;
   border-radius: var(--cv-radius-md);
+}
+
+.baseball-preview:hover,
+.baseball-preview:focus-visible {
+  outline: 3px solid rgba(143, 95, 57, 0.35);
+  outline-offset: 2px;
 }
 
 .outside-work__copy {
@@ -633,6 +649,15 @@ img {
   max-width: min(90vw, 1200px);
   max-height: 82vh;
   background: #000;
+  object-fit: contain;
+}
+
+.photo-modal__image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(90vw, 1400px);
+  max-height: 82vh;
   object-fit: contain;
 }
 
